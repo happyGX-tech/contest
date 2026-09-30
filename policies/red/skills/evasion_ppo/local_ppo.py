@@ -511,6 +511,10 @@ class LocalAvoidPPO:
         policy.stage = int(payload.get("stage", 0))
         environment_data = dict(payload["environment_config"])
         environment_data["unit_speeds_mps"] = tuple(environment_data["unit_speeds_mps"])
+        if environment_data.get("unit_turn_rates_deg_s") is not None:
+            environment_data["unit_turn_rates_deg_s"] = tuple(
+                environment_data["unit_turn_rates_deg_s"]
+            )
         return policy, LocalAvoidConfig(**environment_data), payload
 
 
@@ -597,11 +601,15 @@ def summarize_episodes(
     hits = sum(bool(item.get("hit")) for item in episodes)
     evades = sum(bool(item.get("evaded")) for item in episodes)
     arrivals = sum(bool(item.get("arrived")) for item in episodes)
+    recoveries = sum(bool(item.get("recovered")) for item in episodes)
+    timeouts = sum(bool(item.get("truncated")) for item in episodes)
     result = {
         "episodes": float(count),
         "evade_success_rate": evades / max(evades + hits, 1),
         "hit_rate": hits / max(count, 1),
         "arrival_rate": arrivals / max(count, 1),
+        "recovery_rate": recoveries / max(count, 1),
+        "timeout_rate": timeouts / max(count, 1),
         "mean_extra_path_length_m": float(
             np.mean([item["extra_path_m"] for item in episodes]) if episodes else 0.0
         ),

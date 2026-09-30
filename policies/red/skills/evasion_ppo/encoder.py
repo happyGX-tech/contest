@@ -69,6 +69,7 @@ class EvasionObservationEncoder:
         self._previous_step: int | None = None
         self._cached_step: int | None = None
         self._cached_vector: np.ndarray | None = None
+        self._cached_threat_sources: tuple[float, ...] = ()
         self._track_ages: dict[int, _TrackAge] = {}
 
     @staticmethod
@@ -150,7 +151,19 @@ class EvasionObservationEncoder:
         self._previous_step = None
         self._cached_step = None
         self._cached_vector = None
+        self._cached_threat_sources = ()
         self._track_ages.clear()
+
+    @property
+    def threat_sources(self) -> tuple[float, ...]:
+        """Return source confidences aligned with the encoded threat slots.
+
+        Local tracks use 1/3, communication-cluster tracks 2/3, and global
+        satellite tracks 1.0. The engine has already resolved same-ID
+        conflicts in favor of the satellite track before this encoder runs.
+        """
+
+        return self._cached_threat_sources
 
     def _own_velocity(self, position: np.ndarray, step: int) -> np.ndarray:
         if self._previous_position is None or self._previous_step is None:
@@ -216,13 +229,22 @@ class EvasionObservationEncoder:
             float(own_direction[2]),
         ]
 
-        threats: list[tuple[float, list[float]]] = []
+        communication_ids = {
+            int(value) for value in (own.get("commRangeInfo") or [])
+        }
+        threats: list[tuple[float, float, list[float]]] = []
         for raw_id, track in (own.get("detectInfo") or {}).items():
             if int(self._field(track, "entity_type", -1)) != 24000:
                 continue
             detect_from = int(self._field(track, "detect_from", -1))
             if not self.allow_fused_tracks and detect_from != self.entity_id:
                 continue
+            if detect_from == self.entity_id:
+                source = 1.0 / 3.0
+            elif detect_from in communication_ids:
+                source = 2.0 / 3.0
+            else:
+                source = 1.0
             track_id = int(self._field(track, "entity_id", raw_id))
             timestamp = int(self._field(track, "time", 0))
             if not self._fresh_track(track_id, timestamp, step):
@@ -275,6 +297,7 @@ class EvasionObservationEncoder:
             threats.append(
                 (
                     distance,
+                    source,
                     [
                         1.0,
                         float(local_los[0]),
@@ -293,9 +316,12 @@ class EvasionObservationEncoder:
             )
 
         threats.sort(key=lambda item: item[0])
+        self._cached_threat_sources = tuple(
+            item[1] for item in threats[: self.MAX_THREATS]
+        )
         for slot in range(self.MAX_THREATS):
             if slot < len(threats):
-                features.extend(threats[slot][1])
+                features.extend(threats[slot][2])
             else:
                 features.extend([0.0] * self.THREAT_FEATURES)
 

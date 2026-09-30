@@ -6,6 +6,7 @@ from .policy_v3 import EvasionPPOV3Config, EvasionPPOV3Policy
 from .policy_v4 import EvasionPPOV4Config, EvasionPPOV4Policy
 from .local_env import LocalAvoidConfig, LocalAvoidEnv, VectorLocalAvoidEnv
 from .local_ppo import LocalAvoidPPO, LocalPPOConfig
+from .local_runtime import LocalAvoidRuntimeEncoder, LocalAvoidRuntimePolicy
 
 __all__ = [
     "EvasionObservationEncoder",
@@ -20,4 +21,6 @@ __all__ = [
     "VectorLocalAvoidEnv",
     "LocalAvoidPPO",
     "LocalPPOConfig",
+    "LocalAvoidRuntimeEncoder",
+    "LocalAvoidRuntimePolicy",
 ]

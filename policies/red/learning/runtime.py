@@ -11,7 +11,7 @@ from pathlib import Path
 from .red_policy import RandomMaskedPolicy, SharedPolicy
 
 
-LEARNING_MOTION_CHOICES = ("random_masked", "ppo", "mappo")
+LEARNING_MOTION_CHOICES = ("random_masked", "ppo", "mappo", "local_avoid_s3")
 
 
 def build_learning_motion_policy(
@@ -43,7 +43,11 @@ def build_learning_motion_policy(
         raise FileNotFoundError(f"Learning checkpoint does not exist: {model_path}")
 
     try:
-        if policy_name == "ppo":
+        if policy_name == "local_avoid_s3":
+            from policies.red.skills.evasion_ppo import LocalAvoidRuntimePolicy
+
+            policy = LocalAvoidRuntimePolicy(max_steps=max_steps)
+        elif policy_name == "ppo":
             from .ppo_policy import PPOConfig, PPOSharedPolicy
 
             policy = PPOSharedPolicy(PPOConfig(

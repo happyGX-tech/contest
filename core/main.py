@@ -193,15 +193,17 @@ def main():
     )
     red_motion_policy = os.getenv("RED_MOTION_POLICY", "reactive_evasion")
     hierarchical_learning = red_policy == "r9_hierarchical_learning"
-    if hierarchical_learning and red_motion_policy not in {"random_masked", "ppo", "mappo"}:
+    if hierarchical_learning and red_motion_policy not in {
+        "straight", "random_masked", "ppo", "mappo", "local_avoid_s3"
+    }:
         raise ValueError(
             "r9_hierarchical_learning requires RED_MOTION_POLICY to be "
-            "random_masked, ppo, or mappo"
+            "straight, random_masked, ppo, mappo, or local_avoid_s3"
         )
     learning_training = os.getenv("RED_LEARNING_TRAIN", "0") == "1"
     learning_model = os.getenv("RED_LEARNING_MODEL")
     learning_policy = None
-    if red_motion_policy in {"random_masked", "ppo", "mappo"}:
+    if red_motion_policy in {"random_masked", "ppo", "mappo", "local_avoid_s3"}:
         learning_policy = build_learning_motion_policy(
             red_motion_policy,
             seed=int(os.getenv("RED_POLICY_SEED", "1")),
@@ -210,7 +212,9 @@ def main():
             training=learning_training,
             observation_dim=90 if hierarchical_learning else 85,
         )
-        if learning_training:
+        if learning_training or bool(
+            getattr(learning_policy, "requires_environment_hooks", False)
+        ):
             training_env.set_shared_learning_policy(learning_policy)
     for i, simulator in enumerate(simulators):
         entity_id = simulator.entity_ext.entity.id

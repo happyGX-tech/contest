@@ -35,12 +35,18 @@ class AttackMissileAgent(BaseAgent):
                  learning_max_steps: int = 1000, hierarchical_learning: bool = False):
         super().__init__(agent_id, entity_id, AgentType.AIRCRAFT, init_observation)
         self.commander = commander
-        if motion_policy not in {"straight", "reactive_evasion", "random_masked", "ppo", "mappo"}:
+        if motion_policy not in {
+            "straight", "reactive_evasion", "random_masked", "ppo", "mappo",
+            "local_avoid_s3",
+        }:
             raise ValueError(f"Unsupported red motion policy: {motion_policy}")
-        if motion_policy in {"random_masked", "ppo", "mappo"} and learning_policy is None:
+        if motion_policy in {
+            "random_masked", "ppo", "mappo", "local_avoid_s3"
+        } and learning_policy is None:
             raise ValueError(f"Motion policy '{motion_policy}' requires a shared learning policy")
         self.motion_policy = motion_policy
         self.learning_policy = learning_policy
+        self.is_evasion_skill = bool(getattr(learning_policy, "is_evasion_skill", False))
         self.hierarchical_learning = bool(hierarchical_learning)
         self.learning_encoder = (
             ObservationEncoder(
@@ -49,7 +55,7 @@ class AttackMissileAgent(BaseAgent):
                 agent_id=agent_id,
                 hierarchical_task_context=self.hierarchical_learning,
             )
-            if learning_policy is not None
+            if learning_policy is not None and not self.is_evasion_skill
             else None
         )
         self.learning_adapter = (
@@ -68,6 +74,9 @@ class AttackMissileAgent(BaseAgent):
         self.sat_used = False
         self.latest_observation: dict | None = None
         self._learning_transition: tuple[np.ndarray, int, np.ndarray] | None = None
+        register_agent = getattr(learning_policy, "register_agent", None)
+        if register_agent is not None:
+            register_agent(agent_id, entity_id, learning_max_steps)
 
     def set_observation(self, observation: dict) -> None:
         self.latest_observation = observation
@@ -84,7 +93,10 @@ class AttackMissileAgent(BaseAgent):
         if launch is not None:
             actions.append(launch)
             self.launch_step = step
-            if self.commander.should_use_satellite(self.entity_id):
+            if (
+                self.commander.should_use_satellite(self.entity_id)
+                and bool(getattr(self.learning_policy, "allows_satellite", True))
+            ):
                 actions.append([ACTION_USE_SAT, self.entity_id, 0, 0])
                 self.sat_used = True
 
@@ -100,42 +112,55 @@ class AttackMissileAgent(BaseAgent):
 
         if self.launch_step < 0:
             return
-        assert self.learning_encoder is not None
         assert self.learning_adapter is not None
         assert self.learning_policy is not None
-        target_id = self.commander.target_id_for(self.entity_id)
-        target_index = next(
-            (
-                index
-                for index, target in enumerate(self.learning_adapter.targets)
-                if int(target.get("entity_id", -1)) == target_id
-            ),
-            None,
-        )
-        encoded = self.learning_encoder.encode(
-            observation,
+        if self.is_evasion_skill:
+            goal_position = self.commander.target_position_for(self.entity_id)
+            if goal_position is None:
+                return
+            encoded = self.learning_policy.encode_motion_observation(
+                observation,
+                agent_id=self.agent_id,
+                entity_id=self.entity_id,
+                launch_step=self.launch_step,
+                maneuver_state=self.set_acc_z_z,
+                goal_position=goal_position,
+            )
+        else:
+            assert self.learning_encoder is not None
+            target_id = self.commander.target_id_for(self.entity_id)
+            target_index = next(
+                (
+                    index
+                    for index, target in enumerate(self.learning_adapter.targets)
+                    if int(target.get("entity_id", -1)) == target_id
+                ),
+                None,
+            )
+            encoded = self.learning_encoder.encode(
+                observation,
+                launched=True,
+                launch_step=self.launch_step,
+                satellite_used=self.sat_used,
+                maneuver_state=self.set_acc_z_z,
+                current_target_index=target_index,
+                task_context=(
+                    self.commander.learning_task_context(self.entity_id)
+                    if self.hierarchical_learning else None
+                ),
+            )
+        action_mask = self.learning_adapter.build_action_mask(
             launched=True,
-            launch_step=self.launch_step,
             satellite_used=self.sat_used,
-            maneuver_state=self.set_acc_z_z,
-            current_target_index=target_index,
-            task_context=(
-                self.commander.learning_task_context(self.entity_id)
-                if self.hierarchical_learning else None
-            ),
         )
-        action = self.learning_policy.select_action(
-            encoded,
-            self.learning_adapter.build_action_mask(
-                launched=True,
-                satellite_used=self.sat_used,
-            ),
-        )
+        prepare_action_mask = getattr(self.learning_policy, "prepare_action_mask", None)
+        if prepare_action_mask is not None:
+            action_mask = prepare_action_mask(encoded, action_mask)
+        action = self.learning_policy.select_action(encoded, action_mask)
+        if self.is_evasion_skill:
+            self.set_acc_z_z = {0: -1, 1: 0, 2: 1}[int(action)]
         if bool(getattr(self.learning_policy, "training", False)):
-            self._learning_transition = (encoded, int(action), self.learning_adapter.build_action_mask(
-                launched=True,
-                satellite_used=self.sat_used,
-            ))
+            self._learning_transition = (encoded, int(action), action_mask)
         engine_actions = self.learning_adapter.to_engine_action(int(action), self.entity_id)
         actions.extend(engine_actions.tolist())
 
