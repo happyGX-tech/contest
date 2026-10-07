@@ -1,0 +1,76 @@
+{
+  "model": "/home/ubuntu/yunpan/competition-platform-env/models/local_avoid_ppo_v11_trusted_mission_s3_best.pt",
+  "checkpoint_stage": 3,
+  "episodes_per_stage": 2000,
+  "mission_gate": true,
+  "stages": {
+    "2": {
+      "ppo": {
+        "episodes": 2000.0,
+        "evade_success_rate": 0.967,
+        "hit_rate": 0.033,
+        "arrival_rate": 0.967,
+        "recovery_rate": 0.967,
+        "timeout_rate": 0.0,
+        "mean_extra_path_length_m": 6731.047479420536,
+        "mean_extra_time_s": 33.65523739710268,
+        "mean_recovery_time_s": 250.15,
+        "mean_heading_deviation_deg": 5.673417448365817,
+        "oscillation_rate": 0.07494530719143588,
+        "left_action_ratio": 0.04808803951793722,
+        "straight_action_ratio": 0.9120101130418535,
+        "right_action_ratio": 0.03990184744020927
+      },
+      "straight": {
+        "episodes": 2000.0,
+        "evade_success_rate": 0.185,
+        "hit_rate": 0.815,
+        "arrival_rate": 0.185,
+        "recovery_rate": 0.185,
+        "timeout_rate": 0.0,
+        "mean_extra_path_length_m": 2.2972130864218343e-11,
+        "mean_extra_time_s": 1.1486065432109173e-13,
+        "mean_recovery_time_s": 52.1585,
+        "mean_heading_deviation_deg": 0.0,
+        "oscillation_rate": 0.0,
+        "left_action_ratio": 0.0,
+        "straight_action_ratio": 1.0,
+        "right_action_ratio": 0.0
+      }
+    },
+    "3": {
+      "ppo": {
+        "episodes": 2000.0,
+        "evade_success_rate": 0.45240480961923846,
+        "hit_rate": 0.5465,
+        "arrival_rate": 0.4535,
+        "recovery_rate": 0.4515,
+        "timeout_rate": 0.0,
+        "mean_extra_path_length_m": 8904.065646249264,
+        "mean_extra_time_s": 44.520328231246324,
+        "mean_recovery_time_s": 128.172,
+        "mean_heading_deviation_deg": 21.84653996848297,
+        "oscillation_rate": 0.303892039680093,
+        "left_action_ratio": 0.101649935722928,
+        "straight_action_ratio": 0.7975390388687236,
+        "right_action_ratio": 0.10081102540834845
+      },
+      "straight": {
+        "episodes": 2000.0,
+        "evade_success_rate": 0.1175,
+        "hit_rate": 0.8825,
+        "arrival_rate": 0.1175,
+        "recovery_rate": 0.1175,
+        "timeout_rate": 0.0,
+        "mean_extra_path_length_m": 1.4491888578049838e-11,
+        "mean_extra_time_s": 7.24594428902492e-14,
+        "mean_recovery_time_s": 32.821,
+        "mean_heading_deviation_deg": 0.0,
+        "oscillation_rate": 0.0,
+        "left_action_ratio": 0.0,
+        "straight_action_ratio": 1.0,
+        "right_action_ratio": 0.0
+      }
+    }
+  }
+}

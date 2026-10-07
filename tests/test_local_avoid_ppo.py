@@ -64,13 +64,51 @@ class LocalAvoidEnvironmentTests(unittest.TestCase):
             maneuver_state=0,
             goal_position={"lon": 118.5, "lat": 22.0},
         )
-        mask = LocalAvoidRuntimePolicy.prepare_action_mask(
-            encoded, np.ones(3, dtype=np.bool_)
-        )
+        policy = LocalAvoidRuntimePolicy()
+        policy.environment_config = config
+        policy._current_agent_id = 11
+        mask = policy.prepare_action_mask(encoded, np.ones(3, dtype=np.bool_))
 
         self.assertEqual(encoded.shape, (33,))
         self.assertTrue(np.isfinite(encoded).all())
         self.assertEqual(mask.tolist(), [False, True, False])
+
+    def test_mission_gate_recovers_toward_target_after_evasion(self) -> None:
+        policy = LocalAvoidRuntimePolicy()
+        policy.environment_config = LocalAvoidConfig(goal_distance_scale_m=100_000.0)
+        policy._current_agent_id = 7
+        policy._recovery_pending[7] = True
+        observation = np.zeros(33, dtype=np.float32)
+        observation[3] = 0.5
+        observation[4] = math.sin(math.radians(20.0))
+        observation[5] = math.cos(math.radians(20.0))
+        observation[30] = 1.0
+
+        mask = policy.prepare_action_mask(observation, np.ones(3, dtype=np.bool_))
+
+        self.assertEqual(mask.tolist(), [True, False, False])
+
+    def test_mission_gate_leaves_urgent_threat_to_actor(self) -> None:
+        policy = LocalAvoidRuntimePolicy()
+        policy.environment_config = LocalAvoidConfig(
+            goal_distance_scale_m=100_000.0,
+            threat_distance_scale_m=10_000.0,
+            relative_speed_scale_mps=500.0,
+            t_cpa_scale_s=60.0,
+        )
+        observation = np.zeros(33, dtype=np.float32)
+        observation[3] = 0.5
+        observation[5] = 1.0
+        observation[6] = 1.0
+        observation[7] = 0.05
+        observation[11] = 0.5
+        observation[12] = 20.0 / 60.0
+        observation[13] = 0.1
+        observation[30] = 1.0
+
+        mask = policy.prepare_action_mask(observation, np.ones(3, dtype=np.bool_))
+
+        self.assertEqual(mask.tolist(), [True, True, True])
 
     def test_runtime_skill_does_not_disable_upper_layer_satellite(self) -> None:
         self.assertTrue(LocalAvoidRuntimePolicy.allows_satellite)
