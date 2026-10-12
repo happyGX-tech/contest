@@ -1,0 +1,51 @@
+"""Versioned plan-skill contracts and deterministic executor."""
+
+from .spec import (
+    DeploymentSpec,
+    DeploymentTemplate,
+    FormationSpec,
+    FormationTemplate,
+    GoalAllocation,
+    GoalKind,
+    GoalRef,
+    HiddenResponseMode,
+    HiddenResponseSpec,
+    HiddenTargetSelector,
+    PlanSpec,
+    PlanToken,
+    PlanTokenOp,
+    Role,
+    RoleCounts,
+    WaveSpec,
+)
+from .executor import (
+    DeterministicPlanPolicy,
+    PlanBinding,
+    SUPPORTED_SEARCH_POLICIES,
+    build_grid_deployment_plan,
+    load_plan_spec,
+)
+
+__all__ = [
+    "DeploymentSpec",
+    "DeploymentTemplate",
+    "FormationSpec",
+    "FormationTemplate",
+    "GoalAllocation",
+    "GoalKind",
+    "GoalRef",
+    "HiddenResponseMode",
+    "HiddenResponseSpec",
+    "HiddenTargetSelector",
+    "PlanSpec",
+    "PlanToken",
+    "PlanTokenOp",
+    "Role",
+    "RoleCounts",
+    "WaveSpec",
+    "DeterministicPlanPolicy",
+    "PlanBinding",
+    "SUPPORTED_SEARCH_POLICIES",
+    "build_grid_deployment_plan",
+    "load_plan_spec",
+]

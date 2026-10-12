@@ -1,0 +1,529 @@
+{
+  "schema_version": 2,
+  "experiment": "plan_anchor_sensitivity_final20_all_v2",
+  "scenario": "final20/medium/M05",
+  "scenario_id": "M05",
+  "difficulty": "medium",
+  "title": "弧门侧切",
+  "max_steps": 3000,
+  "common_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "blue_policy": "b0_fixed_ratio_random",
+  "blue_interceptor_ratio": 2,
+  "red_motion_policy": "local_avoid_s3",
+  "satellite_rule": "fixed_lowest_live_unused_h",
+  "search_policy": "legal_grid_search_v1",
+  "fixed_goal_contract": {
+    "public_target_types": {
+      "54": 9600,
+      "51": 9400,
+      "310": 9600,
+      "312": 9600,
+      "2733": 9600,
+      "2735": 9600,
+      "52": 9400,
+      "2739": 9600,
+      "2741": 9600,
+      "2745": 9600,
+      "2728": 9400,
+      "2747": 9600,
+      "2751": 9600,
+      "2730": 9400
+    },
+    "public_attack_h": 27,
+    "public_attack_m": 37,
+    "public_attack_l": 0,
+    "scout_l": 48,
+    "all_hidden_response_l": 80,
+    "required_hidden_discoveries": 8,
+    "permanent_hold_l": 0,
+    "retarget_during_episode": false
+  },
+  "anchors": [
+    {
+      "anchor_id": "A00_balanced",
+      "label": "均衡基准",
+      "factor": "baseline",
+      "description": "中部部署、0/120/240 三波、普通角色分层编组。",
+      "release_steps": [
+        0,
+        120,
+        240
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 5,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A00_balanced.json",
+      "plan_id": "a4cbbf9bb35852aff5386bd70fbdc45a05dbd962d2a4c5e0663116914eb90742",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A01_deploy_forward",
+      "label": "整体前置部署",
+      "factor": "deployment",
+      "description": "仅将三类单位的整体部署锚点前移。",
+      "release_steps": [
+        0,
+        120,
+        240
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": 0.75,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 5,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A01_deploy_forward.json",
+      "plan_id": "af4015a1b26810f7c528a0592614753f0c5dea9635b7c7e76c12ba844d0ed944",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A02_deploy_rear",
+      "label": "整体后置部署",
+      "factor": "deployment",
+      "description": "仅将三类单位的整体部署锚点后移。",
+      "release_steps": [
+        0,
+        120,
+        240
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": -0.75,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 5,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A02_deploy_rear.json",
+      "plan_id": "ee59d00599c3bed1879eb091a264b3c0a4f55c7c97ac1e0e897a089a1142c9f8",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A03_deploy_compact",
+      "label": "密集部署",
+      "factor": "deployment",
+      "description": "仅改成小正面、小纵深的紧凑部署。",
+      "release_steps": [
+        0,
+        120,
+        240
+      ],
+      "deployment": {
+        "template": "compact",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 0.2,
+        "depth": 0.15,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 5,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A03_deploy_compact.json",
+      "plan_id": "f9bbdea3c09584f10c25e1712cc631b5b0bc951fa4b05517bd2582569e389cec",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A04_deploy_wide",
+      "label": "横向展开部署",
+      "factor": "deployment",
+      "description": "仅改成大正面、浅纵深的横向展开部署。",
+      "release_steps": [
+        0,
+        120,
+        240
+      ],
+      "deployment": {
+        "template": "lateral_line",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 1.0,
+        "depth": 0.15,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 5,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A04_deploy_wide.json",
+      "plan_id": "dbc1930e8718bba599013cbf98bfc37d327ee1b90c2348d66fe98cdb42c105d1",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A05_wave_mass",
+      "label": "单波齐射",
+      "factor": "wave",
+      "description": "三个逻辑主攻波在第 0 步同时释放。",
+      "release_steps": [
+        0,
+        0,
+        0
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 5,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A05_wave_mass.json",
+      "plan_id": "b41f70b0d74cc6b680fde472c483ccbed09e3ec7217d0127004447e7f9e768d2",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A06_wave_rapid",
+      "label": "快速三波",
+      "factor": "wave",
+      "description": "三个主攻波在 0/40/80 步释放。",
+      "release_steps": [
+        0,
+        40,
+        80
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 5,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A06_wave_rapid.json",
+      "plan_id": "a4bd36e3e399a2020ae1b2284ef166445d5c3a3496423a51c6f718d2d8539d1d",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A07_wave_slow",
+      "label": "慢速三波",
+      "factor": "wave",
+      "description": "三个主攻波在 0/300/600 步释放。",
+      "release_steps": [
+        0,
+        300,
+        600
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 5,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A07_wave_slow.json",
+      "plan_id": "63b63f669450392a7955666f1b7dfe45797c9b6fc5c202974acf8f907a0be0af",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A08_formation_dense",
+      "label": "波内密集编组",
+      "factor": "formation",
+      "description": "仅取消波内时间层，形成紧凑同时发射。",
+      "release_steps": [
+        0,
+        120,
+        240
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "compact",
+        "lateral_width": 1.0,
+        "longitudinal_depth": 0.0,
+        "intra_wave_gap_steps": 0,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A08_formation_dense.json",
+      "plan_id": "e9f6565b700cdb5c31941fbe9a35ce2e743dc20e44e6751d13904d0575968b6a",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A09_formation_deep",
+      "label": "窄深编组",
+      "factor": "formation",
+      "description": "仅改成窄正面、大纵深和较大波内间隔。",
+      "release_steps": [
+        0,
+        120,
+        240
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": 0.0,
+        "m_depth_offset": 0.0,
+        "l_depth_offset": 0.0
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.15,
+        "longitudinal_depth": 1.0,
+        "intra_wave_gap_steps": 8,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A09_formation_deep.json",
+      "plan_id": "d1660419fef7475d0204a5319505ede2702f4ef8a42cee7c6ca9c4ca56528295",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A10_l_screen",
+      "label": "L 前沿屏障",
+      "factor": "combined",
+      "description": "L 前沿部署并在主攻波内先行，H/M 相对后置。",
+      "release_steps": [
+        0,
+        120,
+        240
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": -0.35,
+        "m_depth_offset": -0.35,
+        "l_depth_offset": 0.8
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 8,
+        "role_order": [
+          "L",
+          "M",
+          "H"
+        ]
+      },
+      "plan_file": "A10_l_screen.json",
+      "plan_id": "7cc2867629e3d0d9fd40ef390364bf9b31571e7416573f3ac6f4b3f8bd504771",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    },
+    {
+      "anchor_id": "A11_hm_spearhead",
+      "label": "H/M 前置",
+      "factor": "combined_control",
+      "description": "H/M 前置先行、L 后置，作为 L 前沿屏障的反向对照。",
+      "release_steps": [
+        0,
+        120,
+        240
+      ],
+      "deployment": {
+        "template": "role_layered",
+        "anchor_forward": 0.0,
+        "anchor_lateral": 0.0,
+        "frontage": 0.67,
+        "depth": 0.43,
+        "h_depth_offset": 0.6,
+        "m_depth_offset": 0.6,
+        "l_depth_offset": -0.8
+      },
+      "strike_formation": {
+        "formation_id": "strike",
+        "template": "role_layered",
+        "lateral_width": 0.65,
+        "longitudinal_depth": 0.35,
+        "intra_wave_gap_steps": 5,
+        "role_order": [
+          "H",
+          "M",
+          "L"
+        ]
+      },
+      "plan_file": "A11_hm_spearhead.json",
+      "plan_id": "4bcd06ce8c9d03255dbca7867e1195e82d25d0b85c95b025ab20ea79707f5586",
+      "accounted_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "run_count": 1200,
+  "map_count": 20,
+  "anchor_count": 12,
+  "baseline": "A00_balanced",
+  "baseline_mean_score": 92.18081954253798,
+  "baseline_sd_score": 8.729707271637972,
+  "oracle_map_best_mean": 96.60623240086784,
+  "oracle_gain": 4.425412858329864
+}

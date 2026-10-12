@@ -1,0 +1,115 @@
+{
+  "python": "/home/ubuntu/yunpan/miniconda3/envs/competition/bin/python",
+  "shared_files": {
+    "evasion_model": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/models/local_avoid_ppo_v13_gate_aligned_s3_best.pt",
+      "sha256": "632662d47fb35edfdb10d680a359cced03fab75af09cff666631a97f0ccf87f3"
+    },
+    "plan_executor": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/policies/red/learning/plan_skill/executor.py",
+      "sha256": "485983bb7251b25c7900d5dc08117a400ff32d80e9b5a59ae6259ffd82b6e633"
+    },
+    "plan_schema": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/policies/red/learning/plan_skill/spec.py",
+      "sha256": "7d5dbc0b3d0f33083e52a0989b0fb63fc8ecacb598b492b2af44d1f1ee91227b"
+    },
+    "unified_agent": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/core/user_agents/unified_missile_agent.py",
+      "sha256": "9818d9c62b9eeb2d9be4ebbb69dc2543adcd0c05f687d410e7b875b90b07d9cc"
+    },
+    "core_main": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/core/main.py",
+      "sha256": "e714c20fd2ecbfbaed0aa22571812a2f71692991d5b86d932ae5c77276213d98"
+    }
+  },
+  "scenarios": {
+    "final20/easy/E01": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/easy/E01/scenario.json",
+      "sha256": "85876c67db4b120b564d32ef034dc335fec121ce2842989db9faf77931072c72"
+    },
+    "final20/easy/E02": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/easy/E02/scenario.json",
+      "sha256": "89899cfcae4403fffa812083bf02ca7f8e479b389e48daeafa772cd082f9f9f7"
+    },
+    "final20/easy/E03": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/easy/E03/scenario.json",
+      "sha256": "24244028f715a2bf62f49e516b893ee9fe17844e870bd5212912d2f93f58656f"
+    },
+    "final20/easy/E04": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/easy/E04/scenario.json",
+      "sha256": "b0695ebac4c04c546ed11bcbeb58a9968cbe3a642ae03db68e705d9a20d034d5"
+    },
+    "final20/easy/E05": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/easy/E05/scenario.json",
+      "sha256": "c4ecdb7474525f8279224a39939f0c1838a2b0959b32f56971d61a39f0b5db66"
+    },
+    "final20/easy/E06": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/easy/E06/scenario.json",
+      "sha256": "095d6dc4b0399cb0c231ddf6e91df89ac5443f9c11d6934a5a7086f71fa842b7"
+    },
+    "final20/hard/H01": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/hard/H01/scenario.json",
+      "sha256": "d490c9b08edb9f3e490e442d6478e3c0bf7f76d94d684e639c5fc2863f4c638b"
+    },
+    "final20/hard/H02": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/hard/H02/scenario.json",
+      "sha256": "58989aea44889ad0ec8440ee5ee3dcd22746b21c3cf882757171a5526db7cd59"
+    },
+    "final20/hard/H03": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/hard/H03/scenario.json",
+      "sha256": "0a485862b8eb798b8a69fae053bc2e0e1cfdcbb98c7d2cbad486c1423fe71403"
+    },
+    "final20/hard/H04": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/hard/H04/scenario.json",
+      "sha256": "342b5cbf4a0d2f5cf31179c46e9fdbc463561aa9f97f4d70cbe11a65860f4575"
+    },
+    "final20/hard/H05": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/hard/H05/scenario.json",
+      "sha256": "ae8148626c88c8eb96903c84db237384a209151a785d6f06baa62bc1b16721b0"
+    },
+    "final20/hard/H06": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/hard/H06/scenario.json",
+      "sha256": "8a43ba2cfb14dc4c8bced57a6c04948c14c33ea78cacef35e8bbf7865c4c252e"
+    },
+    "final20/hard/H07": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/hard/H07/scenario.json",
+      "sha256": "cfdecd047ff6698c3597e1c4908b6afc09fa96c3f84c62244a567cec092da92f"
+    },
+    "final20/hard/H08": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/hard/H08/scenario.json",
+      "sha256": "d2a7892e1798eb03fe43048341557a7af95fee45b49e7118730fd0994883029e"
+    },
+    "final20/medium/M01": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/medium/M01/scenario.json",
+      "sha256": "b195f95a6858b2d95032634571581f4137f249ce88d757e80789dd2905373f52"
+    },
+    "final20/medium/M02": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/medium/M02/scenario.json",
+      "sha256": "6b0dc6e507e4ee00fbafed150c40297c4a4100b202188463456959222ec9252b"
+    },
+    "final20/medium/M03": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/medium/M03/scenario.json",
+      "sha256": "58cd8947cc5ef23ac6697bbe41bad07aed9c7ea7474323fce37ce472cd26bb8a"
+    },
+    "final20/medium/M04": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/medium/M04/scenario.json",
+      "sha256": "c82f6072278d0b97e4349fa08203d8a88d8e0e03da90115ca71749159ef7b60f"
+    },
+    "final20/medium/M05": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/medium/M05/scenario.json",
+      "sha256": "fa24cd42acac99c45918685218a7a132f34709b35dba773c2b4519499f589f92"
+    },
+    "final20/medium/M06": {
+      "path": "/home/ubuntu/yunpan/competition-platform-env-train/scenarios/cases/final20/medium/M06/scenario.json",
+      "sha256": "1293bd588fc5d2c49fa8b74e72fa59fab3fd91db37be899c7a6e483add5b54bf"
+    }
+  },
+  "red_policy": "r12_topformer deterministic PlanSpec-v2 executor",
+  "red_motion_policy": "local_avoid_s3 mission_v12 inference",
+  "blue_policy": "b0_fixed_ratio_random",
+  "blue_interceptor_ratio": 2,
+  "max_steps": 3000,
+  "satellite_rule": "fixed_lowest_live_unused_h",
+  "hidden_response": "all legal discoveries then distinct L groups",
+  "early_stop": "score frozen under deterministic plan"
+}

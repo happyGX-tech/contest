@@ -1,0 +1,410 @@
+{
+  "schema_version": 2,
+  "experiment": "plan_anchor_sensitivity_final20_all_v2",
+  "common_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "anchor_count": 12,
+  "map_count": 20,
+  "expected_runs": 1200,
+  "maps": [
+    {
+      "scenario": "final20/easy/E01",
+      "scenario_id": "E01",
+      "difficulty": "easy",
+      "title": "单门扇形",
+      "manifest": "E01/manifest.json",
+      "red_counts": {
+        "H": 17,
+        "M": 24,
+        "L": 85
+      },
+      "public_target_count": 8,
+      "hidden_target_count": 4,
+      "scout_l": 32,
+      "response_l": 53
+    },
+    {
+      "scenario": "final20/easy/E02",
+      "scenario_id": "E02",
+      "difficulty": "easy",
+      "title": "双层错门",
+      "manifest": "E02/manifest.json",
+      "red_counts": {
+        "H": 17,
+        "M": 24,
+        "L": 85
+      },
+      "public_target_count": 8,
+      "hidden_target_count": 4,
+      "scout_l": 32,
+      "response_l": 53
+    },
+    {
+      "scenario": "final20/easy/E03",
+      "scenario_id": "E03",
+      "difficulty": "easy",
+      "title": "楔形漏斗",
+      "manifest": "E03/manifest.json",
+      "red_counts": {
+        "H": 17,
+        "M": 24,
+        "L": 85
+      },
+      "public_target_count": 8,
+      "hidden_target_count": 4,
+      "scout_l": 32,
+      "response_l": 53
+    },
+    {
+      "scenario": "final20/easy/E04",
+      "scenario_id": "E04",
+      "difficulty": "easy",
+      "title": "三岛跳转",
+      "manifest": "E04/manifest.json",
+      "red_counts": {
+        "H": 17,
+        "M": 24,
+        "L": 85
+      },
+      "public_target_count": 8,
+      "hidden_target_count": 4,
+      "scout_l": 32,
+      "response_l": 53
+    },
+    {
+      "scenario": "final20/easy/E05",
+      "scenario_id": "E05",
+      "difficulty": "easy",
+      "title": "偏置新月",
+      "manifest": "E05/manifest.json",
+      "red_counts": {
+        "H": 17,
+        "M": 24,
+        "L": 85
+      },
+      "public_target_count": 8,
+      "hidden_target_count": 4,
+      "scout_l": 32,
+      "response_l": 53
+    },
+    {
+      "scenario": "final20/easy/E06",
+      "scenario_id": "E06",
+      "difficulty": "easy",
+      "title": "三路栅栏",
+      "manifest": "E06/manifest.json",
+      "red_counts": {
+        "H": 17,
+        "M": 24,
+        "L": 85
+      },
+      "public_target_count": 8,
+      "hidden_target_count": 4,
+      "scout_l": 32,
+      "response_l": 53
+    },
+    {
+      "scenario": "final20/hard/H01",
+      "scenario_id": "H01",
+      "difficulty": "hard",
+      "title": "三层错位门",
+      "manifest": "H01/manifest.json",
+      "red_counts": {
+        "H": 48,
+        "M": 66,
+        "L": 214
+      },
+      "public_target_count": 25,
+      "hidden_target_count": 18,
+      "scout_l": 72,
+      "response_l": 142
+    },
+    {
+      "scenario": "final20/hard/H02",
+      "scenario_id": "H02",
+      "difficulty": "hard",
+      "title": "S形防带",
+      "manifest": "H02/manifest.json",
+      "red_counts": {
+        "H": 48,
+        "M": 66,
+        "L": 214
+      },
+      "public_target_count": 25,
+      "hidden_target_count": 18,
+      "scout_l": 72,
+      "response_l": 142
+    },
+    {
+      "scenario": "final20/hard/H03",
+      "scenario_id": "H03",
+      "difficulty": "hard",
+      "title": "偏置双环",
+      "manifest": "H03/manifest.json",
+      "red_counts": {
+        "H": 48,
+        "M": 66,
+        "L": 214
+      },
+      "public_target_count": 25,
+      "hidden_target_count": 18,
+      "scout_l": 72,
+      "response_l": 142
+    },
+    {
+      "scenario": "final20/hard/H04",
+      "scenario_id": "H04",
+      "difficulty": "hard",
+      "title": "鱼骨走廊",
+      "manifest": "H04/manifest.json",
+      "red_counts": {
+        "H": 48,
+        "M": 66,
+        "L": 214
+      },
+      "public_target_count": 25,
+      "hidden_target_count": 18,
+      "scout_l": 72,
+      "response_l": 142
+    },
+    {
+      "scenario": "final20/hard/H05",
+      "scenario_id": "H05",
+      "difficulty": "hard",
+      "title": "三叉收束",
+      "manifest": "H05/manifest.json",
+      "red_counts": {
+        "H": 48,
+        "M": 66,
+        "L": 214
+      },
+      "public_target_count": 25,
+      "hidden_target_count": 18,
+      "scout_l": 72,
+      "response_l": 142
+    },
+    {
+      "scenario": "final20/hard/H06",
+      "scenario_id": "H06",
+      "difficulty": "hard",
+      "title": "钩形纵深",
+      "manifest": "H06/manifest.json",
+      "red_counts": {
+        "H": 48,
+        "M": 66,
+        "L": 214
+      },
+      "public_target_count": 25,
+      "hidden_target_count": 18,
+      "scout_l": 72,
+      "response_l": 142
+    },
+    {
+      "scenario": "final20/hard/H07",
+      "scenario_id": "H07",
+      "difficulty": "hard",
+      "title": "五岛棋盘",
+      "manifest": "H07/manifest.json",
+      "red_counts": {
+        "H": 48,
+        "M": 66,
+        "L": 214
+      },
+      "public_target_count": 25,
+      "hidden_target_count": 18,
+      "scout_l": 72,
+      "response_l": 142
+    },
+    {
+      "scenario": "final20/hard/H08",
+      "scenario_id": "H08",
+      "difficulty": "hard",
+      "title": "双弧包络",
+      "manifest": "H08/manifest.json",
+      "red_counts": {
+        "H": 48,
+        "M": 66,
+        "L": 214
+      },
+      "public_target_count": 25,
+      "hidden_target_count": 18,
+      "scout_l": 72,
+      "response_l": 142
+    },
+    {
+      "scenario": "final20/medium/M01",
+      "scenario_id": "M01",
+      "difficulty": "medium",
+      "title": "双门分流",
+      "manifest": "M01/manifest.json",
+      "red_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      },
+      "public_target_count": 14,
+      "hidden_target_count": 8,
+      "scout_l": 48,
+      "response_l": 80
+    },
+    {
+      "scenario": "final20/medium/M02",
+      "scenario_id": "M02",
+      "difficulty": "medium",
+      "title": "菱堡外环",
+      "manifest": "M02/manifest.json",
+      "red_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      },
+      "public_target_count": 14,
+      "hidden_target_count": 8,
+      "scout_l": 48,
+      "response_l": 80
+    },
+    {
+      "scenario": "final20/medium/M03",
+      "scenario_id": "M03",
+      "difficulty": "medium",
+      "title": "沙漏双颈",
+      "manifest": "M03/manifest.json",
+      "red_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      },
+      "public_target_count": 14,
+      "hidden_target_count": 8,
+      "scout_l": 48,
+      "response_l": 80
+    },
+    {
+      "scenario": "final20/medium/M04",
+      "scenario_id": "M04",
+      "difficulty": "medium",
+      "title": "北窗南堡",
+      "manifest": "M04/manifest.json",
+      "red_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      },
+      "public_target_count": 14,
+      "hidden_target_count": 8,
+      "scout_l": 48,
+      "response_l": 80
+    },
+    {
+      "scenario": "final20/medium/M05",
+      "scenario_id": "M05",
+      "difficulty": "medium",
+      "title": "弧门侧切",
+      "manifest": "M05/manifest.json",
+      "red_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      },
+      "public_target_count": 14,
+      "hidden_target_count": 8,
+      "scout_l": 48,
+      "response_l": 80
+    },
+    {
+      "scenario": "final20/medium/M06",
+      "scenario_id": "M06",
+      "difficulty": "medium",
+      "title": "断续阶梯",
+      "manifest": "M06/manifest.json",
+      "red_counts": {
+        "H": 27,
+        "M": 37,
+        "L": 128
+      },
+      "public_target_count": 14,
+      "hidden_target_count": 8,
+      "scout_l": 48,
+      "response_l": 80
+    }
+  ],
+  "anchors": [
+    {
+      "anchor_id": "A00_balanced",
+      "label": "均衡基准",
+      "factor": "baseline",
+      "description": "中部部署、0/120/240 三波、普通角色分层编组。"
+    },
+    {
+      "anchor_id": "A01_deploy_forward",
+      "label": "整体前置部署",
+      "factor": "deployment",
+      "description": "仅将三类单位的整体部署锚点前移。"
+    },
+    {
+      "anchor_id": "A02_deploy_rear",
+      "label": "整体后置部署",
+      "factor": "deployment",
+      "description": "仅将三类单位的整体部署锚点后移。"
+    },
+    {
+      "anchor_id": "A03_deploy_compact",
+      "label": "密集部署",
+      "factor": "deployment",
+      "description": "仅改成小正面、小纵深的紧凑部署。"
+    },
+    {
+      "anchor_id": "A04_deploy_wide",
+      "label": "横向展开部署",
+      "factor": "deployment",
+      "description": "仅改成大正面、浅纵深的横向展开部署。"
+    },
+    {
+      "anchor_id": "A05_wave_mass",
+      "label": "单波齐射",
+      "factor": "wave",
+      "description": "三个逻辑主攻波在第 0 步同时释放。"
+    },
+    {
+      "anchor_id": "A06_wave_rapid",
+      "label": "快速三波",
+      "factor": "wave",
+      "description": "三个主攻波在 0/40/80 步释放。"
+    },
+    {
+      "anchor_id": "A07_wave_slow",
+      "label": "慢速三波",
+      "factor": "wave",
+      "description": "三个主攻波在 0/300/600 步释放。"
+    },
+    {
+      "anchor_id": "A08_formation_dense",
+      "label": "波内密集编组",
+      "factor": "formation",
+      "description": "仅取消波内时间层，形成紧凑同时发射。"
+    },
+    {
+      "anchor_id": "A09_formation_deep",
+      "label": "窄深编组",
+      "factor": "formation",
+      "description": "仅改成窄正面、大纵深和较大波内间隔。"
+    },
+    {
+      "anchor_id": "A10_l_screen",
+      "label": "L 前沿屏障",
+      "factor": "combined",
+      "description": "L 前沿部署并在主攻波内先行，H/M 相对后置。"
+    },
+    {
+      "anchor_id": "A11_hm_spearhead",
+      "label": "H/M 前置",
+      "factor": "combined_control",
+      "description": "H/M 前置先行、L 后置，作为 L 前沿屏障的反向对照。"
+    }
+  ]
+}

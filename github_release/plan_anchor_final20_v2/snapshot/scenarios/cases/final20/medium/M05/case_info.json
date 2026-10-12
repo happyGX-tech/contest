@@ -1,0 +1,386 @@
+{
+  "scenario_id": "M05",
+  "display_id": "M05",
+  "title": "弧门侧切",
+  "difficulty": "medium",
+  "difficulty_name": "中等",
+  "source_commit": "ad45a7bc804a88703d1259d6083ba57553a25dfb",
+  "scenario_sha256": "fa24cd42acac99c45918685218a7a132f34709b35dba773c2b4519499f589f92",
+  "max_steps": 3000,
+  "topology_model": "retained_blue_topology_scarce_mothers_v1",
+  "topology_name": "弧门侧切",
+  "blue_translation_fraction": [
+    0.04,
+    0
+  ],
+  "design_intent": "弧门侧切：以哨卫巢视野组织通道，母巢提供纵深目标，暗巢形成搜索支线；默认红方在32格均匀部署。",
+  "distribution": "部分不均匀",
+  "band_counts": [
+    {
+      "public": 2,
+      "swarm": 22
+    },
+    {
+      "public": 5,
+      "swarm": 90
+    },
+    {
+      "public": 4,
+      "swarm": 69
+    },
+    {
+      "public": 3,
+      "swarm": 43
+    }
+  ],
+  "band_cv": {
+    "public": 0.31943828249996997,
+    "swarm": 0.45962634557977683
+  },
+  "objective_ids": [
+    54,
+    51,
+    2753,
+    2754,
+    310,
+    312,
+    2733,
+    2735,
+    52,
+    2755,
+    2756,
+    2739,
+    2741,
+    2745,
+    2728,
+    2758,
+    2760,
+    2747,
+    2751,
+    2761,
+    2763,
+    2730
+  ],
+  "public_objective_ids": [
+    54,
+    51,
+    310,
+    312,
+    2733,
+    2735,
+    52,
+    2739,
+    2741,
+    2745,
+    2728,
+    2747,
+    2751,
+    2730
+  ],
+  "hidden_objective_ids": [
+    2753,
+    2754,
+    2755,
+    2756,
+    2758,
+    2760,
+    2761,
+    2763
+  ],
+  "roots": [
+    {
+      "id": 54,
+      "kind": "site",
+      "lon": 12.096251379480751,
+      "lat": 2.661209375,
+      "hp": 18.0,
+      "interceptors": 7,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 55
+    },
+    {
+      "id": 51,
+      "kind": "target",
+      "lon": 12.426833124446814,
+      "lat": 2.646203125,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2753,
+      "kind": "ship",
+      "lon": 12.200836007604979,
+      "lat": 2.67514375,
+      "hp": 1.2000000000000002,
+      "interceptors": 8,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2754,
+      "kind": "ship",
+      "lon": 12.265635475111507,
+      "lat": 2.6001125,
+      "hp": 1.2000000000000002,
+      "interceptors": 7,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 310,
+      "kind": "site",
+      "lon": 12.069636050205245,
+      "lat": 2.5031078125,
+      "hp": 18.0,
+      "interceptors": 15,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 311
+    },
+    {
+      "id": 312,
+      "kind": "site",
+      "lon": 12.112689052064889,
+      "lat": 2.4655921875,
+      "hp": 18.0,
+      "interceptors": 15,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 313
+    },
+    {
+      "id": 2733,
+      "kind": "site",
+      "lon": 12.15308253150233,
+      "lat": 2.4280765625000003,
+      "hp": 18.0,
+      "interceptors": 15,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2734
+    },
+    {
+      "id": 2735,
+      "kind": "site",
+      "lon": 12.190832266398846,
+      "lat": 2.3905609375,
+      "hp": 18.0,
+      "interceptors": 15,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2736
+    },
+    {
+      "id": 52,
+      "kind": "target",
+      "lon": 12.417109747606249,
+      "lat": 2.4818489583333334,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2755,
+      "kind": "ship",
+      "lon": 12.242930649685798,
+      "lat": 2.46076875,
+      "hp": 1.2000000000000002,
+      "interceptors": 15,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2756,
+      "kind": "ship",
+      "lon": 12.279165823873472,
+      "lat": 2.3857375000000003,
+      "hp": 1.2000000000000002,
+      "interceptors": 15,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2739,
+      "kind": "site",
+      "lon": 12.0637545664764,
+      "lat": 2.2824802083333333,
+      "hp": 18.0,
+      "interceptors": 14,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2740
+    },
+    {
+      "id": 2741,
+      "kind": "site",
+      "lon": 12.087637365204042,
+      "lat": 2.232459375,
+      "hp": 18.0,
+      "interceptors": 14,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2742
+    },
+    {
+      "id": 2745,
+      "kind": "site",
+      "lon": 12.108327297945783,
+      "lat": 2.1824385416666665,
+      "hp": 18.0,
+      "interceptors": 13,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2746
+    },
+    {
+      "id": 2728,
+      "kind": "target",
+      "lon": 12.400761189955903,
+      "lat": 2.25496875,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2758,
+      "kind": "ship",
+      "lon": 12.2024026630944,
+      "lat": 2.24639375,
+      "hp": 1.2000000000000002,
+      "interceptors": 14,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2760,
+      "kind": "ship",
+      "lon": 12.21299944518239,
+      "lat": 2.1713625,
+      "hp": 1.2000000000000002,
+      "interceptors": 14,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2747,
+      "kind": "site",
+      "lon": 11.984958977593577,
+      "lat": 2.0556,
+      "hp": 18.0,
+      "interceptors": 11,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2748
+    },
+    {
+      "id": 2751,
+      "kind": "site",
+      "lon": 11.98757385141093,
+      "lat": 1.9805687500000002,
+      "hp": 18.0,
+      "interceptors": 10,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2752
+    },
+    {
+      "id": 2761,
+      "kind": "ship",
+      "lon": 12.102992792720352,
+      "lat": 2.03201875,
+      "hp": 1.2000000000000002,
+      "interceptors": 11,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2763,
+      "kind": "ship",
+      "lon": 12.105895706302384,
+      "lat": 1.9569875,
+      "hp": 1.2000000000000002,
+      "interceptors": 11,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2730,
+      "kind": "target",
+      "lon": 12.303974682356515,
+      "lat": 2.003078125,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    }
+  ],
+  "root_counts": {
+    "target": 4,
+    "site": 10,
+    "ship": 8
+  },
+  "interceptor_counts": {
+    "54": 7,
+    "310": 15,
+    "312": 15,
+    "2733": 15,
+    "2735": 15,
+    "2739": 14,
+    "2741": 14,
+    "2745": 13,
+    "2747": 11,
+    "2751": 10,
+    "2753": 8,
+    "2754": 7,
+    "2755": 15,
+    "2756": 15,
+    "2758": 14,
+    "2760": 14,
+    "2761": 11,
+    "2763": 11
+  },
+  "red_missile_counts": {
+    "high": 27,
+    "medium": 37,
+    "low": 128
+  },
+  "blue_root_total": 22,
+  "radar_total": 10,
+  "interceptor_total": 224,
+  "entity_total": 450,
+  "blue_root_health_total": 285.6,
+  "red_nominal_damage_total": 853,
+  "blue_health_to_red_nominal_damage_ratio": 0.3348182883939039,
+  "map_area": {
+    "lonMin": 11.58,
+    "lonMax": 12.665,
+    "latMin": 1.90125,
+    "latMax": 2.75875
+  },
+  "logical_map_size": [
+    87.5,
+    70
+  ],
+  "launch_altitude_external_m": 3000,
+  "initial_speed_note": "Initial speed 300 is the supplied model rule; no supported scenario speed override was found.",
+  "detection": {
+    "source": "RadarModelSimulator.execute_detection + ISimulator._is_geometrically_visible",
+    "range_m": 20000,
+    "distance_axes": "ECEF X,Y only",
+    "minimum_target_stage": 3,
+    "slice_altitude_m": 3000
+  },
+  "validation_status": "Current design; see representative_results.json for sampled native results.",
+  "distribution_rule": {
+    "public_cv_limit": 0.2,
+    "stock_cv_limit": 0.2,
+    "small_count_rule": "public limit=max(0.20, minimum CV achievable by integer counts in four bands)"
+  },
+  "blue_health_multiplier": 1.5,
+  "deployment_rule": "For each type and all types combined, cell counts differ by at most one."
+}
