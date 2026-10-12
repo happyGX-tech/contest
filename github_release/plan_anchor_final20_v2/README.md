@@ -44,22 +44,42 @@ provenance/
   protocol_identity.json     运行时关键文件和场景 SHA-256
   run_index.json             1,200 局原始索引（含原机器绝对路径，仅供审计）
 snapshot/
+  run.py                     原项目命令行包装器
   tools/                     当时的生成、运行、分析脚本
   policies/.../plan_skill/   与 run_index 哈希一致的 schema/执行器
+  policies/.../unified/      编码器、网络、动作定义与共享信息中心
+  policies/.../skills/       冻结 local_avoid_s3 的加载与网络代码
+  policies/blue/             固定蓝方策略实现
   core/                      与 run_index 哈希一致的入口和 agent
+  grid_maps/                 合法部署网格与动作编译
   models/                    与 run_index 哈希一致的冻结底层 checkpoint
   scenarios/                 final20 场景与计分代码
 scripts/
   reproduce_analysis.py      不依赖模拟器，重建统计表和报告
   verify_bundle.py           哈希、PlanSpec、矩阵与计分公式检查
+  verify_python_snapshot.py  补漏 Python 模块的导入烟测
 ```
+
+## 2026-10-13 源码补漏
+
+初版确实漏传了运行时模块。导师指出的以下四个文件现已补到原路径：
+
+```text
+snapshot/policies/red/learning/unified/info_center.py
+snapshot/policies/red/learning/unified/unified_encoder.py
+snapshot/policies/red/learning/unified/unified_networks.py
+snapshot/policies/red/learning/unified/action_spec.py
+```
+
+再次从 `core/main.py`、`unified_missile_agent.py`、PlanSpec executor 和 `local_avoid_s3` 加载入口反向检查后，还补入了 `unified/` 其余源码、红/蓝公共策略、基础 Agent、`grid_maps/`、`RunSummary` 和底层模型加载代码。具体证据等级见 `provenance/recovered_dependencies.md`。
 
 ## 一键复核统计
 
-只需要 Python 3 标准库：
+统计复核只需要 Python 3 标准库；Python 快照导入烟测还需要 NumPy 和 PyTorch：
 
 ```bash
 python scripts/verify_bundle.py
+python scripts/verify_python_snapshot.py
 python scripts/reproduce_analysis.py
 diff -u results/report.md reproduced/report.md
 ```
@@ -67,6 +87,8 @@ diff -u results/report.md reproduced/report.md
 预期关键输出：
 
 ```text
+protocol_files_checked: 25
+snapshot_python_files_checked: 71
 plans_checked: 240
 score_rows_checked: 1200
 formula_runs_checked: 1200
@@ -76,12 +98,14 @@ A00_mean: 92.18081954253798
 
 ## 重新运行模拟器
 
-本目录是实验发布包，不是完整模拟器发行版。完整重跑需要原项目的 Python 环境、模拟器源码及 Linux 原生动态库。建议在一个干净的项目副本中：
+本目录现在包含计划生成/执行、编码器/网络、红蓝策略、部署和底层模型加载所需的 Python 侧快照，但仍不是完整模拟器发行版。完整重跑需要原项目的 `envengine` 及 Linux 原生动态库。实验环境的关键版本是 Python `3.11.16`、NumPy `2.4.6`、PyTorch `2.6.0+cu124`、SciPy `1.17.1`、Requests `2.34.2`。
 
-1. 用 `snapshot/` 中同路径文件覆盖项目对应文件；
+建议在一个干净的原项目副本中：
+
+1. 用 `snapshot/` 中同路径文件覆盖项目对应文件，例如 `rsync -a snapshot/ /path/to/competition-platform-env-train/`；
 2. 将 `plans/` 放到 `experiments/plan_skill/anchors_final20_all_v2/`；
 3. 将冻结模型放到 `models/local_avoid_ppo_v13_gate_aligned_s3_best.pt`；
-4. 先运行 `scripts/verify_bundle.py`，再执行：
+4. 先运行两个 verify 脚本，再执行：
 
 ```bash
 python tools/run_plan_anchor_all_maps_v2.py \
@@ -94,11 +118,10 @@ python tools/analyze_plan_anchor_all_maps_v2.py \
   --output results/analysis/plan_anchor_final20_all_12x5_v2
 ```
 
-`protocol_identity.json` 只证明当时显式记录的关键源码、场景和 checkpoint；它没有给整个模拟器 checkout 做全仓库快照。因此，紧凑数据可以精确复现统计报告，而在另一台机器上重跑得到逐局完全相同的轨迹，还要求相同原生库、Python/NumPy/PyTorch 环境及其余模拟器代码。
+`protocol_identity.json` 只证明当时显式记录的关键源码、场景和 checkpoint；它没有给整个模拟器 checkout 做全仓库快照。补漏模块的来源和证据等级单独记录在 `provenance/recovered_dependencies.md`。因此，紧凑数据可以精确复现统计报告；在另一台机器上重跑得到逐局完全相同的轨迹，还要求相同原生库和运行环境。
 
 ## 发布注意
 
 - `results/report.md` 已按真实矩阵校正为每图 5 个 seed；若其他副本写成 12，这是报告文字错误，因为数据实际是 20×12×5=1,200 局。
 - 原始 1,200 份 summary 和日志约 1 GB，没有放入本目录；逐目标计分证据已压缩到 CSV。
 - 公开上传前请确认原项目、场景数据和 checkpoint 的许可；本目录没有擅自添加新许可证。
-
