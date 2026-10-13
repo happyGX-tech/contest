@@ -14,6 +14,31 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+EXPECTED_ANCHORS = (
+    "A00_balanced",
+    "A01_deploy_forward",
+    "A02_deploy_rear",
+    "A03_deploy_compact",
+    "A04_deploy_wide",
+    "A05_wave_mass",
+    "A06_wave_rapid",
+    "A07_wave_slow",
+    "A08_formation_dense",
+    "A09_formation_deep",
+    "A10_l_screen",
+    "A11_hm_spearhead",
+)
+
+EXPECTED_SCENARIOS = (
+    "E01", "E02", "E03", "E04", "E05", "E06",
+    "H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08",
+    "M01", "M02", "M03", "M04", "M05", "M06",
+)
+
+ORIGINAL_REPORT_SHA256 = (
+    "47bd8e84074d3f1398ae072357cb006aa4c880e2752704eff63aaec860a79fc4"
+)
+
 REQUIRED_SNAPSHOT_SOURCES = (
     "snapshot/run.py",
     "snapshot/core/evaluation/run_summary.py",
@@ -122,6 +147,14 @@ def check_plans() -> int:
         raise ValueError("root manifest expected_runs is not 1200")
     if root_manifest["map_count"] != 20 or root_manifest["anchor_count"] != 12:
         raise ValueError("root manifest is not the 20-map x 12-anchor matrix")
+    if tuple(root_manifest["common_seeds"]) != (1, 2, 3, 4, 5):
+        raise ValueError("root manifest does not use shared seeds 1--5")
+    root_anchor_ids = tuple(row["anchor_id"] for row in root_manifest["anchors"])
+    if root_anchor_ids != EXPECTED_ANCHORS:
+        raise ValueError("root manifest does not contain exactly A00--A11")
+    root_scenario_ids = tuple(row["scenario_id"] for row in root_manifest["maps"])
+    if root_scenario_ids != EXPECTED_SCENARIOS:
+        raise ValueError("root manifest does not contain the exact final20 map set")
 
     checked = 0
     for map_row in root_manifest["maps"]:
@@ -129,6 +162,12 @@ def check_plans() -> int:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         if len(manifest["anchors"]) != 12:
             raise ValueError(f"wrong anchor count in {manifest_path}")
+        anchor_ids = tuple(row["anchor_id"] for row in manifest["anchors"])
+        if anchor_ids != EXPECTED_ANCHORS:
+            raise ValueError(
+                f"wrong or reordered anchor IDs in {manifest_path}: "
+                f"{anchor_ids}"
+            )
         for anchor in manifest["anchors"]:
             plan_path = manifest_path.parent / anchor["plan_file"]
             tokens = json.loads(plan_path.read_text(encoding="utf-8"))
@@ -156,13 +195,34 @@ def read_scores() -> dict[tuple[str, int, str], float]:
     }
     if len(scores) != 1200:
         raise ValueError("score keys are not unique")
-    if len({key[0] for key in scores}) != 20:
-        raise ValueError("score export does not contain 20 maps")
-    if len({key[1] for key in scores}) != 5:
-        raise ValueError("score export does not contain 5 shared seeds")
-    if len({key[2] for key in scores}) != 12:
-        raise ValueError("score export does not contain 12 anchors")
+    if {key[0] for key in scores} != set(EXPECTED_SCENARIOS):
+        raise ValueError("score export does not contain the exact final20 map set")
+    if {key[1] for key in scores} != set(range(1, 6)):
+        raise ValueError("score export does not contain exactly shared seeds 1--5")
+    if {key[2] for key in scores} != set(EXPECTED_ANCHORS):
+        raise ValueError("score export does not contain exactly A00--A11")
+    expected_keys = {
+        (scenario_id, seed, anchor_id)
+        for scenario_id in EXPECTED_SCENARIOS
+        for seed in range(1, 6)
+        for anchor_id in EXPECTED_ANCHORS
+    }
+    if set(scores) != expected_keys:
+        raise ValueError("score export is not the complete map x seed x anchor matrix")
     return scores
+
+
+def check_original_report() -> bool:
+    path = ROOT / "results/original_report.md"
+    if not path.is_file():
+        raise ValueError("missing original experiment report")
+    actual = sha256(path)
+    if actual != ORIGINAL_REPORT_SHA256:
+        raise ValueError(
+            f"original report hash mismatch: {actual} != "
+            f"{ORIGINAL_REPORT_SHA256}"
+        )
+    return True
 
 
 def check_score_formula(scores: dict[tuple[str, int, str], float]) -> int:
@@ -200,6 +260,7 @@ def main() -> None:
     plans = check_plans()
     scores = read_scores()
     formula_runs = check_score_formula(scores)
+    original_report = check_original_report()
     baseline = [
         value for key, value in scores.items() if key[2] == "A00_balanced"
     ]
@@ -210,6 +271,7 @@ def main() -> None:
         "plans_checked": plans,
         "score_rows_checked": len(scores),
         "formula_runs_checked": formula_runs,
+        "original_report_checked": original_report,
         "A00_runs": len(baseline),
         "A00_mean": sum(baseline) / len(baseline),
     }, ensure_ascii=False, indent=2))
