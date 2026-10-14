@@ -111,11 +111,11 @@ class BaselineRules:
     wave_count: int = 3
     wave_interval: int = 40
     static_search_group_size: int = 3
-    static_search_group_spacing_km: float = 50.0
+    static_search_group_spacing_km: float = 5.0
     static_search_low_fraction: float = 0.06
     static_search_min_platforms: int = 9
-    static_search_max_range_km: float = 480.0
-    static_search_danger_radius_km: float = 200.0
+    static_search_max_range_km: float = 48.0
+    static_search_danger_radius_km: float = 20.0
     # Policy time is the TrainingEnv step index; final24 uses one second/step.
     static_search_lead_steps: int = 700
 

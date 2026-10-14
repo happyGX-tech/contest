@@ -1,7 +1,7 @@
 """红方学习基线所需的观测、动作和共享策略抽象。
 
 高层动作空间固定为：等待、对 5 个槽位发射、对 5 个槽位改目标、
-左/右/停止机动、使用卫星。适配器负责将高层动作转换为仿真引擎已有的
+左/右/停止机动、使用天眼。适配器负责将高层动作转换为仿真引擎已有的
 四元动作，因此学习算法不需要直接回归经纬度。
 """
 
@@ -57,6 +57,11 @@ class SharedPolicy(ABC):
 
     def reset_episode(self) -> None:
         """一轮开始时调用。共享策略应能安全地被多个 Agent 重复调用。"""
+
+    def finalize_episode(self, *, truncated: bool = False) -> None:
+        """一轮结束时调用；用于落盘仍存活智能体的尾部轨迹。"""
+
+        del truncated
 
     def begin_environment_step(self, full_observation: Mapping[str, Any]) -> None:
         """联合动作生成前保存全局状态的可选钩子。"""
@@ -213,7 +218,7 @@ class ObservationEncoder:
             else:
                 target_position = target["position"]
                 detection_age = self.max_steps
-            name = str(target.get("nameChn", ""))
+            entity_type = int(target.get("type", -1))
             delta_lon = float(target_position["lon"]) - lon
             delta_lat = float(target_position["lat"]) - lat
             mean_latitude = np.radians((float(target_position["lat"]) + lat) / 2.0)
@@ -230,19 +235,19 @@ class ObservationEncoder:
                 np.cos(bearing),
                 float(detection is not None),
                 np.clip(detection_age / self.max_steps, 0.0, 1.0),
-                float(name.startswith("目标")),
-                float(name.startswith("拦截阵地")),
+                float(entity_type == 9400),
+                float(entity_type == 9600),
                 float(current_target_index == index),
                 np.sin(relative_bearing),
                 np.cos(relative_bearing),
             ])
 
-        detected_names = [str(getattr(info, "nameChn", "")) for info in detect_info.values()]
+        detected_entity_types = [int(getattr(info, "type", -1)) for info in detect_info.values()]
         comm_count = len(self_info.get("commRangeInfo") or [])
         features.extend([
             np.clip(len(detect_info) / 200.0, 0.0, 1.0),
-            np.clip(sum(name.startswith("标6") for name in detected_names) / 200.0, 0.0, 1.0),
-            np.clip(sum(name.startswith("无人船") for name in detected_names) / 10.0, 0.0, 1.0),
+            np.clip(sum(et == 24000 for et in detected_entity_types) / 200.0, 0.0, 1.0),
+            np.clip(sum(et == 9500 for et in detected_entity_types) / 10.0, 0.0, 1.0),
             np.clip(comm_count / 64.0, 0.0, 1.0),
         ])
         if self.hierarchical_task_context:
@@ -256,7 +261,7 @@ class GlobalStateEncoder:
     """将完整态势编码为集中式 Critic 使用的固定长度全局状态。"""
 
     RED_TYPES = (21000, 21001, 21002)
-    BLUE_PREFIXES = ("目标", "拦截阵地", "普通雷达", "标6", "无人船")
+    BLUE_TYPES = (9400, 9600, 44000, 24000, 9500)
     EXTRA_RED_FEATURES = 9
 
     def __init__(self, max_steps: int = 1000, target_slots: int = DEFAULT_TARGET_SLOTS):
@@ -268,7 +273,7 @@ class GlobalStateEncoder:
         return (
             1
             + len(self.RED_TYPES) * 5
-            + len(self.BLUE_PREFIXES) * 3
+            + len(self.BLUE_TYPES) * 3
             + self.target_slots * 6
             + self.EXTRA_RED_FEATURES
         )
@@ -312,8 +317,8 @@ class GlobalStateEncoder:
                 np.clip(self._mean(alive, lambda x: x.get("position", {}).get("alt", 0.0)) / 20000.0, -1.0, 1.0),
             ])
 
-        for prefix in self.BLUE_PREFIXES:
-            group = [item for item in entities if str(item.get("nameChn", "")).startswith(prefix)]
+        for entity_type in self.BLUE_TYPES:
+            group = [item for item in entities if int(item.get("type", 0)) == entity_type]
             alive_count = sum(float(item.get("health", 0.0)) > 0 for item in group)
             features.extend([
                 np.clip(len(group) / 200.0, 0.0, 1.0),
@@ -327,7 +332,7 @@ class GlobalStateEncoder:
         ]
         key_targets = [
             item for item in entities
-            if str(item.get("nameChn", "")).startswith("目标")
+            if int(item.get("type", 0)) == 9400
             and float(item.get("health", 0.0)) > 0
         ]
         nearest_distances = [
@@ -354,7 +359,7 @@ class GlobalStateEncoder:
         ])
 
         targets = sorted(
-            [item for item in entities if str(item.get("nameChn", "")).startswith(("目标", "拦截阵地"))],
+            [item for item in entities if int(item.get("type", 0)) in [9400, 9600]],
             key=lambda item: item["entity_id"],
         )[:self.target_slots]
         for index in range(self.target_slots):
@@ -363,14 +368,14 @@ class GlobalStateEncoder:
                 continue
             target = targets[index]
             position = target.get("position", {})
-            name = str(target.get("nameChn", ""))
+            entity_type = int(target.get("type", 0))
             features.extend([
                 float(position.get("lon", 0.0)) / 180.0,
                 float(position.get("lat", 0.0)) / 90.0,
                 np.clip(float(position.get("alt", 0.0)) / 20000.0, -1.0, 1.0),
                 np.clip(float(target.get("health", 0.0)) / 100.0, 0.0, 1.0),
                 float(float(target.get("health", 0.0)) > 0),
-                float(name.startswith("目标")),
+                float(entity_type == 9400),
             ])
         return np.asarray(features, dtype=np.float32)
 

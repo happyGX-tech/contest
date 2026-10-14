@@ -226,7 +226,7 @@ class DefendCommanderModelSimulator(ISimulator):
                         lla=self._copy_vector(entity.lla),
                         pos_ecf=self._copy_vector(entity.posEcf),
                         health=entity.survivePoints,
-                        value=self._asset_value(entity.id, entity.nameChn),
+                        value=self._asset_value(entity.id, entity.entityType),
                     )
                 )
 
@@ -427,14 +427,14 @@ class DefendCommanderModelSimulator(ISimulator):
         else:
             super().command_received(command)
 
-    def _asset_value(self, entity_id: int, name: str) -> float:
+    def _asset_value(self, entity_id: int, entity_type: int) -> float:
         if entity_id in self._asset_values:
             return self._asset_values[entity_id]
-        if name.startswith("目标"):
+        if entity_type == 9400:
             return 10.0
-        if name.startswith("拦截阵地"):
+        if entity_type == 9600:
             return 6.0
-        if name.startswith("无人船"):
+        if entity_type == 9500:
             return 3.0
         return 1.0
 

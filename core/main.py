@@ -19,7 +19,7 @@ from envengine import Profile, TrainingEnv
 from envengine.sdk.log import LogManager
 from envengine.sdk.writer import WriteConfig, init_writer, get_writer, write_immediately
 from user_agents import AttackMissileAgent, DeployAgent
-from evaluation import RunSummary
+from evaluation import MissionOutcomeTracker, RunSummary
 
 try:
     from scenarios.cases import RewardTracker, load_reward_policy
@@ -38,6 +38,9 @@ def parse_args():
                         type=str,
                         default='./scenarios/platform.json',
                         help='Path or URL to scenario configuration file (default: ./scenarios/platform.json)')
+
+    parser.add_argument('--deployment-plan', type=Path, default=None,
+                        help='Validated 3 x 8 x 4 grid count plan JSON')
 
     parser.add_argument('--total-rounds',
                         type=int,
@@ -79,22 +82,22 @@ def parse_args():
     parser.add_argument('--enable-config',
                         action='store_true',
                         default=False,
-                        help='Enable config writing (default: True)')
+                        help='Enable config writing (default: False)')
 
     parser.add_argument('--enable-state',
                         action='store_true',
                         default=False,
-                        help='Enable state writing (default: True)')
+                        help='Enable state writing (default: False)')
 
     parser.add_argument('--enable-event',
                         action='store_true',
                         default=False,
-                        help='Enable event writing (default: True)')
+                        help='Enable event writing (default: False)')
 
     parser.add_argument('--enable-ai-action',
                         action='store_true',
                         default=False,
-                        help='Enable AI action writing (default: True)')
+                        help='Enable AI action writing (default: False)')
 
     return parser.parse_args()
 
@@ -193,15 +196,17 @@ def main():
     )
     red_motion_policy = os.getenv("RED_MOTION_POLICY", "reactive_evasion")
     hierarchical_learning = red_policy == "r9_hierarchical_learning"
-    if hierarchical_learning and red_motion_policy not in {"random_masked", "ppo", "mappo"}:
+    if hierarchical_learning and red_motion_policy not in {
+        "random_masked", "ppo", "mappo", "local_avoid_s3"
+    }:
         raise ValueError(
             "r9_hierarchical_learning requires RED_MOTION_POLICY to be "
-            "random_masked, ppo, or mappo"
+            "random_masked, ppo, mappo, or local_avoid_s3"
         )
     learning_training = os.getenv("RED_LEARNING_TRAIN", "0") == "1"
     learning_model = os.getenv("RED_LEARNING_MODEL")
     learning_policy = None
-    if red_motion_policy in {"random_masked", "ppo", "mappo"}:
+    if red_motion_policy in {"random_masked", "ppo", "mappo", "local_avoid_s3"}:
         learning_policy = build_learning_motion_policy(
             red_motion_policy,
             seed=int(os.getenv("RED_POLICY_SEED", "1")),
@@ -210,7 +215,9 @@ def main():
             training=learning_training,
             observation_dim=90 if hierarchical_learning else 85,
         )
-        if learning_training:
+        if learning_training or bool(
+            getattr(learning_policy, "requires_environment_hooks", False)
+        ):
             training_env.set_shared_learning_policy(learning_policy)
     for i, simulator in enumerate(simulators):
         entity_id = simulator.entity_ext.entity.id
@@ -232,7 +239,22 @@ def main():
     logging.info(f"[测试] 已注册 {training_env.agent_manager.get_agent_count()} 个智能体")
 
     # 注册部署智能体
-    deploy_agent = DeployAgent(-1, -1,{}, profile.imagineProfile.redArea.coordinates, profile.imagineProfile.redArea.coordinatesHM)
+    if args.deployment_plan is not None:
+        from grid_maps.agent import GridDeployAgent
+        plan = json.loads(args.deployment_plan.read_text(encoding="utf-8"))
+        deployment_entities = {
+            item.entity.id: {"type": item.entity.entityType,
+                             "position": {"alt": item.entity.lla.z}}
+            for item in profile.imagineProfile.entityList
+            if item.entity.entityType in (21000, 21001, 21002)
+        }
+        deploy_agent = GridDeployAgent(
+            -1, -1, {"entities": deployment_entities},
+            profile.imagineProfile.redArea.coordinates,
+            profile.imagineProfile.redArea.coordinatesHM, plan,
+        )
+    else:
+        deploy_agent = DeployAgent(-1, -1,{}, profile.imagineProfile.redArea.coordinates, profile.imagineProfile.redArea.coordinatesHM)
     training_env.agent_manager.register_agent(deploy_agent)
 
     logging.info("[测试] 运行环境初始化完成")
@@ -249,6 +271,10 @@ def main():
                 "blue": os.getenv("BLUE_POLICY", "engine_default"),
             },
             reward_tracker=RewardTracker(reward_policy) if reward_policy is not None else None,
+            outcome_tracker=MissionOutcomeTracker(
+                training_env.agent_manager.get_all_agents(),
+                training_env.engine.simulator_factory,
+            ),
         )
         run_summary.start(initial_observation)
         final_observation = initial_observation
@@ -262,6 +288,7 @@ def main():
             obs, reward, done, info = training_env.step()
             final_observation = obs
             run_summary.update(step, obs)
+            # time.sleep(0.02)
             if step % 200 == 0:
                 # logging.info(f"[测试] Step {step}: obs={obs}, reward={reward}, done={done}, info={info}")
                 logging.info(f"[测试] Step {step}")
@@ -288,11 +315,15 @@ def main():
         summary_path = run_summary.write(write_config.output_dir, summary, summary_filename)
         print("FINAL_SUMMARY " + json.dumps(summary, ensure_ascii=False))
         logging.info(f"[测试] 单局汇总已写入: {summary_path}")
-        if learning_training and learning_policy is not None and learning_model:
-            learning_policy.save(learning_model)
-            logging.info(
-                f"[测试] 第 {i + 1} 轮红方学习模型已保存: {learning_model}"
+        if learning_policy is not None:
+            learning_policy.finalize_episode(
+                truncated=termination_reason == "time_limit"
             )
+
+    if learning_training and learning_policy is not None and learning_model:
+        Path(learning_model).parent.mkdir(parents=True, exist_ok=True)
+        learning_policy.save(learning_model)
+        logging.info(f"[测试] 红方学习模型已保存: {learning_model}")
 
     training_env.close()
     # 关闭写入器

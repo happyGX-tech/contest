@@ -108,16 +108,7 @@ venv.bak/
 *.swp
 *.sw
 /Results/
+/datasets/local_avoid_full_sim_v1/
 tests/test_low_missile_ship_damage.py
 tests/test_reward.py
 tests/test_scenario_compatibility.py
-
-# Local avoidance PPO delivery: keep only the selected checkpoint and reports.
-models/r9_mappo_e01.pt
-models/r9_ppo_e01.pt
-models/local_avoid_ppo*.pt
-!models/local_avoid_ppo_stage3_selected.pt
-results/local_avoid_ppo/*
-!results/local_avoid_ppo/evaluation_v9_stage2_recovery_best_2000.json
-!results/local_avoid_ppo/stage3_diagnosis_v4_3000.json
-!results/local_avoid_ppo/stage3_diagnosis_v9_selected_3000.json

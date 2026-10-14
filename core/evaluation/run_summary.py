@@ -31,10 +31,12 @@ class RunSummary:
         scenario: str,
         policies: Mapping[str, str],
         reward_tracker=None,
+        outcome_tracker=None,
     ) -> None:
         self.scenario = scenario
         self.policies = dict(policies)
         self.reward_tracker = reward_tracker
+        self.outcome_tracker = outcome_tracker
         self.initial_entities: dict[int | str, dict[str, Any]] = {}
         self.steps_executed = 0
 
@@ -45,11 +47,15 @@ class RunSummary:
             for entity_id, entity in entities.items()
             if isinstance(entity, Mapping)
         }
+        if self.outcome_tracker is not None:
+            self.outcome_tracker.start(observation)
 
     def update(self, step: int, observation: Mapping[str, Any]) -> None:
         self.steps_executed = int(step)
         if self.reward_tracker is not None:
             self.reward_tracker.check_completion(step, observation)
+        if self.outcome_tracker is not None:
+            self.outcome_tracker.update(observation)
 
     def build(
         self,
@@ -69,7 +75,7 @@ class RunSummary:
         blue_entities = self._side_entities(self.initial_entities, _BLUE_SIDE)
         objectives, score = self._objectives_and_score(final_entities, final_observation)
 
-        return {
+        summary = {
             "scenario": self.scenario,
             "policies": self.policies,
             "steps_executed": self.steps_executed,
@@ -90,6 +96,9 @@ class RunSummary:
             },
             "objectives": objectives,
         }
+        if self.outcome_tracker is not None:
+            summary["outcomes"] = self.outcome_tracker.finish(final_observation)
+        return summary
 
     def write(
         self,

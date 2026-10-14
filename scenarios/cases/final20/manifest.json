@@ -1,0 +1,225 @@
+{
+  "design": "current_three_tier_maps",
+  "maps": [
+    {
+      "map": "E01",
+      "tier": "easy",
+      "mothers": 3,
+      "stock": 97,
+      "red": 126,
+      "entities": 242,
+      "distribution": "比较均匀",
+      "scenario_sha256": "85876c67db4b120b564d32ef034dc335fec121ce2842989db9faf77931072c72",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "E02",
+      "tier": "easy",
+      "mothers": 3,
+      "stock": 97,
+      "red": 126,
+      "entities": 242,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "89899cfcae4403fffa812083bf02ca7f8e479b389e48daeafa772cd082f9f9f7",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "E03",
+      "tier": "easy",
+      "mothers": 3,
+      "stock": 97,
+      "red": 126,
+      "entities": 242,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "24244028f715a2bf62f49e516b893ee9fe17844e870bd5212912d2f93f58656f",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "E04",
+      "tier": "easy",
+      "mothers": 3,
+      "stock": 97,
+      "red": 126,
+      "entities": 242,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "b0695ebac4c04c546ed11bcbeb58a9968cbe3a642ae03db68e705d9a20d034d5",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "E05",
+      "tier": "easy",
+      "mothers": 3,
+      "stock": 97,
+      "red": 126,
+      "entities": 242,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "c4ecdb7474525f8279224a39939f0c1838a2b0959b32f56971d61a39f0b5db66",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "E06",
+      "tier": "easy",
+      "mothers": 3,
+      "stock": 97,
+      "red": 126,
+      "entities": 242,
+      "distribution": "比较均匀",
+      "scenario_sha256": "095d6dc4b0399cb0c231ddf6e91df89ac5443f9c11d6934a5a7086f71fa842b7",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "H01",
+      "tier": "hard",
+      "mothers": 5,
+      "stock": 435,
+      "red": 328,
+      "entities": 828,
+      "distribution": "比较均匀",
+      "scenario_sha256": "d490c9b08edb9f3e490e442d6478e3c0bf7f76d94d684e639c5fc2863f4c638b",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "H02",
+      "tier": "hard",
+      "mothers": 5,
+      "stock": 435,
+      "red": 328,
+      "entities": 828,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "58989aea44889ad0ec8440ee5ee3dcd22746b21c3cf882757171a5526db7cd59",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "H03",
+      "tier": "hard",
+      "mothers": 5,
+      "stock": 435,
+      "red": 328,
+      "entities": 828,
+      "distribution": "比较均匀",
+      "scenario_sha256": "0a485862b8eb798b8a69fae053bc2e0e1cfdcbb98c7d2cbad486c1423fe71403",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "H04",
+      "tier": "hard",
+      "mothers": 5,
+      "stock": 435,
+      "red": 328,
+      "entities": 828,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "342b5cbf4a0d2f5cf31179c46e9fdbc463561aa9f97f4d70cbe11a65860f4575",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "H05",
+      "tier": "hard",
+      "mothers": 5,
+      "stock": 435,
+      "red": 328,
+      "entities": 828,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "ae8148626c88c8eb96903c84db237384a209151a785d6f06baa62bc1b16721b0",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "H06",
+      "tier": "hard",
+      "mothers": 5,
+      "stock": 435,
+      "red": 328,
+      "entities": 828,
+      "distribution": "比较均匀",
+      "scenario_sha256": "8a43ba2cfb14dc4c8bced57a6c04948c14c33ea78cacef35e8bbf7865c4c252e",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "H07",
+      "tier": "hard",
+      "mothers": 5,
+      "stock": 435,
+      "red": 328,
+      "entities": 828,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "cfdecd047ff6698c3597e1c4908b6afc09fa96c3f84c62244a567cec092da92f",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "H08",
+      "tier": "hard",
+      "mothers": 5,
+      "stock": 435,
+      "red": 328,
+      "entities": 828,
+      "distribution": "比较均匀",
+      "scenario_sha256": "d2a7892e1798eb03fe43048341557a7af95fee45b49e7118730fd0994883029e",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "M01",
+      "tier": "medium",
+      "mothers": 4,
+      "stock": 224,
+      "red": 192,
+      "entities": 450,
+      "distribution": "比较均匀",
+      "scenario_sha256": "b195f95a6858b2d95032634571581f4137f249ce88d757e80789dd2905373f52",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "M02",
+      "tier": "medium",
+      "mothers": 4,
+      "stock": 224,
+      "red": 192,
+      "entities": 450,
+      "distribution": "比较均匀",
+      "scenario_sha256": "6b0dc6e507e4ee00fbafed150c40297c4a4100b202188463456959222ec9252b",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "M03",
+      "tier": "medium",
+      "mothers": 4,
+      "stock": 224,
+      "red": 192,
+      "entities": 450,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "58cd8947cc5ef23ac6697bbe41bad07aed9c7ea7474323fce37ce472cd26bb8a",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "M04",
+      "tier": "medium",
+      "mothers": 4,
+      "stock": 224,
+      "red": 192,
+      "entities": 450,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "c82f6072278d0b97e4349fa08203d8a88d8e0e03da90115ca71749159ef7b60f",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "M05",
+      "tier": "medium",
+      "mothers": 4,
+      "stock": 224,
+      "red": 192,
+      "entities": 450,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "fa24cd42acac99c45918685218a7a132f34709b35dba773c2b4519499f589f92",
+      "uniform_deployment_verified": true
+    },
+    {
+      "map": "M06",
+      "tier": "medium",
+      "mothers": 4,
+      "stock": 224,
+      "red": 192,
+      "entities": 450,
+      "distribution": "部分不均匀",
+      "scenario_sha256": "1293bd588fc5d2c49fa8b74e72fa59fab3fd91db37be899c7a6e483add5b54bf",
+      "uniform_deployment_verified": true
+    }
+  ]
+}

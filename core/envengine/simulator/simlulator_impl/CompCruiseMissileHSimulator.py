@@ -14,7 +14,7 @@ from envengine.sdk.Util import UtilsPy
 from envengine.sdk.Util import State_py
 from envengine.simulator.decorator import Simulator, timer_decorator
 from envengine.simulator.interfaces import ISimulator
-from envengine.simulator.models.HXDMissileModel import Missile
+from envengine.simulator.models.ACMMissileModel import Missile
 from envengine.simulator.simulator_factory import SimulatorFactory
 
 logger = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 @Simulator.register("CruiseMissileHS")
 class CompCruiseMissileHSimulator(ISimulator):
     """
-    高性能弹
+    毁灭者
 
     Attributes:
         launch (int): 是否发射
@@ -61,17 +61,8 @@ class CompCruiseMissileHSimulator(ISimulator):
 
             self.ret = self.model.Update()
             state: State_py = self.model.getState()
+            self._update_state(state)
 
-            pos = state.posEcf()
-            vel = state.velEcf()
-            lla = UtilsPy.CoordinateHelper.ecefToLla_py(pos)
-
-            # 更新实体数据
-            entity = self.entity_ext.entity
-            entity.lla.x, entity.lla.y, entity.lla.z = lla.x(), lla.y(), lla.z()
-            entity.posEcf.x, entity.posEcf.y, entity.posEcf.z = pos.x(), pos.y(), pos.z()
-            entity.velEcf.x, entity.velEcf.y, entity.velEcf.z = vel.x(), vel.y(), vel.z()
-            entity.stage = state.stage()
         else:
             if self.entity_ext.entity.isVisible:
                 # 自爆
@@ -92,12 +83,12 @@ class CompCruiseMissileHSimulator(ISimulator):
                 # 指令转发
                 self._send_commands(self_command_list)
 
-                # 弹爆炸了，计算与周围仿真器的距离，如果距离小于100米，则通知仿真器进行爆炸
+                # 毁灭者爆炸了，计算与周围仿真器的距离，如果距离小于100米，则通知仿真器进行爆炸
                 damage_candidate_simulators: list[ISimulator] = self._simulator_factory.get_simulators_by_side(
                     1 if self.entity_ext.entity.sideId == 0 else 0)
                 can_damage_simulators: list[ISimulator] = self._get_targets_within_self_range(
                     damage_candidate_simulators,
-                    max_range=1000)
+                    max_range=100)
                 if not can_damage_simulators:
                     return
 
@@ -126,7 +117,7 @@ class CompCruiseMissileHSimulator(ISimulator):
                 self.entity_ext.entity.sideId)
             can_communication_simulators: list[ISimulator] = self._get_targets_within_self_range(
                 communication_candidate_simulators,
-                max_range=500 * 1000)
+                max_range=50 * 1000)
 
             # 如果已经发送过同样的探测信息，则不再发送
             can_communication_send_simulators = []
@@ -146,24 +137,28 @@ class CompCruiseMissileHSimulator(ISimulator):
 
     def execute_detection(self):
         """
-        执行探测，高性能弹可以探测100KM范围内的无人船和拦截弹
-        如果是卫星探测期间，不再判断距离
+        执行探测，毁灭者可以探测100KM范围内的暗巢和自爆虫群
         :return:
         """
-        interceptors: list[ISimulator] = self._simulator_factory.get_simulators_by_type(24000)
-        ships: list[ISimulator] = self._simulator_factory.get_simulators_by_type(9500)
 
+        """
+        9400:   母巢
+        9500:   暗巢
+        9600:   哨卫巢
+        24000:  自爆虫群
+        """
+
+        if self._simulator_factory is None:
+            return
+
+        own_pos = self.entity_ext.entity.posEcf
         detected: list[ISimulator] = []
-        for sim in interceptors:
-            if (sim.entity_ext.entity.isVisible
-                    and sim.entity_ext.entity.survivePoints > 0
-                    and (self.is_using_satellite() or self._is_geometrically_visible(sim.entity_ext.entity.posEcf, self.entity_ext.entity.posEcf, 100 * 1000))):
-                detected.append(sim)
-        for sim in ships:
-            if (sim.entity_ext.entity.isVisible
-                    and sim.entity_ext.entity.survivePoints > 0
-                    and self._is_geometrically_visible(sim.entity_ext.entity.posEcf, self.entity_ext.entity.posEcf, 100*1000)):
-                detected.append(sim)
+        for detect_t in [24000, 9400, 9500, 9600]:
+            for sim in self._simulator_factory.get_simulators_by_type(detect_t):
+                if (sim.entity_ext.entity.isVisible
+                        and sim.entity_ext.entity.survivePoints > 0
+                        and self._is_geometrically_visible(sim.entity_ext.entity.posEcf, own_pos, 10 * 1000)):
+                    detected.append(sim)
 
         if not detected:
             return
@@ -204,16 +199,16 @@ class CompCruiseMissileHSimulator(ISimulator):
         missile_lla = UtilsPy.Vector3D(self.entity_ext.entity.lla.x, self.entity_ext.entity.lla.y,
                                        self.entity_ext.entity.lla.z+0.1)
 
-        self.model.Init(self.simulator_sim_step / 1000, missile_lla, 20)
-        self.model.SetDesiredHeight(30000)
-        self.set_speed(2000)
+        self.model.Init(self.simulator_sim_step / 1000, missile_lla * ISimulator.MODEL_SCALE, 20)
+        self.model.SetDesiredHeight(3_000 * ISimulator.MODEL_SCALE)
+        self.set_speed(200 * ISimulator.MODEL_SCALE)
         self.model.Save(False, self.entity_ext.entity.id)
 
     def set_speed(self, speed: float) -> None:
         """
         初始设置速度
         """
-        self.model.SetDesiredSpeed(2000)
+        self.model.SetDesiredSpeed(200 * ISimulator.MODEL_SCALE)
 
     def command_received(self, command: Command) -> None:
         """
@@ -232,7 +227,7 @@ class CompCruiseMissileHSimulator(ISimulator):
                 command.commandAttributes["target"]["x"],
                 command.commandAttributes["target"]["y"],
                 command.commandAttributes["target"]["z"]
-            ))
+            ) * ISimulator.MODEL_SCALE)
 
             # targetLLa = command.commandAttributes["target"]
             # print(f"{self.entity_ext.entity.nameChn}, 发射位置：{self.entity_ext.entity.lla}，目标位置：{targetLLa}")
@@ -244,15 +239,16 @@ class CompCruiseMissileHSimulator(ISimulator):
             else:
                 self.model.SetDesiredAccZ(command.commandAttributes["acc_z"] * 20 * 9.8)
         elif command.commandTypeId == SimmerCommandType.SET_DESIRED_VEL_X:
-            self.model.SetDesiredSpeed(command.commandAttributes["vel_x"])
+            self.model.SetDesiredSpeed(command.commandAttributes["vel_x"] * ISimulator.MODEL_SCALE)
         elif command.commandTypeId == SimmerCommandType.CHANGE_MISSILE_TARGET:
+            # Match Launch: scale LLA before converting to native ECEF.
             pos = UtilsPy.CoordinateHelper.llaToEcef_py(Vector3D(  # type:ignore
                 command.commandAttributes["target"]["x"],
                 command.commandAttributes["target"]["y"],
                 command.commandAttributes["target"]["z"]
-            ))
+            ) * ISimulator.MODEL_SCALE)
 
             # 红方弹的目标都是不动点
-            self.model.SetTargetEcf(Vector3D(pos.x(), pos.y(), pos.z()), Vector3D(0, 0, 0))
+            self.model.SetTargetEcf(pos, Vector3D(0, 0, 0))
         else:
             super().command_received(command)

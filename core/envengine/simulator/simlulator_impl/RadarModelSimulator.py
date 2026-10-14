@@ -85,8 +85,8 @@ class RadarModelSimulator(ISimulator):
         detected_candidate_simulators: list[ISimulator] = self._simulator_factory.get_simulators_by_side(
             1 if self.entity_ext.entity.sideId == 0 else 0)
         detected: list[ISimulator] = self._get_targets_within_self_range(detected_candidate_simulators,
-                                                                         max_range=200 * 1000)
-        # 只有蓝方有雷达，仅探测 stage >= 3 的实体（滑翔段及以后）
+                                                                         max_range=20 * 1000)
+        # 只有蓝方有视野塔，仅探测 stage >= 3 的实体（滑翔段及以后）
         detected = [i for i in detected if i.entity_ext.entity.stage >= 3]
 
         if not detected:
@@ -110,14 +110,7 @@ class RadarModelSimulator(ISimulator):
     def reset(self) -> None:
         """重置到初始状态"""
         super().reset()
-        posEcf: Vector3D = UtilsPy.CoordinateHelper.llaToEcef_py(
-            Vector3D(self.entity_ext.entity.lla.x, self.entity_ext.entity.lla.y, self.entity_ext.entity.lla.z))
-
-        self.entity_ext.entity.posEcf = Vector3d(
-            posEcf.x(),
-            posEcf.y(),
-            posEcf.z()
-        )
+        self.entity_ext.entity.posEcf = self._get_ecf_position()
 
     def init_model(self) -> None:
         pass

@@ -52,22 +52,13 @@ class DeployAgent(BaseAgent):
             else:
                 lon, lat = self.random_point_in_rect(self.deploy_coordinates)
 
-            if entity_type == 21002:
-                actions.append([
-                    ACTION_DEPLOY,
-                    entity_id,
-                    lon,
-                    lat,
-                    10000  # observation[entity_id]["position"]["alt"]
-                ])
-            else:
-                actions.append([
-                    ACTION_DEPLOY,
-                    entity_id,
-                    lon,
-                    lat,
-                    0
-                ])
+            actions.append([
+                ACTION_DEPLOY,
+                entity_id,
+                lon,
+                lat,
+                observation[entity_id]["position"]["alt"]
+            ])
 
         self.index += len(actions)
 

@@ -46,6 +46,7 @@ RED_MOTION_POLICY_CHOICES = (
     "random_masked",
     "ppo",
     "mappo",
+    "local_avoid_s3",
 )
 
 
@@ -85,11 +86,11 @@ def with_competition_step_limit(scenario: Path, core_args: list[str]) -> list[st
 
 def cmd_run(args: argparse.Namespace) -> int:
     if args.red_policy == "r9_hierarchical_learning" and args.red_motion_policy not in {
-        "random_masked", "ppo", "mappo",
+        "random_masked", "ppo", "mappo", "local_avoid_s3",
     }:
         print(
             "r9_hierarchical_learning requires --red-motion-policy "
-            "random_masked, ppo, or mappo",
+            "random_masked, ppo, mappo, or local_avoid_s3",
             file=sys.stderr,
         )
         return 2
@@ -192,7 +193,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     run_parser.add_argument(
         "--red-learning-model",
-        help="PPO/MAPPO checkpoint path; required when --red-motion-policy is ppo or mappo",
+        help="Motion checkpoint path; required for PPO, MAPPO, and local_avoid_s3",
     )
     run_parser.add_argument(
         "--red-learning-train",

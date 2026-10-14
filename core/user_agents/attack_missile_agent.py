@@ -13,7 +13,7 @@ from policies.red.learning import (
 )
 
 ACTION_SET_ACC_Z = 0  # 设置Z轴加速度
-ACTION_USE_SAT = 3  # 使用卫星
+ACTION_USE_SAT = 3  # 使用天眼
 
 
 class AttackMissileAgent(BaseAgent):
@@ -23,7 +23,7 @@ class AttackMissileAgent(BaseAgent):
     横向加速度指令：(加速度值的 1 表示 20G)
     [ACTION_SET_ACC_Z, 实体id, 加速度值, 0]
 
-    使用卫星指令：
+    使用天眼指令：
     [ACTION_USE_SAT, 实体id, 0, 0]
 
     Attributes:
@@ -35,12 +35,18 @@ class AttackMissileAgent(BaseAgent):
                  learning_max_steps: int = 1000, hierarchical_learning: bool = False):
         super().__init__(agent_id, entity_id, AgentType.AIRCRAFT, init_observation)
         self.commander = commander
-        if motion_policy not in {"straight", "reactive_evasion", "random_masked", "ppo", "mappo"}:
+        if motion_policy not in {
+            "straight", "reactive_evasion", "random_masked", "ppo", "mappo",
+            "local_avoid_s3",
+        }:
             raise ValueError(f"Unsupported red motion policy: {motion_policy}")
-        if motion_policy in {"random_masked", "ppo", "mappo"} and learning_policy is None:
+        if motion_policy in {
+            "random_masked", "ppo", "mappo", "local_avoid_s3"
+        } and learning_policy is None:
             raise ValueError(f"Motion policy '{motion_policy}' requires a shared learning policy")
         self.motion_policy = motion_policy
         self.learning_policy = learning_policy
+        self.is_evasion_skill = bool(getattr(learning_policy, "is_evasion_skill", False))
         self.hierarchical_learning = bool(hierarchical_learning)
         self.learning_encoder = (
             ObservationEncoder(
@@ -49,7 +55,7 @@ class AttackMissileAgent(BaseAgent):
                 agent_id=agent_id,
                 hierarchical_task_context=self.hierarchical_learning,
             )
-            if learning_policy is not None
+            if learning_policy is not None and not self.is_evasion_skill
             else None
         )
         self.learning_adapter = (
@@ -68,6 +74,9 @@ class AttackMissileAgent(BaseAgent):
         self.sat_used = False
         self.latest_observation: dict | None = None
         self._learning_transition: tuple[np.ndarray, int, np.ndarray] | None = None
+        register_agent = getattr(learning_policy, "register_agent", None)
+        if register_agent is not None:
+            register_agent(agent_id, entity_id, learning_max_steps)
 
     def set_observation(self, observation: dict) -> None:
         self.latest_observation = observation
@@ -84,7 +93,10 @@ class AttackMissileAgent(BaseAgent):
         if launch is not None:
             actions.append(launch)
             self.launch_step = step
-            if self.commander.should_use_satellite(self.entity_id):
+            if (
+                self.commander.should_use_satellite(self.entity_id)
+                and bool(getattr(self.learning_policy, "allows_satellite", True))
+            ):
                 actions.append([ACTION_USE_SAT, self.entity_id, 0, 0])
                 self.sat_used = True
 
@@ -100,68 +112,32 @@ class AttackMissileAgent(BaseAgent):
 
         if self.launch_step < 0:
             return
-        assert self.learning_encoder is not None
         assert self.learning_adapter is not None
         assert self.learning_policy is not None
-        target_id = self.commander.target_id_for(self.entity_id)
-        target_index = next(
-            (
-                index
-                for index, target in enumerate(self.learning_adapter.targets)
-                if int(target.get("entity_id", -1)) == target_id
-            ),
-            None,
-        )
-        encoded = self.learning_encoder.encode(
-            observation,
-            launched=True,
-            launch_step=self.launch_step,
-            satellite_used=self.sat_used,
-            maneuver_state=self.set_acc_z_z,
-            current_target_index=target_index,
-            task_context=(
-                self.commander.learning_task_context(self.entity_id)
-                if self.hierarchical_learning else None
-            ),
-        )
-        action = self.learning_policy.select_action(
-            encoded,
-            self.learning_adapter.build_action_mask(
-                launched=True,
-                satellite_used=self.sat_used,
-            ),
-        )
-        if bool(getattr(self.learning_policy, "training", False)):
-            self._learning_transition = (encoded, int(action), self.learning_adapter.build_action_mask(
-                launched=True,
-                satellite_used=self.sat_used,
-            ))
-        engine_actions = self.learning_adapter.to_engine_action(int(action), self.entity_id)
-        actions.extend(engine_actions.tolist())
-
-    def record_step(self, observation: dict, action, reward: float, info: dict = None):
-        """Send an isolated-observation transition to an online learning policy."""
-
-        super().record_step(observation, action, reward, info)
-        if self._learning_transition is None or self.learning_policy is None:
-            return
-        encoded, selected_action, action_mask = self._learning_transition
-        self._learning_transition = None
-        if not bool(getattr(self.learning_policy, "training", False)):
-            return
-        assert self.learning_encoder is not None
-        assert self.learning_adapter is not None
-        target_id = self.commander.target_id_for(self.entity_id)
-        target_index = next(
-            (
-                index
-                for index, target in enumerate(self.learning_adapter.targets)
-                if int(target.get("entity_id", -1)) == target_id
-            ),
-            None,
-        )
-        next_observation = (
-            self.learning_encoder.encode(
+        if self.is_evasion_skill:
+            goal_position = self.commander.target_position_for(self.entity_id)
+            if goal_position is None:
+                return
+            encoded = self.learning_policy.encode_motion_observation(
+                observation,
+                agent_id=self.agent_id,
+                entity_id=self.entity_id,
+                launch_step=self.launch_step,
+                maneuver_state=self.set_acc_z_z,
+                goal_position=goal_position,
+            )
+        else:
+            assert self.learning_encoder is not None
+            target_id = self.commander.target_id_for(self.entity_id)
+            target_index = next(
+                (
+                    index
+                    for index, target in enumerate(self.learning_adapter.targets)
+                    if int(target.get("entity_id", -1)) == target_id
+                ),
+                None,
+            )
+            encoded = self.learning_encoder.encode(
                 observation,
                 launched=True,
                 launch_step=self.launch_step,
@@ -173,9 +149,73 @@ class AttackMissileAgent(BaseAgent):
                     if self.hierarchical_learning else None
                 ),
             )
-            if observation.get("self")
-            else np.zeros_like(encoded)
+        action_mask = self.learning_adapter.build_action_mask(
+            launched=True,
+            satellite_used=self.sat_used,
         )
+        prepare_action_mask = getattr(self.learning_policy, "prepare_action_mask", None)
+        if prepare_action_mask is not None:
+            action_mask = prepare_action_mask(encoded, action_mask)
+        action = self.learning_policy.select_action(encoded, action_mask)
+        if self.is_evasion_skill:
+            self.set_acc_z_z = {0: -1, 1: 0, 2: 1}[int(action)]
+        if bool(
+            getattr(self.learning_policy, "training", False)
+            or getattr(self.learning_policy, "records_evaluation", False)
+        ):
+            self._learning_transition = (encoded, int(action), action_mask)
+        engine_actions = self.learning_adapter.to_engine_action(int(action), self.entity_id)
+        actions.extend(engine_actions.tolist())
+
+    def record_step(self, observation: dict, action, reward: float, info: dict = None):
+        """Send an isolated-observation transition to an online learning policy."""
+
+        super().record_step(observation, action, reward, info)
+        if self._learning_transition is None or self.learning_policy is None:
+            return
+        encoded, selected_action, action_mask = self._learning_transition
+        self._learning_transition = None
+        if not bool(
+            getattr(self.learning_policy, "training", False)
+            or getattr(self.learning_policy, "records_evaluation", False)
+        ):
+            return
+        if self.is_evasion_skill:
+            goal_position = self.commander.target_position_for(self.entity_id)
+            encode_next = getattr(
+                self.learning_policy, "encode_next_motion_observation", None
+            )
+            next_observation = (
+                encode_next(
+                    observation,
+                    agent_id=self.agent_id,
+                    entity_id=self.entity_id,
+                    launch_step=self.launch_step,
+                    maneuver_state=self.set_acc_z_z,
+                    goal_position=goal_position,
+                )
+                if observation.get("self")
+                and goal_position is not None
+                and encode_next is not None
+                else np.zeros_like(encoded)
+            )
+        else:
+            assert self.learning_encoder is not None
+            next_observation = (
+                self.learning_encoder.encode(
+                    observation,
+                    launched=True,
+                    launch_step=self.launch_step,
+                    satellite_used=self.sat_used,
+                    maneuver_state=self.set_acc_z_z,
+                    task_context=(
+                        self.commander.learning_task_context(self.entity_id)
+                        if self.hierarchical_learning else None
+                    ),
+                )
+                if observation.get("self")
+                else np.zeros_like(encoded)
+            )
         global_state, next_global_state = self.learning_policy.get_global_state_context()
         self.learning_policy.observe(
             PolicyTransition(
@@ -193,13 +233,13 @@ class AttackMissileAgent(BaseAgent):
 
     def _set_acc_z_avoid(self, actions, observation: dict):
         """
-        躲避拦截弹机动
+        躲避自爆虫群机动
         :param actions:
         :param observation:
         :return:
         """
 
-        # 当探测到拦截弹时，进行机动规避
+        # 当探测到自爆虫群时，进行机动规避
         if self.launch_step < 0:
             return
 
@@ -217,7 +257,7 @@ class AttackMissileAgent(BaseAgent):
 
         old_status = self.set_acc_z_z
         if self.set_acc_z_z == 0:
-            # 发现来袭拦截弹后立即横向机动。
+            # 发现来袭自爆虫群后立即横向机动。
             actions.append([ACTION_SET_ACC_Z, self.entity_id, 1, 0])
             self.set_acc_z_z = 1
         elif self.set_acc_z_z == 1 and self.acc_start_step >= 10:

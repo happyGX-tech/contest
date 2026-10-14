@@ -1,0 +1,5 @@
+-r requirements.txt
+
+# Checkpoint inference and trajectory-policy loading. CPU collection does not
+# require CUDA, but the major/minor version is pinned to the producing runtime.
+torch==2.6.0

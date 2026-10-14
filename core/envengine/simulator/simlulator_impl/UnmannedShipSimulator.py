@@ -12,7 +12,7 @@ from envengine.simulator.simulator_factory import SimulatorFactory
 @Simulator.register("UnmannedShipS")
 class UnmannedShipSimulator(ISimulator):
     """
-    车辆仿真器
+    9500 暗巢
     """
 
     def __init__(self, entity_ext: EntityExt,

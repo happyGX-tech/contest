@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 
 
 MISSILE_COMMUNICATION_RANGE_M = {
-    21000: 500_000.0,
-    21001: 200_000.0,
-    21002: 100_000.0,
+    21000: 50_000.0,
+    21001: 20_000.0,
+    21002: 10_000.0,
 }
 
 
@@ -53,9 +53,11 @@ class Engine:
         """
         if ai_commands is None:
             ai_commands = []
+
         # 处理AI输入的指令
+        self.simulator_factory.update_sim_time(self.sim_time)
         self.simulator_factory.process_ai_commands(ai_commands)
-        t0 = time.perf_counter()
+
         start_time = time.time()  # 当前步开始时间
 
         # ===== 基于事件驱动的交替更新 =====
@@ -99,6 +101,7 @@ class Engine:
 
         self.current_step += 1
         self.sim_time += self.sim_step
+
         # 控制倍速
         if self.speed_multiplier > 0:
             elapsed = time.time() - start_time  # 计算当前步已经用了多久
@@ -223,14 +226,26 @@ class Engine:
     def fuse_cluster_detection(self, groups: Any) -> dict[int, dict[int, DetectInfo]]:
         """融合每个弹群内的探测数据"""
         fuse_result: dict[int, dict[int, DetectInfo]] = {}
+
+        # 红方天眼探测到的东西全局共享
+        sta_detect_info:dict[int, DetectInfo] = {}
+        sta_sims = self.simulator_factory.get_simulators_by_type(9202)
+        for sta in sta_sims:
+            if sta.entity_ext.entity.sideId == 0 and sta.entity_ext.entity.detectInfo:
+                sta_detect_info.update(sta.entity_ext.entity.detectInfo)
+
         for idx, group in enumerate(groups):
             if idx not in fuse_result:
                 fuse_result[idx] = {}
             for i in group:
                 # 获取弹
-                f: ISimulator = self.simulator_factory.get_simulator_by_id(i)
+                f: ISimulator | None = self.simulator_factory.get_simulator_by_id(i)
+                if not f:
+                    continue
+
                 # 获取弹的探测信息
                 detect_info: dict[int, DetectInfo] = f.entity_ext.entity.detectInfo
+                detect_info.update(sta_detect_info)
                 for key, new_value in detect_info.items():
                     old_value = fuse_result.get(idx).get(key)
                     # 如果不存在 或 新数据时间更新，则更新

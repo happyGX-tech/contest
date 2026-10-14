@@ -24,7 +24,7 @@ class InitialCatalogueTrackFusion:
         return tuple(sorted(self._targets.values(), key=lambda item: item.entity_id))
 
     def ingest(self, observation: dict) -> bool:
-        """Fuse received tracks and report whether the legal target set changed."""
+        """Fuse one platform's received tracks and return whether a track moved."""
 
         changed = False
         for raw_id, track in (observation.get("self", {}).get("detectInfo") or {}).items():

@@ -268,6 +268,13 @@ class RedBaselineCommander:
 
         return self.target_by_platform.get(int(platform_id))
 
+    def target_position_for(self, platform_id: int) -> Position | None:
+        """Return the current assigned target position for the motion skill."""
+
+        target_id = self.target_id_for(platform_id)
+        target = next((item for item in self.targets if item.entity_id == target_id), None)
+        return target.position if target is not None else None
+
     def should_use_satellite(self, platform_id: int) -> bool:
         """Whether this launched platform is the R8 satellite leader.
 

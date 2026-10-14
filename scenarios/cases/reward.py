@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 
-# 不同蓝方根节点的任务价值：无人船:拦截阵地:计分目标 = 1:2:5。
+# 不同蓝方根节点的任务价值：暗巢:哨卫巢:计分母巢 = 1:2:5。
 OBJECTIVE_KIND_WEIGHTS = {
     "target": 5.0,
     "site": 2.0,
@@ -123,7 +123,7 @@ def load_reward_policy(scenario: str | Path) -> RewardPolicy | None:
     )
     max_steps = int(info["max_steps"])
     if not objective_ids:
-        raise ValueError(f"{info_path} 没有计分目标")
+        raise ValueError(f"{info_path} 没有计分母巢")
     if max_steps <= 0:
         raise ValueError(f"{info_path} 的 max_steps 必须大于 0")
     if any(weight <= 0 for _, weight in objective_weights):

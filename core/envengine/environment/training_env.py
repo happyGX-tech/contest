@@ -44,6 +44,9 @@ class TrainingEnv:
         polygon = profile.imagineProfile.redArea.coordinates[0]
         lons = [point[0] for point in polygon]
         lats = [point[1] for point in polygon]
+        for p in profile.imagineProfile.redArea.coordinatesHM[0]:
+            lons.append(p[0])
+            lats.append(p[1])
         min_lon, max_lon = min(lons), max(lons)
         min_lat, max_lat = min(lats), max(lats)
         self.speed_distributor = SpeedDistributor(min_lon=min_lon, max_lon=max_lon,
@@ -78,13 +81,6 @@ class TrainingEnv:
 
         # 重置所有智能体
         self.agent_manager.reset_all()
-        commanders = {
-            agent.commander
-            for agent in self.agent_manager.get_all_agents()
-            if getattr(agent, "commander", None) is not None
-        }
-        for commander in commanders:
-            commander.reset()
 
         # 获取初始态势作为观测
         observation = self._get_observation()
@@ -154,8 +150,8 @@ class TrainingEnv:
                     self.engine.simulator_factory.modify_simulator_position(action_item["executor_id"],
                                                                             action_item["lla"])
                     # 更改模型初始速度
-                    # speed = self.speed_distributor.get_speed(action_item["lla"]["x"])
-                    # self.engine.simulator_factory.modify_simulator_speed(action_item["executor_id"], speed)
+                    speed = self.speed_distributor.get_speed(action_item["lla"]["x"])
+                    self.engine.simulator_factory.modify_simulator_speed(action_item["executor_id"], speed)
                     # 渲染
                     if self.render_mode == 'human' and self.renderer:
                         # 获取观测
@@ -242,7 +238,7 @@ class TrainingEnv:
         if self.current_step >= self.max_steps:
             return True
 
-        # 所有 红方弹、拦截弹 结束之后，仿真结束
+        # 所有 红方弹、自爆虫群 结束之后，仿真结束
         for h in self.engine.simulator_factory.get_simulators_by_type(21000):
             if h.entity_ext.entity.isVisible:
                 return False
@@ -278,7 +274,9 @@ class TrainingEnv:
                 full_observation,
                 agent.agent_id
             )
+
             if isolated_obs:
+                isolated_obs["is_using_satellite"] = self.engine.simulator_factory.is_using_satellite()
                 agent_observations[agent.agent_id] = isolated_obs
 
         commanders = {
@@ -314,11 +312,11 @@ class TrainingEnv:
 
     def _get_init_ship_observation(self) -> dict:
         """获取初始化时，给红方 AI 的蓝方信息
-        仅传递，蓝方高中价值舰船（即：目标、拦截阵地）
+        仅传递，蓝方高中价值单位（即：母巢、哨卫巢）
 
-        9400：目标
-        9500：无人船
-        9600：拦截阵地
+        9400：母巢
+        9500：暗巢
+        9600：哨卫巢
         """
 
         simulators = self.engine.simulator_factory.get_all_simulators()
