@@ -1,0 +1,42 @@
+{
+  "maps": [
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E05",
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05"
+  ],
+  "seeds": [
+    11901,
+    11902,
+    11903
+  ],
+  "blue_policies": [
+    "b0_fixed_ratio_random"
+  ],
+  "objective_motion": "static",
+  "evaluation_label": "E01-E05/M01-M05 训练地图",
+  "map_role": "trained",
+  "comparison_mode": "v12-r3-only",
+  "comparison_label": "V12-R3 Timely Arrival",
+  "condition_order": [
+    "v12_r3"
+  ],
+  "delta_pairs": [],
+  "max_steps": 1200,
+  "conditions": {
+    "v12_r3": {
+      "checkpoint": "/home/ubuntu/yunpan/competition-platform-env/models/local_avoid_set_attention_v12_r3_timely_arrival.pt",
+      "checkpoint_sha256": "2338b69fd5bb39c617d5a3fbee7c6c68e96cfe7c75faaf4dac70ade1f6358140",
+      "gate_mode": "none"
+    }
+  },
+  "expected_games": 30,
+  "workers": 10,
+  "runtime": "docker"
+}

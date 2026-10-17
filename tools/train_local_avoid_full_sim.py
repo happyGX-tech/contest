@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Iterative PPO training backed only by the complete simulator.
+"""Iterative local-avoid PPO training backed only by the complete simulator.
 
-This is the infrastructure entry point for Set-Attention local avoidance.  It
-runs complete competition games in isolated worker processes, collects compact
-per-missile runtime trajectories, performs centralized PPO updates, writes
-TensorBoard/JSONL metrics, saves checkpoints, and reload-validates each update.
+This entry point supports both the legacy fixed-two-slot MLP and Set-Attention
+checkpoints. It runs complete competition games in isolated worker processes,
+collects compact per-missile runtime trajectories, performs centralized PPO
+updates, writes TensorBoard/JSONL metrics, saves checkpoints, and reload-validates
+each update.
 
 The ``--smoke`` preset deliberately truncates games.  It validates plumbing,
 not convergence or policy quality.
@@ -40,12 +41,54 @@ from policies.red.skills.evasion_ppo.full_sim_rollout import (  # noqa: E402
     build_full_sim_rollout,
     load_runtime_trajectories,
 )
+from policies.red.skills.evasion_ppo.local_ppo import LocalAvoidPPO  # noqa: E402
 from policies.red.skills.evasion_ppo.set_attention_ppo import (  # noqa: E402
     SetAttentionLocalAvoidPPO,
 )
 
 
 DEFAULT_IMAGE = "docker.m.daocloud.io/library/python:3.11-slim-trixie"
+SUPPORTED_POLICY_LOADERS = {
+    "local_avoid_asymmetric_ppo_v1": LocalAvoidPPO,
+    SetAttentionLocalAvoidPPO.algorithm_name: SetAttentionLocalAvoidPPO,
+}
+
+
+def load_full_sim_policy(path: Path, *, device: str):
+    payload = torch.load(path, map_location="cpu", weights_only=False)
+    algorithm = str(payload.get("algorithm", ""))
+    try:
+        loader = SUPPORTED_POLICY_LOADERS[algorithm]
+    except KeyError as error:
+        raise ValueError(
+            f"unsupported full-simulator PPO checkpoint algorithm: {algorithm!r}"
+        ) from error
+    return loader.load(path, device=device)
+
+
+def policy_observation_contract(policy: Any) -> dict[str, int | str]:
+    actor_dim = int(policy.config.actor_obs_dim)
+    critic_dim = int(policy.config.critic_state_dim)
+    if (actor_dim, critic_dim) == (33, 43):
+        return {
+            "name": "fixed2",
+            "architecture": "mlp",
+            "max_threat_slots": 2,
+            "actor_obs_dim": actor_dim,
+            "critic_state_dim": critic_dim,
+        }
+    if (actor_dim, critic_dim) == (85, 125):
+        return {
+            "name": "set8",
+            "architecture": "set_attention",
+            "max_threat_slots": 8,
+            "actor_obs_dim": actor_dim,
+            "critic_state_dim": critic_dim,
+        }
+    raise ValueError(
+        "unsupported local-avoid observation contract: "
+        f"actor={actor_dim}, critic={critic_dim}"
+    )
 
 
 @dataclass(frozen=True)
@@ -58,6 +101,7 @@ class WorkerTask:
     log_path: Path
     run_id: str
     scenario: str
+    cross_trace_path: Path | None = None
 
 
 DEFAULT_V10_TRAIN_SCENARIOS = (
@@ -86,11 +130,27 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=ROOT / "models/local_avoid_set_attention_v10_fullsim_multimap.pt",
     )
+    parser.add_argument(
+        "--policy-name",
+        default="local_avoid_set_attention_v10",
+        help="Version label stored in protocol and checkpoint metadata.",
+    )
+    parser.add_argument(
+        "--observation-contract",
+        choices=("auto", "fixed2", "set8"),
+        default="auto",
+        help="Fail closed unless the input checkpoint uses the requested ABI.",
+    )
     parser.add_argument("--scenario", default="final20/easy/E01")
     parser.add_argument(
         "--scenarios",
         default=",".join(DEFAULT_V10_TRAIN_SCENARIOS),
         help="Comma-separated stratified map pool; overrides --scenario.",
+    )
+    parser.add_argument(
+        "--heldout-scenarios",
+        default=",".join(DEFAULT_V10_HOLDOUT_SCENARIOS),
+        help="Comma-separated maps reserved from training and recorded in metadata.",
     )
     parser.add_argument("--blue-policy", default="b0_fixed_ratio_random")
     parser.add_argument("--workers", type=int, default=8)
@@ -106,6 +166,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--ppo-epochs", type=int, default=None)
     parser.add_argument("--minibatch-size", type=int, default=None)
     parser.add_argument("--behavior-batch-size", type=int, default=32768)
+    parser.add_argument(
+        "--reward-mode",
+        choices=(
+            "success_conditioned",
+            "normalized_distance",
+            "distance_outcome",
+            "timely_arrival",
+        ),
+        default="success_conditioned",
+        help=(
+            "success_conditioned zeroes failed trajectories; normalized_distance "
+            "uses only normalized target-distance reduction; distance_outcome "
+            "adds a compact real-outcome terminal ladder; timely_arrival treats "
+            "arrival and effective damage identically and penalizes delay/failure."
+        ),
+    )
     parser.add_argument(
         "--initial-trace-dir",
         type=Path,
@@ -162,7 +238,7 @@ def parse_args() -> argparse.Namespace:
 def scenario_schedule(
     scenarios: list[str], games: int, iteration: int
 ) -> list[str]:
-    """Rotate a near-equal E/M/H allocation across maps and iterations."""
+    """Rotate a near-equal allocation across every tier present in the pool."""
 
     if len(scenarios) == 1:
         return scenarios * games
@@ -171,10 +247,16 @@ def scenario_schedule(
         "medium": [value for value in scenarios if "/medium/" in value],
         "hard": [value for value in scenarios if "/hard/" in value],
     }
-    if not all(groups.values()):
-        return [scenarios[((iteration - 1) * games + index) % len(scenarios)] for index in range(games)]
-    tier_names = ("easy", "medium", "hard")
-    tier_offsets = {name: (iteration - 1) * ((games + 2) // 3) for name in tier_names}
+    tier_names = tuple(name for name in ("easy", "medium", "hard") if groups[name])
+    if not tier_names:
+        return [
+            scenarios[((iteration - 1) * games + index) % len(scenarios)]
+            for index in range(games)
+        ]
+    tier_offsets = {
+        name: (iteration - 1) * ((games + len(tier_names) - 1) // len(tier_names))
+        for name in tier_names
+    }
     selected = []
     tier_local_counts = {name: 0 for name in tier_names}
     for index in range(games):
@@ -249,6 +331,9 @@ def competition_python_env(args: argparse.Namespace) -> Path:
 def simulator_command(
     args: argparse.Namespace, task: WorkerTask
 ) -> tuple[list[str], dict[str, str], str | None]:
+    launch_trace_path = task.trace_path.with_name(
+        task.trace_path.name.removesuffix(".jsonl.gz") + ".launches.jsonl"
+    )
     common = [
         "run",
         "--scenario", task.scenario,
@@ -272,17 +357,26 @@ def simulator_command(
             "LOCAL_AVOID_ROLLOUT_MODE": "1",
             "LOCAL_AVOID_TRACE_OVERWRITE": "1",
             "LOCAL_AVOID_TRACE_PATH": str(task.trace_path.resolve()),
+            "NATIVE_ENCOUNTER_LAUNCH_TRACE_PATH": str(launch_trace_path.resolve()),
+            "NATIVE_ENCOUNTER_SOURCE_SCENARIO": task.scenario,
+            "NATIVE_ENCOUNTER_SOURCE_RUN_ID": task.run_id,
             "OMP_NUM_THREADS": "1",
             "MKL_NUM_THREADS": "1",
             "PYTHONUNBUFFERED": "1",
         }
     )
+    if task.cross_trace_path is not None:
+        environment.update({
+            "LOCAL_AVOID_CROSS_ENV_TRACE_PATH": str(task.cross_trace_path.resolve()),
+            "LOCAL_AVOID_CROSS_ENV_TRACE_OVERWRITE": "1",
+        })
     if args.runtime == "host":
         return [sys.executable, str(ROOT / "run.py"), *common], environment, None
 
     checkpoint_index = common.index(str(task.checkpoint_path.resolve()))
     common[checkpoint_index] = container_path(task.checkpoint_path)
     trace_in_container = container_path(task.trace_path)
+    launch_trace_in_container = container_path(launch_trace_path)
     python_env = competition_python_env(args)
     container_name = f"fullsim-ppo-w{task.worker_index}-s{task.seed}-{os.getpid()}"
     library_path = ":".join(
@@ -313,10 +407,20 @@ def simulator_command(
         "-e", "LOCAL_AVOID_ROLLOUT_MODE=1",
         "-e", "LOCAL_AVOID_TRACE_OVERWRITE=1",
         "-e", f"LOCAL_AVOID_TRACE_PATH={trace_in_container}",
+        "-e", f"NATIVE_ENCOUNTER_LAUNCH_TRACE_PATH={launch_trace_in_container}",
+        "-e", f"NATIVE_ENCOUNTER_SOURCE_SCENARIO={task.scenario}",
+        "-e", f"NATIVE_ENCOUNTER_SOURCE_RUN_ID={task.run_id}",
         "-e", f"LD_LIBRARY_PATH={library_path}",
         args.docker_image,
         "/opt/competition-env/bin/python", "/workspace/run.py", *common,
     ]
+    if task.cross_trace_path is not None:
+        cross_trace_in_container = container_path(task.cross_trace_path)
+        image_index = command.index(args.docker_image)
+        command[image_index:image_index] = [
+            "-e", f"LOCAL_AVOID_CROSS_ENV_TRACE_PATH={cross_trace_in_container}",
+            "-e", "LOCAL_AVOID_CROSS_ENV_TRACE_OVERWRITE=1",
+        ]
     return command, environment, container_name
 
 
@@ -339,7 +443,12 @@ def terminate(process: subprocess.Popen[Any], container_name: str | None) -> Non
 
 
 def run_worker(args: argparse.Namespace, task: WorkerTask) -> dict[str, Any]:
+    launch_trace_path = task.trace_path.with_name(
+        task.trace_path.name.removesuffix(".jsonl.gz") + ".launches.jsonl"
+    )
     task.trace_path.parent.mkdir(parents=True, exist_ok=True)
+    if task.cross_trace_path is not None:
+        task.cross_trace_path.parent.mkdir(parents=True, exist_ok=True)
     task.log_path.parent.mkdir(parents=True, exist_ok=True)
     command, environment, container_name = simulator_command(args, task)
     started = time.monotonic()
@@ -358,6 +467,8 @@ def run_worker(args: argparse.Namespace, task: WorkerTask) -> dict[str, Any]:
             terminate(process, container_name)
             task_data = asdict(task)
             task_data["checkpoint_path"] = str(task.checkpoint_path)
+            if task.cross_trace_path is not None:
+                task_data["cross_trace_path"] = str(task.cross_trace_path)
             return {
                 **task_data,
                 "trace_path": str(task.trace_path),
@@ -368,6 +479,8 @@ def run_worker(args: argparse.Namespace, task: WorkerTask) -> dict[str, Any]:
     elapsed = time.monotonic() - started
     task_data = asdict(task)
     task_data["checkpoint_path"] = str(task.checkpoint_path)
+    if task.cross_trace_path is not None:
+        task_data["cross_trace_path"] = str(task.cross_trace_path)
     result = {
         **task_data,
         "trace_path": str(task.trace_path),
@@ -375,6 +488,15 @@ def run_worker(args: argparse.Namespace, task: WorkerTask) -> dict[str, Any]:
         "elapsed_seconds": elapsed,
         "return_code": return_code,
         "trace_bytes": task.trace_path.stat().st_size if task.trace_path.exists() else 0,
+        "launch_trace_path": str(launch_trace_path),
+        "launch_trace_bytes": (
+            launch_trace_path.stat().st_size if launch_trace_path.exists() else 0
+        ),
+        "cross_trace_bytes": (
+            task.cross_trace_path.stat().st_size
+            if task.cross_trace_path is not None and task.cross_trace_path.exists()
+            else 0
+        ),
     }
     if return_code != 0 or not task.trace_path.is_file():
         result["error"] = f"exit={return_code}, trace={task.trace_path.exists()}"
@@ -386,15 +508,28 @@ def run_worker(args: argparse.Namespace, task: WorkerTask) -> dict[str, Any]:
         if final_summary is None:
             result["error"] = "missing FINAL_SUMMARY"
         else:
+            final_outcomes = final_summary.get("outcomes", {})
             result["outcome_counts"] = annotate_runtime_trace_outcomes(
-                task.trace_path, final_summary
+                task.trace_path,
+                final_summary,
+                alive_at_end_terminal=(
+                    "timeout" if args.reward_mode == "timely_arrival" else "incomplete"
+                ),
             )
             result["score"] = final_summary.get("score")
             result["outcomes"] = {
                 key: value
-                for key, value in final_summary.get("outcomes", {}).items()
+                for key, value in final_outcomes.items()
                 if key not in {"definitions", "per_platform", "by_type"}
             }
+            per_platform = final_outcomes.get("per_platform", {})
+            result["outcomes"]["sampled_damage_zone_100"] = sum(
+                1
+                for outcome in per_platform.values()
+                if isinstance(outcome, dict)
+                and outcome.get("minimum_target_distance_m") is not None
+                and float(outcome["minimum_target_distance_m"]) <= 100.0
+            )
             if result["outcome_counts"].get("missing_outcome", 0):
                 result["error"] = (
                     "MissionOutcomeTracker has no label for "
@@ -425,6 +560,7 @@ def aggregate_actual_outcomes(
         "arrived",
         "effective_hits",
         "alive_at_end",
+        "sampled_damage_zone_100",
     )
     counts = {
         key: float(
@@ -447,6 +583,9 @@ def aggregate_actual_outcomes(
         "hit_rate_per_launch": (
             counts["effective_hits"] / max(counts["launched"], 1.0)
         ),
+        "sampled_damage_zone_100_rate": (
+            counts["sampled_damage_zone_100"] / max(counts["launched"], 1.0)
+        ),
     }
 
 
@@ -468,7 +607,15 @@ def main() -> int:
         if args.scenarios
         else [args.scenario]
     )
-    for scenario in scenarios:
+    heldout_scenarios = [
+        value.strip()
+        for value in args.heldout_scenarios.split(",")
+        if value.strip()
+    ]
+    overlap = sorted(set(scenarios) & set(heldout_scenarios))
+    if overlap:
+        raise ValueError(f"training and heldout scenarios overlap: {overlap}")
+    for scenario in [*scenarios, *heldout_scenarios]:
         scenario_path = ROOT / "scenarios" / "cases" / scenario / "scenario.json"
         if not scenario_path.is_file():
             raise FileNotFoundError(scenario_path)
@@ -489,9 +636,18 @@ def main() -> int:
         )
     args.runtime = select_runtime(args.runtime)
 
-    policy, environment_config, checkpoint_payload = SetAttentionLocalAvoidPPO.load(
+    policy, environment_config, checkpoint_payload = load_full_sim_policy(
         args.input_model, device=args.device
     )
+    observation_contract = policy_observation_contract(policy)
+    if (
+        args.observation_contract != "auto"
+        and observation_contract["name"] != args.observation_contract
+    ):
+        raise ValueError(
+            f"input checkpoint uses {observation_contract['name']!r}, expected "
+            f"{args.observation_contract!r}"
+        )
     if not args.smoke and policy.device.type != "cuda":
         raise RuntimeError(
             "formal full-simulator PPO requires a CUDA learner; pass "
@@ -514,7 +670,12 @@ def main() -> int:
     # Keep the learned V9 network/observation statistics, but do not carry
     # Adam moments or reward-scale statistics from the old objective.
     policy.optimizer = torch.optim.Adam(
-        policy.network.parameters(), lr=float(policy.config.learning_rate)
+        (
+            parameter
+            for parameter in policy.network.parameters()
+            if parameter.requires_grad
+        ),
+        lr=float(policy.config.learning_rate),
     )
     policy.reward_rms.mean = np.zeros_like(policy.reward_rms.mean)
     policy.reward_rms.var = np.ones_like(policy.reward_rms.var)
@@ -575,7 +736,7 @@ def main() -> int:
         "reward_clip": 10.0,
         "normalize_reward": True,
     }
-    if reward_config != expected_v8:
+    if args.reward_mode == "success_conditioned" and reward_config != expected_v8:
         raise ValueError(
             "input checkpoint does not carry the exact V8 static-minimal reward: "
             f"{reward_config}"
@@ -588,26 +749,74 @@ def main() -> int:
     run_dir.mkdir(parents=True, exist_ok=False)
     history_path = run_dir / "training_history.jsonl"
     status_path = run_dir / "run_status.json"
+    reward_name = {
+        "success_conditioned": "v10_real_success_conditioned_target_distance_v2",
+        "normalized_distance": "normalized_target_distance_reduction_only_v2",
+        "distance_outcome": "normalized_target_distance_plus_real_outcome_v1",
+        "timely_arrival": "normalized_target_distance_timely_arrival_v1",
+    }[args.reward_mode]
+    distance_outcome = args.reward_mode == "distance_outcome"
+    timely_arrival = args.reward_mode == "timely_arrival"
+    effective_reward_config = {
+        "normalized_target_distance_reduction": 1.0,
+        "terminal_distance_source": "runtime_terminal_goal_distance_m",
+        "success_conditioned": args.reward_mode == "success_conditioned",
+        "intercepted_or_lost_trajectory_return": (
+            0.0
+            if args.reward_mode == "success_conditioned"
+            else (
+                "intercepted=0.20*distance_progress,lost_or_timeout=0"
+                if timely_arrival
+                else "distance_progress"
+            )
+        ),
+        "terminal_source": "mission_outcome_tracker",
+        "proxy_terminals_allowed": False,
+        "terminal_rewards_mutually_exclusive": distance_outcome or timely_arrival,
+        "effective_hit_bonus": 0.35 if distance_outcome else 0.0,
+        "arrival_without_effective_hit_bonus": 0.20 if distance_outcome else 0.0,
+        "interception_penalty": (
+            -0.25 if distance_outcome else (-0.15 if timely_arrival else 0.0)
+        ),
+        "lost_or_timeout_terminal_reward": -0.30 if timely_arrival else 0.0,
+        "timeout_penalty": -0.30 if timely_arrival else 0.0,
+        "arrival_and_effective_hit_equivalent": timely_arrival,
+        "timely_arrival_bonus": 0.10 if timely_arrival else 0.0,
+        "intercepted_progress_scale": 0.20 if timely_arrival else 1.0,
+        "lost_timeout_progress_scale": 0.0 if timely_arrival else 1.0,
+        "time_cost_budget_at_horizon": -0.05 if timely_arrival else 0.0,
+        "official_arrival_tolerance_m": 500.0,
+        "sampled_damage_zone_diagnostic_m": 100.0,
+        "action_switch_penalty": 0.0,
+        "turn_reversal_penalty": 0.0,
+    }
+    training_tiers = [
+        name
+        for name in ("easy", "medium", "hard")
+        if any(f"/{name}/" in scenario for scenario in scenarios)
+    ]
     protocol = {
         "status": "running",
-        "pipeline": "complete_simulator_set_attention_ppo_v4",
-        "policy_name": "local_avoid_set_attention_v10",
+        "pipeline": "complete_simulator_local_avoid_ppo_v6",
+        "policy_name": args.policy_name,
+        "source_algorithm": checkpoint_payload.get("algorithm"),
+        "observation_contract": observation_contract,
         "smoke": bool(args.smoke),
         "input_model": str(args.input_model),
         "input_sha256": fingerprint(args.input_model),
         "output_model": str(args.output_model),
         "scenario": args.scenario,
         "scenarios": scenarios,
-        "heldout_scenarios": list(DEFAULT_V10_HOLDOUT_SCENARIOS),
+        "heldout_scenarios": heldout_scenarios,
         "heldout_seeds": list(DEFAULT_V10_HOLDOUT_SEEDS),
-        "map_split": "16_train_4_strict_holdout",
-        "acceptance_baselines": ["straight", "v9_input_checkpoint"],
-        "acceptance_metrics": [
-            "arrival_rate",
-            "evasion_rate",
-            "hit_rate_per_launch",
-        ],
-        "map_sampling": "rotating_tier_balanced_e_m_h",
+        "map_split": f"{len(scenarios)}_train_{len(heldout_scenarios)}_strict_holdout",
+        "acceptance_baselines": ["straight", "input_checkpoint"],
+        "acceptance_metrics": (
+            ["arrival_rate", "evasion_rate", "sampled_damage_zone_100_rate"]
+            if timely_arrival
+            else ["arrival_rate", "evasion_rate", "hit_rate_per_launch"]
+        ),
+        "map_sampling": "rotating_tier_balanced_" + "_".join(training_tiers),
         "blue_policy": args.blue_policy,
         "objective_motion": args.objective_motion,
         "gate_mode": args.gate_mode,
@@ -617,19 +826,10 @@ def main() -> int:
         "games_per_iteration": args.games,
         "iterations": args.iterations,
         "max_steps": args.max_steps,
-        "reward": "v10_real_success_conditioned_target_distance_v2",
+        "reward": reward_name,
+        "reward_mode": args.reward_mode,
         "source_checkpoint_reward_config": reward_config,
-        "effective_reward_config": {
-            "successful_normalized_target_distance_reduction": 1.0,
-            "intercepted_or_lost_trajectory_return": 0.0,
-            "terminal_source": "mission_outcome_tracker",
-            "proxy_terminals_allowed": False,
-            "arrival_bonus": 0.0,
-            "interception_penalty": 0.0,
-            "timeout_penalty": 0.0,
-            "action_switch_penalty": 0.0,
-            "turn_reversal_penalty": 0.0,
-        },
+        "effective_reward_config": effective_reward_config,
         "ppo_config": {
             "learning_rate": float(policy.config.learning_rate),
             "ppo_epochs": int(policy.config.ppo_epochs),
@@ -645,9 +845,15 @@ def main() -> int:
             str(args.initial_trace_dir) if args.initial_trace_dir is not None else None
         ),
         "type_sampling": "balanced_h_m_l_median_resample",
-        "incomplete_rollouts_used": bool(args.smoke),
+        "incomplete_rollouts_used": bool(
+            args.smoke and args.reward_mode != "timely_arrival"
+        ),
         "smoke_incomplete_note": (
-            "plumbing-only time-limit bootstrap; formal training excludes incomplete"
+            (
+                "completed smoke horizon is a penalized timeout under timely_arrival"
+                if timely_arrival
+                else "plumbing-only time-limit bootstrap; formal training excludes incomplete"
+            )
             if args.smoke
             else None
         ),
@@ -773,6 +979,8 @@ def main() -> int:
             require_real_outcomes=True,
             balance_types=True,
             balance_seed=args.seed_start + iteration,
+            reward_mode=args.reward_mode,
+            reward_horizon_steps=args.max_steps,
         )
         before = {
             name: value.detach().cpu().clone()
@@ -794,7 +1002,8 @@ def main() -> int:
         actual_outcomes = aggregate_actual_outcomes(worker_results)
         metrics = {
             "training_source": "complete_simulator_only",
-            "reward_version": "v10_real_success_conditioned_target_distance_v2",
+            "reward_version": reward_name,
+            "reward_mode": args.reward_mode,
             "micro_simulator_samples": 0,
             "deployment_gate_mode": "none",
             "objective_motion": args.objective_motion,
@@ -806,8 +1015,12 @@ def main() -> int:
             "optimized_samples": int(len(rollout["actions"])),
             "changed_parameter_tensors": int(changed_parameters),
             "source_checkpoint_sha256": protocol["input_sha256"],
+            "source_algorithm": protocol["source_algorithm"],
+            "observation_contract": observation_contract,
             "pipeline_smoke": bool(args.smoke),
-            "incomplete_rollouts_used": bool(args.smoke),
+            "incomplete_rollouts_used": bool(
+                args.smoke and args.reward_mode != "timely_arrival"
+            ),
             "terminal_source": "mission_outcome_tracker",
             "proxy_terminals_allowed": False,
             "type_balancing": "median_resample_h_m_l",
@@ -824,8 +1037,8 @@ def main() -> int:
             environment_config=environment_config,
             metrics=metrics,
         )
-        reloaded, _reloaded_environment, reloaded_payload = (
-            SetAttentionLocalAvoidPPO.load(args.output_model, device="cpu")
+        reloaded, _reloaded_environment, reloaded_payload = load_full_sim_policy(
+            args.output_model, device="cpu"
         )
         finite_tensors = all(
             bool(torch.isfinite(value).all())

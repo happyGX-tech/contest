@@ -93,6 +93,156 @@ class FullSimulatorRolloutTests(unittest.TestCase):
         self.assertEqual(stats["failed_zero_reward"], 1.0)
         self.assertEqual(rollout["critic_states"].shape, (2, 125))
 
+    def test_normalized_distance_reward_keeps_progress_before_interception(self) -> None:
+        policy = SetAttentionLocalAvoidPPO(
+            SetAttentionPPOConfig(
+                device="cpu",
+                token_dim=16,
+                attention_heads=2,
+                attention_layers=1,
+                attention_ff_dim=32,
+                hidden_dims=(32, 32, 16),
+                ppo_epochs=1,
+                minibatch_size=8,
+                normalize_reward=False,
+            )
+        )
+        trajectory = {
+            "format": "local-avoid-runtime-trajectory-v3",
+            "missile_type_slot": 0,
+            "terminal": "intercepted",
+            "terminal_source": "mission_outcome_tracker",
+            # The complete simulator emits an all-zero next observation after
+            # an entity disappears.  The runtime trace separately preserves
+            # the real terminal goal distance.
+            "next_observation": observation(0.0),
+            "terminal_goal_distance_m": 60_000.0,
+            "steps": [
+                {
+                    "observation": observation(0.8),
+                    "action": 1,
+                    "action_mask": [1, 1, 1],
+                },
+                {
+                    "observation": observation(0.7),
+                    "action": 1,
+                    "action_mask": [1, 1, 1],
+                },
+            ],
+        }
+
+        rollout, stats = build_full_sim_rollout(
+            policy,
+            [trajectory],
+            environment_config=LocalAvoidConfig(),
+            reward_mode="normalized_distance",
+        )
+
+        np.testing.assert_allclose(
+            rollout["raw_rewards"], [0.125, 0.125], atol=1e-6
+        )
+        self.assertAlmostEqual(stats["normalized_distance_reward"], 0.25)
+        self.assertEqual(stats["failed_zero_reward"], 0.0)
+
+    def test_distance_outcome_reward_adds_mutually_exclusive_terminal_ladder(self) -> None:
+        policy = SetAttentionLocalAvoidPPO(
+            SetAttentionPPOConfig(
+                device="cpu",
+                token_dim=16,
+                attention_heads=2,
+                attention_layers=1,
+                attention_ff_dim=32,
+                hidden_dims=(32, 32, 16),
+                normalize_reward=False,
+            )
+        )
+        environment = LocalAvoidConfig()
+
+        def trajectory(terminal: str) -> dict:
+            return {
+                "format": "local-avoid-runtime-trajectory-v3",
+                "terminal": terminal,
+                "terminal_source": "mission_outcome_tracker",
+                "terminal_goal_distance_m": 60_000.0,
+                "missile_type_slot": 0,
+                "steps": [
+                    {"observation": observation(0.8), "action": 1, "action_mask": [1, 1, 1]},
+                    {"observation": observation(0.7), "action": 1, "action_mask": [1, 1, 1]},
+                ],
+            }
+
+        expected = {
+            "effective_hit": (0.60, 0.35),
+            "arrived": (0.45, 0.20),
+            "intercepted": (0.00, -0.25),
+            "lost": (0.25, 0.00),
+        }
+        for terminal, (expected_return, expected_terminal) in expected.items():
+            with self.subTest(terminal=terminal):
+                rollout, stats = build_full_sim_rollout(
+                    policy,
+                    [trajectory(terminal)],
+                    environment_config=environment,
+                    reward_mode="distance_outcome",
+                )
+                self.assertAlmostEqual(float(rollout["raw_rewards"].sum()), expected_return)
+                self.assertAlmostEqual(stats["terminal_outcome_reward"], expected_terminal)
+
+        _, hit_stats = build_full_sim_rollout(
+            policy,
+            [trajectory("effective_hit")],
+            environment_config=environment,
+            reward_mode="distance_outcome",
+        )
+        self.assertEqual(hit_stats["arrival_bonus"], 0.0)
+        self.assertAlmostEqual(hit_stats["effective_hit_bonus"], 0.35)
+
+    def test_timely_arrival_equates_arrival_and_damage_and_penalizes_failure(self) -> None:
+        policy = SetAttentionLocalAvoidPPO(
+            SetAttentionPPOConfig(
+                device="cpu",
+                token_dim=16,
+                attention_heads=2,
+                attention_layers=1,
+                attention_ff_dim=32,
+                hidden_dims=(32, 32, 16),
+                normalize_reward=False,
+            )
+        )
+
+        def trajectory(terminal: str) -> dict:
+            return {
+                "format": "local-avoid-runtime-trajectory-v3",
+                "terminal": terminal,
+                "terminal_source": "mission_outcome_tracker",
+                "terminal_goal_distance_m": 60_000.0,
+                "missile_type_slot": 0,
+                "steps": [
+                    {"observation": observation(0.8), "action": 1, "action_mask": [1, 1, 1]},
+                    {"observation": observation(0.7), "action": 1, "action_mask": [1, 1, 1]},
+                ],
+            }
+
+        returns = {}
+        for terminal in ("effective_hit", "arrived", "intercepted", "lost", "timeout"):
+            rollout, stats = build_full_sim_rollout(
+                policy,
+                [trajectory(terminal)],
+                environment_config=LocalAvoidConfig(),
+                reward_mode="timely_arrival",
+                reward_horizon_steps=100,
+            )
+            returns[terminal] = float(rollout["raw_rewards"].sum())
+            self.assertEqual(stats["effective_hit_bonus"], 0.0)
+
+        self.assertAlmostEqual(returns["effective_hit"], returns["arrived"])
+        self.assertAlmostEqual(returns["arrived"], 0.349, places=6)
+        self.assertAlmostEqual(returns["intercepted"], -0.101, places=6)
+        self.assertAlmostEqual(returns["lost"], -0.301, places=6)
+        self.assertAlmostEqual(returns["timeout"], -0.301, places=6)
+        self.assertGreater(returns["arrived"], returns["intercepted"])
+        self.assertGreater(returns["intercepted"], returns["timeout"])
+
     def test_real_arrival_distance_reward_telescopes_to_one(self) -> None:
         policy = SetAttentionLocalAvoidPPO(
             SetAttentionPPOConfig(
@@ -289,6 +439,39 @@ class FullSimulatorRolloutTests(unittest.TestCase):
         self.assertEqual(counts, {"effective_hit": 1})
         self.assertEqual(annotated["terminal"], "effective_hit")
         self.assertEqual(annotated["terminal_proxy"], "lost_proxy")
+
+    def test_trace_annotation_can_label_completed_alive_episode_as_timeout(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            trace_path = Path(directory) / "timeout.jsonl.gz"
+            trajectory = {
+                "format": "local-avoid-runtime-trajectory-v3",
+                "entity_id": 101,
+                "terminal": "incomplete",
+                "steps": [],
+            }
+            with gzip.open(trace_path, "wt", encoding="utf-8") as stream:
+                stream.write(json.dumps(trajectory) + "\n")
+            counts = annotate_runtime_trace_outcomes(
+                trace_path,
+                {
+                    "outcomes": {
+                        "per_platform": {
+                            "101": {
+                                "engaged": False,
+                                "resolved": False,
+                                "arrived": False,
+                                "effective_hit": False,
+                                "alive_at_end": True,
+                            }
+                        }
+                    }
+                },
+                alive_at_end_terminal="timeout",
+            )
+            annotated = load_runtime_trajectories([trace_path])[0]
+
+        self.assertEqual(counts, {"timeout": 1})
+        self.assertEqual(annotated["terminal"], "timeout")
 
 
 if __name__ == "__main__":

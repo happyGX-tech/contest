@@ -1,0 +1,9 @@
+{
+  "status": "partial",
+  "completed_games": 240,
+  "valid_games": 233,
+  "failed_games": 7,
+  "expected_games": 240,
+  "paired_cases": 233,
+  "resumed_protocol_rejections": 109
+}

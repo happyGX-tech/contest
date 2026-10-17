@@ -1,0 +1,43 @@
+{
+  "maps": [
+    "E06",
+    "M06"
+  ],
+  "seeds": [
+    11901,
+    11902,
+    11903
+  ],
+  "blue_policies": [
+    "b0_fixed_ratio_random",
+    "b1_nearest_interceptor",
+    "b2_threat_priority",
+    "b3_min_cost_assignment",
+    "b4_joint_timing_assignment",
+    "b5_successive_depth_coordination",
+    "b6_mixed_fire_coordination",
+    "b7_planned_nearest",
+    "b8_threat_multi_wave",
+    "b9_min_cost_planned_multi_wave"
+  ],
+  "objective_motion": "static",
+  "evaluation_label": "E06/M06 Held-out",
+  "map_role": "heldout",
+  "comparison_mode": "v12-r3-only",
+  "comparison_label": "V12-R3 Timely Arrival",
+  "condition_order": [
+    "v12_r3"
+  ],
+  "delta_pairs": [],
+  "max_steps": 1200,
+  "conditions": {
+    "v12_r3": {
+      "checkpoint": "/home/ubuntu/yunpan/competition-platform-env/models/local_avoid_set_attention_v12_r3_timely_arrival.pt",
+      "checkpoint_sha256": "2338b69fd5bb39c617d5a3fbee7c6c68e96cfe7c75faaf4dac70ade1f6358140",
+      "gate_mode": "none"
+    }
+  },
+  "expected_games": 60,
+  "workers": 16,
+  "runtime": "docker"
+}

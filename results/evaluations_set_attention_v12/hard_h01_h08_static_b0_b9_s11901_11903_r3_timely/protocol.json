@@ -1,0 +1,115 @@
+{
+  "maps": [
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05",
+    "H06",
+    "H07",
+    "H08"
+  ],
+  "seeds": [
+    11901,
+    11902,
+    11903
+  ],
+  "blue_policies": [
+    "b0_fixed_ratio_random",
+    "b1_nearest_interceptor",
+    "b2_threat_priority",
+    "b3_min_cost_assignment",
+    "b4_joint_timing_assignment",
+    "b5_successive_depth_coordination",
+    "b6_mixed_fire_coordination",
+    "b7_planned_nearest",
+    "b8_threat_multi_wave",
+    "b9_min_cost_planned_multi_wave"
+  ],
+  "objective_motion": "static",
+  "evaluation_label": "H01-H08 Hard Held-out",
+  "map_role": "heldout",
+  "comparison_mode": "v12-r3-only",
+  "comparison_label": "V12-R3 Timely Arrival",
+  "condition_order": [
+    "v12_r3"
+  ],
+  "delta_pairs": [],
+  "max_steps": 1200,
+  "conditions": {
+    "v12_r3": {
+      "checkpoint": "/home/ubuntu/yunpan/competition-platform-env/models/local_avoid_set_attention_v12_r3_timely_arrival.pt",
+      "checkpoint_sha256": "2338b69fd5bb39c617d5a3fbee7c6c68e96cfe7c75faaf4dac70ade1f6358140",
+      "gate_mode": "none"
+    }
+  },
+  "expected_games": 240,
+  "workers": 20,
+  "runtime": "docker",
+  "runtime_environment_identity": {
+    "competition_environment_mount": {
+      "container_path": "/opt/competition-env",
+      "host_path": "/home/ubuntu/yunpan/miniconda3/envs/competition",
+      "read_only": true
+    },
+    "competition_environment_tree": {
+      "algorithm": "sha256-content-and-relative-path",
+      "file_count": 45934,
+      "name": "mounted_competition_conda_environment",
+      "root": "/home/ubuntu/yunpan/miniconda3/envs/competition",
+      "sha256": "91eecbc320d2e96599794016315e80c9a3f03a322a38948f49dbaf7970fec9a9",
+      "symlink_count": 0,
+      "total_file_bytes": 6520156810
+    },
+    "docker_image": "docker.m.daocloud.io/library/python:3.11-slim-trixie",
+    "docker_image_id": "sha256:d1e9ca7c4e78d1e8ecadb5d44bfc8e956e7a65b659a9950f569f243d72b326d0",
+    "docker_repo_digests": [
+      "docker.m.daocloud.io/library/python@sha256:d1e9ca7c4e78d1e8ecadb5d44bfc8e956e7a65b659a9950f569f243d72b326d0"
+    ],
+    "docker_run_reference": "sha256:d1e9ca7c4e78d1e8ecadb5d44bfc8e956e7a65b659a9950f569f243d72b326d0",
+    "mounted_competition_python": {
+      "configured_path": "/home/ubuntu/yunpan/miniconda3/envs/competition/bin/python",
+      "container_path": "/opt/competition-env/bin/python",
+      "resolved_path": "/home/ubuntu/yunpan/miniconda3/envs/competition/bin/python",
+      "sha256": "48ba47d7b677bba59306f82e32d6150f50eee043f3214414cff8fd0772d45b8c",
+      "size_bytes": 25398160
+    },
+    "runtime": "docker"
+  },
+  "code_identity": {
+    "name": "full_simulator_source_tree",
+    "algorithm": "sha256",
+    "sha256": "7ebf159a81f4b44fcb57f6ef35f431cb042811d01ab3d73710f1f0e4bc62cdf6",
+    "file_count": 484,
+    "scope": [
+      "run.py",
+      "core/**/*.py",
+      "core/**/*.so",
+      "core/**/*.pyd",
+      "policies/**/*.py",
+      "scenarios/**/*.py",
+      "scenarios/cases/**/*.py",
+      "tools/evaluate_motion_matrix.py",
+      "tools/evaluate_v8_vs_v13_full_sim.py"
+    ]
+  },
+  "observation_encoding_identity": {
+    "name": "local_avoid_runtime_observation_encoding",
+    "algorithm": "sha256",
+    "sha256": "12b0b1e4c2658cb769258e2892d4f8eb2ce401165ffef093ec1178b6a9c0082f",
+    "file_count": 4,
+    "scope": [
+      "policies/red/skills/evasion_ppo/encoder.py",
+      "policies/red/skills/evasion_ppo/local_runtime.py",
+      "policies/red/skills/evasion_ppo/set_env.py",
+      "policies/red/skills/evasion_ppo/set_runtime.py"
+    ],
+    "files": {
+      "policies/red/skills/evasion_ppo/encoder.py": "e0759416effa10522f1c2f9e79ac0186c79a906374c771999c24d9e0211ae25f",
+      "policies/red/skills/evasion_ppo/local_runtime.py": "2aa2146cab870933acb66f4c4521499f2605308ece949ecd4ff9cfcb5030345f",
+      "policies/red/skills/evasion_ppo/set_env.py": "6c03c98b688cf3549a795c5a2b8638dbdb2a94c46a202c957652c961f213db83",
+      "policies/red/skills/evasion_ppo/set_runtime.py": "9309ddf3b382175512808ed372b296fb4c43efb913d67ba25a45e85ac938512c"
+    }
+  },
+  "matrix_protocol_fingerprint": "bb8fb28fa3af12c92653cbf7d6c08cecdec00d1050ff4aff2f722578a41710ab"
+}

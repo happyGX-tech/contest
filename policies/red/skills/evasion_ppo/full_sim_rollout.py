@@ -55,9 +55,18 @@ def load_runtime_trajectories(paths: Iterable[str | Path]) -> list[dict[str, Any
 
 
 def annotate_runtime_trace_outcomes(
-    path: str | Path, summary: dict[str, Any]
+    path: str | Path,
+    summary: dict[str, Any],
+    *,
+    alive_at_end_terminal: str = "incomplete",
 ) -> dict[str, int]:
     """Replace distance proxies with per-platform full-simulator outcomes."""
+
+    if alive_at_end_terminal not in {"incomplete", "timeout"}:
+        raise ValueError(
+            "alive_at_end_terminal must be 'incomplete' or 'timeout'; "
+            f"got {alive_at_end_terminal!r}"
+        )
 
     trace_path = Path(path)
     trajectories = load_runtime_trajectories([trace_path])
@@ -79,7 +88,7 @@ def annotate_runtime_trace_outcomes(
         elif bool(outcome.get("resolved")):
             terminal = "intercepted" if bool(outcome.get("engaged")) else "lost"
         elif bool(outcome.get("alive_at_end")):
-            terminal = "incomplete"
+            terminal = alive_at_end_terminal
         else:
             terminal = "lost"
         trajectory["terminal_proxy"] = trajectory.get("terminal")
@@ -168,12 +177,238 @@ def _behavior_outputs(
     )
 
 
+def _normalized_distance_reduction_rewards(
+    observations: np.ndarray,
+    next_observation: np.ndarray,
+    actions: np.ndarray,
+    terminal: str,
+    config: LocalAvoidConfig,
+    terminal_goal_distance_m: float | None = None,
+    reward_horizon_steps: int | None = None,
+) -> tuple[np.ndarray, dict[str, float]]:
+    """Normalized target-distance reduction with no terminal shaping.
+
+    Every trajectory receives the distance progress it actually made, including
+    trajectories later intercepted or lost.  Arrival uses zero remaining
+    distance because the target may disappear before a final observation is
+    emitted.  No arrival bonus, interception penalty, action cost, or other
+    reward term is added.
+    """
+
+    rewards = np.zeros(len(observations), dtype=np.float32)
+    distances_m = (
+        observations[:, 3].astype(np.float64)
+        * float(config.goal_distance_scale_m)
+    )
+    initial_distance_m = max(float(distances_m[0]), 1.0)
+    progress_fraction = np.zeros(len(observations), dtype=np.float64)
+    if len(observations) > 1:
+        progress_fraction[:-1] = (
+            distances_m[:-1] - distances_m[1:]
+        ) / initial_distance_m
+
+    if (
+        terminal_goal_distance_m is not None
+        and np.isfinite(float(terminal_goal_distance_m))
+        and float(terminal_goal_distance_m) >= 0.0
+    ):
+        final_distance_m = float(terminal_goal_distance_m)
+        progress_fraction[-1] = (
+            distances_m[-1] - final_distance_m
+        ) / initial_distance_m
+    elif terminal in {"arrived", "effective_hit"}:
+        progress_fraction[-1] = distances_m[-1] / initial_distance_m
+    elif (
+        next_observation.size == observations.shape[1]
+        and np.any(next_observation)
+    ):
+        next_distance_m = (
+            float(next_observation[3]) * float(config.goal_distance_scale_m)
+        )
+        progress_fraction[-1] = (
+            distances_m[-1] - next_distance_m
+        ) / initial_distance_m
+    elif terminal not in {"intercepted", "lost"}:
+        raise ValueError(
+            f"normalized-distance reward lacks a final observation for "
+            f"terminal={terminal!r}"
+        )
+
+    del actions, reward_horizon_steps
+    rewards += progress_fraction.astype(np.float32)
+    np.clip(
+        rewards,
+        -float(config.reward_clip),
+        float(config.reward_clip),
+        out=rewards,
+    )
+    total = float(progress_fraction.sum())
+    return rewards, {
+        "progress_reward": total,
+        "normalized_distance_reward": total,
+        "successful_distance_reward": (
+            total if terminal in {"arrived", "effective_hit"} else 0.0
+        ),
+        "failed_zero_reward": 0.0,
+        "arrival_bonus": 0.0,
+        "effective_hit_bonus": 0.0,
+        "interception_penalty": 0.0,
+        "terminal_outcome_reward": 0.0,
+        "hit_penalty": 0.0,
+        "timeout_penalty": 0.0,
+        "switch_penalty": 0.0,
+        "reversal_penalty": 0.0,
+    }
+
+
+def _distance_outcome_rewards(
+    observations: np.ndarray,
+    next_observation: np.ndarray,
+    actions: np.ndarray,
+    terminal: str,
+    config: LocalAvoidConfig,
+    terminal_goal_distance_m: float | None = None,
+    reward_horizon_steps: int | None = None,
+) -> tuple[np.ndarray, dict[str, float]]:
+    """Normalized distance progress plus a small real-outcome terminal ladder.
+
+    Distance remains the dense primary objective.  The mutually-exclusive
+    terminal adjustment distinguishes effective damage, arrival without an
+    effective hit, and interception.  Lost and time-limit trajectories receive
+    no terminal adjustment.  Proxy outcomes are rejected by the caller.
+    """
+
+    rewards, components = _normalized_distance_reduction_rewards(
+        observations,
+        next_observation,
+        actions,
+        terminal,
+        config,
+        terminal_goal_distance_m,
+        reward_horizon_steps,
+    )
+    arrival_bonus = 0.0
+    effective_hit_bonus = 0.0
+    interception_penalty = 0.0
+    if terminal == "effective_hit":
+        effective_hit_bonus = 0.35
+    elif terminal == "arrived":
+        arrival_bonus = 0.20
+    elif terminal == "intercepted":
+        interception_penalty = -0.25
+
+    terminal_reward = (
+        arrival_bonus + effective_hit_bonus + interception_penalty
+    )
+    rewards[-1] += np.float32(terminal_reward)
+    np.clip(
+        rewards,
+        -float(config.reward_clip),
+        float(config.reward_clip),
+        out=rewards,
+    )
+    components.update(
+        {
+            "arrival_bonus": arrival_bonus,
+            "effective_hit_bonus": effective_hit_bonus,
+            "interception_penalty": interception_penalty,
+            "terminal_outcome_reward": terminal_reward,
+        }
+    )
+    return rewards, components
+
+
+def _timely_arrival_rewards(
+    observations: np.ndarray,
+    next_observation: np.ndarray,
+    actions: np.ndarray,
+    terminal: str,
+    config: LocalAvoidConfig,
+    terminal_goal_distance_m: float | None = None,
+    reward_horizon_steps: int | None = None,
+) -> tuple[np.ndarray, dict[str, float]]:
+    """Reward alive, timely arrival at the assigned target.
+
+    The full-simulator 500 m ``arrived`` label is the authoritative success
+    signal.  ``effective_hit`` deliberately receives exactly the same reward:
+    target compatibility and actual damage are upper-layer concerns.  Dense
+    distance progress is retained for successful trajectories, heavily
+    discounted for intercepted trajectories, and removed for lost/timeout
+    trajectories.  A small horizon-normalized time cost discourages detours.
+    """
+
+    if reward_horizon_steps is None or int(reward_horizon_steps) <= 0:
+        raise ValueError("timely_arrival reward requires positive reward_horizon_steps")
+
+    rewards, components = _normalized_distance_reduction_rewards(
+        observations,
+        next_observation,
+        actions,
+        terminal,
+        config,
+        terminal_goal_distance_m,
+        reward_horizon_steps,
+    )
+    if terminal in {"arrived", "effective_hit"}:
+        progress_scale = 1.0
+        terminal_reward = 0.10
+        arrival_bonus = 0.10
+        interception_penalty = 0.0
+        lost_timeout_penalty = 0.0
+    elif terminal == "intercepted":
+        progress_scale = 0.20
+        terminal_reward = -0.15
+        arrival_bonus = 0.0
+        interception_penalty = -0.15
+        lost_timeout_penalty = 0.0
+    elif terminal in {"lost", "timeout", "incomplete", "censored"}:
+        progress_scale = 0.0
+        terminal_reward = -0.30
+        arrival_bonus = 0.0
+        interception_penalty = 0.0
+        lost_timeout_penalty = -0.30
+    else:
+        raise ValueError(f"unsupported timely-arrival terminal outcome: {terminal!r}")
+
+    rewards *= np.float32(progress_scale)
+    time_cost_per_step = -0.05 / float(reward_horizon_steps)
+    rewards += np.float32(time_cost_per_step)
+    rewards[-1] += np.float32(terminal_reward)
+    np.clip(
+        rewards,
+        -float(config.reward_clip),
+        float(config.reward_clip),
+        out=rewards,
+    )
+    scaled_progress = float(components["normalized_distance_reward"]) * progress_scale
+    time_cost = time_cost_per_step * len(observations)
+    components.update(
+        {
+            "progress_reward": scaled_progress,
+            "normalized_distance_reward": scaled_progress,
+            "successful_distance_reward": (
+                scaled_progress if terminal in {"arrived", "effective_hit"} else 0.0
+            ),
+            "arrival_bonus": arrival_bonus,
+            "effective_hit_bonus": 0.0,
+            "interception_penalty": interception_penalty,
+            "lost_timeout_penalty": lost_timeout_penalty,
+            "timeout_penalty": lost_timeout_penalty if terminal == "timeout" else 0.0,
+            "time_cost": time_cost,
+            "terminal_outcome_reward": terminal_reward,
+        }
+    )
+    return rewards, components
+
+
 def _v10_raw_rewards(
     observations: np.ndarray,
     next_observation: np.ndarray,
     actions: np.ndarray,
     terminal: str,
     config: LocalAvoidConfig,
+    terminal_goal_distance_m: float | None = None,
+    reward_horizon_steps: int | None = None,
 ) -> tuple[np.ndarray, dict[str, float]]:
     """Success-conditioned normalized target-distance reduction.
 
@@ -197,6 +432,7 @@ def _v10_raw_rewards(
             distances_m[:-1] - distances_m[1:]
         ) / initial_distance_m
 
+    del terminal_goal_distance_m, reward_horizon_steps
     arrived = terminal in {"arrived", "effective_hit"}
     failed = terminal in {"intercepted", "lost"}
     incomplete = terminal in {"incomplete", "censored"}
@@ -229,6 +465,9 @@ def _v10_raw_rewards(
         ),
         "failed_zero_reward": float(failed),
         "arrival_bonus": 0.0,
+        "effective_hit_bonus": 0.0,
+        "interception_penalty": 0.0,
+        "terminal_outcome_reward": 0.0,
         "hit_penalty": 0.0,
         "timeout_penalty": 0.0,
         "switch_penalty": 0.0,
@@ -278,14 +517,34 @@ def build_full_sim_rollout(
     require_real_outcomes: bool = True,
     balance_types: bool = False,
     balance_seed: int = 0,
+    reward_mode: str = "success_conditioned",
+    reward_horizon_steps: int | None = None,
 ) -> tuple[dict[str, np.ndarray], dict[str, float]]:
     """Convert complete-simulator trajectories into one on-policy PPO batch.
 
-    Reward is the V10 objective: success-conditioned normalized target-distance
-    reduction.  Formal training rejects proxy terminal labels.  Time-limit
-    trajectories use their real final next observation for value bootstrap.
-    Optionally, PPO samples are resampled to equal H/M/L counts.
+    ``success_conditioned`` is the V10-v2 objective that zeroes failed
+    trajectories. ``normalized_distance`` uses only normalized target-distance
+    reduction, even before a later interception. ``distance_outcome`` keeps
+    that dense signal and adds a compact real-outcome terminal ladder.
+    ``timely_arrival`` treats arrival and effective damage identically while
+    penalizing interception, loss, timeout, and excess flight time. Formal
+    training rejects proxy terminal labels. Time-limit trajectories use their
+    real final next observation for value bootstrap. Optionally, PPO samples
+    are resampled to equal H/M/L counts.
     """
+
+    reward_functions = {
+        "success_conditioned": _v10_raw_rewards,
+        "normalized_distance": _normalized_distance_reduction_rewards,
+        "distance_outcome": _distance_outcome_rewards,
+        "timely_arrival": _timely_arrival_rewards,
+    }
+    try:
+        reward_function = reward_functions[reward_mode]
+    except KeyError as error:
+        raise ValueError(
+            f"unsupported full-simulator reward mode: {reward_mode!r}"
+        ) from error
 
     gamma_value = float(policy.config.gamma if gamma is None else gamma)
     lambda_value = float(
@@ -361,13 +620,19 @@ def build_full_sim_rollout(
     returns = np.zeros(len(observations), dtype=np.float32)
     component_totals = {
         "progress_reward": 0.0,
+        "normalized_distance_reward": 0.0,
         "successful_distance_reward": 0.0,
         "failed_zero_reward": 0.0,
         "arrival_bonus": 0.0,
+        "effective_hit_bonus": 0.0,
+        "interception_penalty": 0.0,
+        "terminal_outcome_reward": 0.0,
         "hit_penalty": 0.0,
         "timeout_penalty": 0.0,
         "switch_penalty": 0.0,
         "reversal_penalty": 0.0,
+        "lost_timeout_penalty": 0.0,
+        "time_cost": 0.0,
     }
     cursor = 0
     bootstrap_values: list[float] = []
@@ -378,12 +643,14 @@ def build_full_sim_rollout(
         next_observation = np.asarray(
             trajectory.get("next_observation", []), dtype=np.float32
         )
-        episode_rewards, components = _v10_raw_rewards(
+        episode_rewards, components = reward_function(
             episode_observations,
             next_observation,
             actions[cursor:end],
             str(trajectory.get("terminal", "unknown")),
             environment_config,
+            trajectory.get("terminal_goal_distance_m"),
+            reward_horizon_steps,
         )
         raw_rewards[cursor:end] = episode_rewards
         for key, value in components.items():
@@ -495,6 +762,7 @@ def build_full_sim_rollout(
         "effective_hit": float(terminals.get("effective_hit", 0)),
         "intercepted": float(terminals.get("intercepted", 0)),
         "lost": float(terminals.get("lost", 0)),
+        "timeout": float(terminals.get("timeout", 0)),
         "excluded_incomplete": float(excluded_incomplete),
         **component_totals,
     }
