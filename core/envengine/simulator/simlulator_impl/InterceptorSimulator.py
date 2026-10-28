@@ -13,6 +13,7 @@ from envengine.simulator.decorator import Simulator
 from envengine.simulator.interfaces import ISimulator
 from envengine.simulator.models.SM6_1BMissileModel import Missile
 from envengine.simulator.simulator_factory import SimulatorFactory
+from envengine.simulator.util.scaled_coordinates import unscaled_ecef_velocity
 
 
 @Simulator.register("InterceptorS")
@@ -49,17 +50,7 @@ class InterceptorSimulator(ISimulator):
         if self.ret < 0:
             self.ret = self.model.Update()
             state: State_py = self.model.getState()
-
-            pos = state.posEcf()
-            vel = state.velEcf()
-            lla = UtilsPy.CoordinateHelper.ecefToLla_py(pos)
-            entity = self.entity_ext.entity
-            if math.isnan(lla.x()):
-                print(1)
-            entity.lla.x, entity.lla.y, entity.lla.z = lla.x(), lla.y(), lla.z()
-            entity.posEcf.x, entity.posEcf.y, entity.posEcf.z = pos.x(), pos.y(), pos.z()
-            entity.velEcf.x, entity.velEcf.y, entity.velEcf.z = vel.x(), vel.y(), vel.z()
-            entity.stage = state.stage()
+            self._update_state(state)
 
             self.set_target_ecf()
 
@@ -87,7 +78,7 @@ class InterceptorSimulator(ISimulator):
                     1 if self.entity_ext.entity.sideId == 0 else 0)
                 can_damage_simulators: list[ISimulator] = self._get_targets_within_self_range(
                     damage_candidate_simulators,
-                    max_range=1000)
+                    max_range=100)
                 if not can_damage_simulators:
                     return
 
@@ -109,7 +100,7 @@ class InterceptorSimulator(ISimulator):
     def launch(self, target_id: int, target_pos_ecf: Vector3D, target_vel_ecf: Vector3D):
         """
         发射
-        :param target_lla: 目标位置
+        :param target_lla: 母巢位置
         :return:
         """
         if self.launched != -1:
@@ -126,33 +117,27 @@ class InterceptorSimulator(ISimulator):
         # psi_f = CoordinateHelper.getPsi_py(targetPosNue) * 57.3
         # self.model.SetTargetEcf(target_pos_ecf, target_vel_ecf)
 
-        self.model.Launch(target_lla)
         self.leave_parent()
         self.launched = 1
+        self.model.Launch(target_lla * ISimulator.MODEL_SCALE)
 
     def set_target_ecf(self) -> None:
         """
         设置目标位置
         :return:
         """
-        target: ISimulator = self._simulator_factory.get_simulator_by_id(self.target_id)
-
-        if target.entity_ext.entity.survivePoints <= 0:
+        target = self._simulator_factory.blue_information.get_track(self.target_id, self.sim_time)
+        if target is None:
             return
-        self.model.SetTargetEcf(Vector3D(
-                target.entity_ext.entity.posEcf.x,
-                target.entity_ext.entity.posEcf.y,
-                target.entity_ext.entity.posEcf.z),
-            Vector3D(
-                target.entity_ext.entity.velEcf.x,
-                target.entity_ext.entity.velEcf.y,
-                target.entity_ext.entity.velEcf.z))
 
-    def set_lla(self, lla: Vector3d) -> None:
-        """
-        初始设置lla
-        """
-        pass
+        # 将信息库预测的引擎坐标转换到自爆虫模型使用的尺度。
+        predicted_lla = CoordinateHelper.ecefToLla_py(Vector3D(target.pos_ecf.x, target.pos_ecf.y, target.pos_ecf.z))
+        target_lla = predicted_lla * ISimulator.MODEL_SCALE
+        target_pos_ecf = CoordinateHelper.llaToEcef_py(target_lla)
+        target_vel_ecf = unscaled_ecef_velocity(predicted_lla, target.vel_ecf, ISimulator.MODEL_SCALE)
+
+        self.model.SetTargetEcf(target_pos_ecf,
+                                Vector3D(target_vel_ecf.x, target_vel_ecf.y, target_vel_ecf.z))
 
     def set_speed(self, speed: float) -> None:
         """
@@ -172,10 +157,21 @@ class InterceptorSimulator(ISimulator):
 
     def init_model(self):
         self.model = Missile()
+        self.set_lla(self.entity_ext.entity.lla)
+
+    def set_lla(self, lla: Vector3d) -> None:
+        """
+        初始设置lla
+        """
+
+        if self.launched == 1:
+            return
+
+        self.entity_ext.entity.lla = lla
         missile_lla = UtilsPy.Vector3D(self.entity_ext.entity.lla.x, self.entity_ext.entity.lla.y,
                                        self.entity_ext.entity.lla.z + 0.1)
 
-        self.model.Init(self.simulator_sim_step / 1000, missile_lla, 20)
+        self.model.Init(self.simulator_sim_step / 1000, missile_lla * ISimulator.MODEL_SCALE, 20)
         self.model.Save(False, self.entity_ext.entity.id)
 
     def command_received(self, command: Command) -> None:

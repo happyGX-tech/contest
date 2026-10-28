@@ -11,7 +11,7 @@ from dataclasses_json import dataclass_json
 @dataclass_json
 @dataclass
 class InterfereInfo:
-	# 雷达工作频率
+	# 视野塔工作频率
 	radarFrequency: float = 0.0
 	# 信号带宽
 	signalBandWidth: float = 0.0

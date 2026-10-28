@@ -8,13 +8,13 @@
   "mission_type_name": "综合任务",
   "topology_id": "staggered_s_gates",
   "topology_name": "折线四关",
-  "design_intent": "四个雷达节点从西北到东南交替错位，形成清晰的S形关卡；北侧无人船前置到第一关之前，其余节点分布在中段和末端。",
+  "design_intent": "四个视野塔节点从西北到东南交替错位，形成清晰的S形关卡；北侧暗巢前置到第一关之前，其余节点分布在中段和末端。",
   "structural_features": [
     "前沿节点先行暴露",
     "多关卡连续规避",
     "末端分支选择"
   ],
-  "difficulty_mechanism": "10个计分目标、4部雷达和268枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.5。",
+  "difficulty_mechanism": "10个母巢、4部视野塔和268枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.5。",
   "objective_ids": [
     51,
     52,
@@ -141,7 +141,7 @@
       "initial_information": "public"
     }
   ],
-  "scenario_sha256": "d8708e288961714c15f9bc6d24f72b698f5ff584098b0ee02b034e5119c815f9",
+  "scenario_sha256": "1dff8f54145bf6e7c0928e48dca6f199db611504d3a93c763f3e78b5039b6fe7",
   "entity_total": 511,
   "blue_entity_total": 282,
   "blue_root_total": 10,

@@ -1,0 +1,245 @@
+{
+  "revision": "blue stock up 15 percent red down 15 percent",
+  "maps": [
+    {
+      "map": "E01",
+      "red": [
+        17,
+        24,
+        85
+      ],
+      "stock": 97,
+      "total_entities": 241,
+      "distribution": "比较均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "E02",
+      "red": [
+        17,
+        24,
+        85
+      ],
+      "stock": 97,
+      "total_entities": 241,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "E03",
+      "red": [
+        17,
+        24,
+        85
+      ],
+      "stock": 97,
+      "total_entities": 241,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "E04",
+      "red": [
+        17,
+        24,
+        85
+      ],
+      "stock": 97,
+      "total_entities": 241,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "E05",
+      "red": [
+        17,
+        24,
+        85
+      ],
+      "stock": 97,
+      "total_entities": 241,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "E06",
+      "red": [
+        17,
+        24,
+        85
+      ],
+      "stock": 97,
+      "total_entities": 241,
+      "distribution": "比较均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "H01",
+      "red": [
+        48,
+        66,
+        214
+      ],
+      "stock": 435,
+      "total_entities": 827,
+      "distribution": "比较均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "H02",
+      "red": [
+        48,
+        66,
+        214
+      ],
+      "stock": 435,
+      "total_entities": 827,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "H03",
+      "red": [
+        48,
+        66,
+        214
+      ],
+      "stock": 435,
+      "total_entities": 827,
+      "distribution": "比较均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "H04",
+      "red": [
+        48,
+        66,
+        214
+      ],
+      "stock": 435,
+      "total_entities": 827,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "H05",
+      "red": [
+        48,
+        66,
+        214
+      ],
+      "stock": 435,
+      "total_entities": 827,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "H06",
+      "red": [
+        48,
+        66,
+        214
+      ],
+      "stock": 435,
+      "total_entities": 827,
+      "distribution": "比较均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "H07",
+      "red": [
+        48,
+        66,
+        214
+      ],
+      "stock": 435,
+      "total_entities": 827,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "H08",
+      "red": [
+        48,
+        66,
+        214
+      ],
+      "stock": 435,
+      "total_entities": 827,
+      "distribution": "比较均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "M01",
+      "red": [
+        27,
+        37,
+        128
+      ],
+      "stock": 224,
+      "total_entities": 449,
+      "distribution": "比较均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "M02",
+      "red": [
+        27,
+        37,
+        128
+      ],
+      "stock": 224,
+      "total_entities": 449,
+      "distribution": "比较均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "M03",
+      "red": [
+        27,
+        37,
+        128
+      ],
+      "stock": 224,
+      "total_entities": 449,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "M04",
+      "red": [
+        27,
+        37,
+        128
+      ],
+      "stock": 224,
+      "total_entities": 449,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "M05",
+      "red": [
+        27,
+        37,
+        128
+      ],
+      "stock": 224,
+      "total_entities": 449,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    },
+    {
+      "map": "M06",
+      "red": [
+        27,
+        37,
+        128
+      ],
+      "stock": 224,
+      "total_entities": 449,
+      "distribution": "部分不均匀",
+      "checks_passed": true
+    }
+  ]
+}

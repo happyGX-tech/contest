@@ -21,13 +21,13 @@ class Renderer:
         self.running = False
         self.thread = None
 
-        # 地图配置，基于不变形考虑，屏幕上每一个像素对应的经度和纬度必须维持一个固定的比例
+        # 地图配置：横纵坐标保持固定比例，避免渲染变形
         self.MIN_WINDOW_SIZE = 500
         self.LON_MIN, self.LON_MAX = lon_min, lon_max
         self.LAT_MIN, self.LAT_MAX = lat_min, lat_max
-        self.lon_per_pixel = self.lat_per_pixel = 0 # 每像素对应的经度纬度（只在初始化时计算一次，后续保持不变）
+        self.lon_per_pixel = self.lat_per_pixel = 0 # 每像素对应的横纵坐标跨度（初始化后保持不变）
         self.MAP_W, self.MAP_H = max(1000, self.MIN_WINDOW_SIZE), max(800, self.MIN_WINDOW_SIZE)
-        # 只在初始化时计算一次每像素对应的经纬度比例，并记录地理中心
+        # 初始化坐标比例并记录地图中心
         self._init_lonlat_pixel_ratio()
         self._recalculate_lonlat_boundary()
 
@@ -61,7 +61,7 @@ class Renderer:
         self.mouse_x = 0
         self.mouse_y = 0
 
-        self.radar_angle = 0  # 雷达角度
+        self.radar_angle = 0  # 视野塔角度
 
         self.draw_radius = 8
 
@@ -93,11 +93,11 @@ class Renderer:
         self.red_areaHM = red_areaHM[0] if red_areaHM else []
 
     def _init_lonlat_pixel_ratio(self):
-        """只计算一次：每像素对应的经纬度（正方形像素，保持不变形）
-        根据初始屏幕尺寸与场景经纬度范围确定比例，并记录场景地理中心，
+        """计算每像素对应的横纵坐标跨度（正方形像素，保持不变形）。
+        根据初始屏幕尺寸与场景坐标范围确定比例，并记录地图中心，
         后续不再改变该比例。
         """
-        lon_lat_pixel_ratio = 1  # 屏幕上一个像素对应的经度和纬度的比例，lon/lat
+        lon_lat_pixel_ratio = 1  # 横纵坐标使用相同比例
 
         self.lat_per_pixel = (self.LAT_MAX - self.LAT_MIN) / self.MAP_H
         self.lon_per_pixel = self.lat_per_pixel * lon_lat_pixel_ratio
@@ -106,14 +106,14 @@ class Renderer:
             self.lon_per_pixel = (self.LON_MAX - self.LON_MIN) / self.MAP_W
             self.lat_per_pixel = self.lon_per_pixel / lon_lat_pixel_ratio
 
-        # 记录场景地理中心（恒定，不随窗口缩放变化）
+        # 记录地图中心（恒定，不随窗口缩放变化）
         self.geo_center_lon = (self.LON_MAX + self.LON_MIN) / 2
         self.geo_center_lat = (self.LAT_MAX + self.LAT_MIN) / 2
 
     def _recalculate_lonlat_boundary(self):
-        """根据屏幕尺寸重新计算对应的经纬度范围（仅重新居中，不改变每像素比例）
-        使用初始化时确定的恒定 lon_per_pixel/lat_per_pixel 与地理中心，
-        将场景地理中心对齐到当前窗口中心，保证窗口缩放时坐标轴（位于地理中心）
+        """根据屏幕尺寸重新计算坐标范围（仅重新居中，不改变每像素比例）。
+        使用初始化时确定的恒定像素比例与地图中心，
+        将地图中心对齐到当前窗口中心，保证窗口缩放时坐标轴（位于地图中心）
         始终居中、不发生偏移。
         """
         self.LON_MIN = self.geo_center_lon - self.lon_per_pixel * self.MAP_W / 2
@@ -158,7 +158,7 @@ class Renderer:
         线性映射（带缩放和偏移）
         返回屏幕坐标，原点在屏幕中心
         """
-        # 先将经纬度映射到世界坐标 (0~MAP_W, 0~MAP_H)
+        # 将场景坐标映射到世界坐标 (0~MAP_W, 0~MAP_H)
         wx = (lon - self.LON_MIN) / self.lon_per_pixel # 距离屏幕左边缘的像素数
         wy = (self.LAT_MAX - lat) / self.lat_per_pixel # 距离屏幕上边缘的像素数
 
@@ -203,7 +203,7 @@ class Renderer:
 
     def _screen_to_geo_linear(self, screen_x, screen_y):
         """
-        将屏幕坐标转换为经纬度（线性映射）
+        将屏幕坐标转换为场景坐标（线性映射）
         """
         wx, wy = self._screen_to_world(screen_x, screen_y)
         lon = wx * self.lon_per_pixel + self.LON_MIN
@@ -438,8 +438,8 @@ class Renderer:
                         # 重新设置窗口模式，应用限制后的尺寸
                         screen = pygame.display.set_mode((self.MAP_W, self.MAP_H), pygame.RESIZABLE)
 
-                    # 重新计算经纬度边界，使地理中心重新对齐到新的窗口中心，
-                    # 避免窗口缩放时坐标轴（位于地理中心）相对屏幕中心发生偏移
+                    # 重新计算坐标边界，使地图中心重新对齐到新的窗口中心，
+                    # 避免窗口缩放时坐标轴相对屏幕中心发生偏移
                     self._recalculate_lonlat_boundary()
 
             # 获取最新态势
@@ -500,33 +500,33 @@ class Renderer:
                 name = data.get('nameChn', str(data.get('id', '')))
                 match entity_type:
                     case 21000:
-                        # 高性能飞行器
-                        self.draw_missile_h(screen, (x,y))
+                        # 毁灭者
+                        self.draw_destroyer(screen, x,y)
                     case 21001:
-                        # 低性能飞行器
-                        self.draw_missile_m(screen, (x,y))
+                        # 突击者
+                        self.draw_assault(screen, x,y)
                     case 21002:
-                        # 无人机
-                        self.draw_missile_l(screen, (x,y))
+                        # 清道夫
+                        self.draw_scavenger(screen, x,y)
                     case 9202:
-                        # 卫星
-                        self.draw_satellite(screen, (x,y))
+                        # 天眼
+                        self.draw_eye(screen, x,y)
                     case 9400:
-                        # 目标
-                        self.draw_target(screen, (x,y))
+                        # 母巢
+                        self.draw_hive(screen, x,y)
                     case 9500:
-                        # 无人船
-                        self.draw_autonomous_ship(screen, (x, y))
+                        # 暗巢
+                        self.draw_dark_hive(screen, x, y)
                     case 9600:
-                        # 拦截阵地
-                        self.draw_defensive(screen, (x,y))
+                        # 哨卫巢
+                        self.draw_sentry_hive(screen, x,y)
 
-                        # 雷达：按 200km 长度绘制探测范围圆形
-                        pixel_radius = self.km_to_pixel_radius(lon, lat, 200)
+                        # 视野塔：按20公里半径绘制探测范围参考圆
+                        pixel_radius = self.km_to_pixel_radius(lon, lat, 20)
                         pygame.draw.circle(screen, (0, 255, 0), (x, y), pixel_radius * self.zoom, 1)
                     case 24000:
-                        # 拦截弹
-                        self.draw_intercept(screen, (x,y))
+                        # 自爆虫群
+                        self.draw_swarm(screen, x,y)
                     case _:
                         pygame.draw.circle(screen, color, (x, y), self.draw_radius)
                         text_surface = self.font.render(str(name), True, color)
@@ -539,25 +539,16 @@ class Renderer:
                 # screen.blit(text_surface, text_rect)
 
             # ========== 右上角图例 ==========
-            self.draw_legend(screen)
+            # self.draw_legend(screen)
+            self.draw_legend2(screen)
 
-            # ========== 左下角显示鼠标位置坐标（以原点为中心） ==========
-            # 获取鼠标位置对应的经纬度和世界坐标
-            mouse_wx, mouse_wy = self._screen_to_world(self.mouse_x, self.mouse_y)
+            # ========== 左下角显示鼠标位置对应的场景坐标 ==========
             mouse_lon, mouse_lat = self._screen_to_geo_linear(self.mouse_x, self.mouse_y)
-
-            # 计算相对于原点（屏幕中心）的偏移量
-            cx, cy = self.MAP_W // 2, self.MAP_H // 2
-
-            # 世界坐标相对于原点的偏移
-            world_offset_x = mouse_wx - cx
-            world_offset_y = cy - mouse_wy  # Y轴向上为正
 
             # 构建坐标信息字符串
             coord_info = [
-                f"鼠标位置 (原点为屏幕中心):",
-                f"  世界坐标: ({world_offset_x:+.0f}, {world_offset_y:+.0f})",
-                f"  经纬度: ({mouse_lon:.4f}, {mouse_lat:.4f})"
+                "鼠标位置:",
+                f"  坐标 (x, y): ({mouse_lon:.4f}, {mouse_lat:.4f})"
             ]
 
             # 绘制半透明背景（左下角）
@@ -625,8 +616,8 @@ class Renderer:
 
     def km_to_pixel_radius(self, lon: float, lat: float, range_km: float) -> float:
         """
-        1、根据经纬度与公里数的近似对应关系，计算出目标距离对应的经度和纬度
-        2、根据当前render的经纬度与对应的像素的关系，分别计算在经纬度方向上的像素
+        1、根据场景坐标与公里数的近似对应关系，计算目标距离对应的横纵坐标跨度
+        2、根据当前渲染比例，分别计算横纵方向上的像素半径
         3、两个方向取平均
         """
 
@@ -641,116 +632,139 @@ class Renderer:
         r_lon = range_lon / self.lon_per_pixel
         return (r_lat + r_lon) / 2.0
 
-    def draw_missile_h(self,
-                      screen: pygame.Surface,
-                      center: typing.Tuple[int, int])->pygame.Rect:
-        """绘制高性能弹"""
-        return self.draw_triangle(screen, (255, 0, 0), center, self.draw_radius * 7, self.draw_radius * 2)
+    def draw_destroyer(self, surf, cx, cy, size=50):
+        """毁灭者：六边形 + 中心圆点"""
+        k = size / 128.0
 
-    def draw_missile_m(self,
-                      screen: pygame.Surface,
-                      center: typing.Tuple[int, int])->pygame.Rect:
-        """绘制中性能弹"""
-        return self.draw_triangle(screen, (232, 14, 217), center, self.draw_radius * 5, self.draw_radius * 2)
+        def T(x, y): return (cx + (x - 64) * k, cy + (y - 64) * k)
 
-    def draw_missile_l(self,
-                       screen: pygame.Surface,
-                       center: typing.Tuple[int, int])->pygame.Rect:
-        """绘制低性能弹"""
-        return self.draw_triangle(screen, (79, 232, 14), center, self.draw_radius * 2, self.draw_radius * 2)
+        hexp = [T(x, y) for x, y in self.get_poly_pts(64, 64, 40, 6)]
+        pygame.draw.polygon(surf, (255, 77, 109), hexp, max(2, int(3 * k)))
+        pygame.draw.circle(surf, (255, 77, 109), T(64, 64), max(1, int(9 * k)))
 
-    def draw_satellite(self,
-                       screen: pygame.Surface,
-                       center: typing.Tuple[int, int])->pygame.Rect:
-        """绘制卫星"""
-        x = center[0]
-        y = center[1]
-        rec_length = self.draw_radius * 5
-        first = pygame.draw.circle(screen, (255, 120, 50), center, self.draw_radius * 1.5)
-        second = pygame.draw.rect(screen, (255, 120, 50), pygame.Rect(x - rec_length / 2, y - self.draw_radius * 0.5, rec_length, self.draw_radius))
-        left = min(first.left, second.left)
-        top = min(first.top, second.top)
-        right = max(first.right, second.right)
-        bottom = max(first.bottom, second.bottom)
-        return pygame.Rect(left, top, right-left, bottom-top)
+    def draw_assault(self, surf, cx, cy, size=50):
+        """突击者：向上三角形 + 中心圆点"""
+        k = size / 128.0
 
-    def draw_target(self,
-                       screen: pygame.Surface,
-                       center: typing.Tuple[int, int])-> pygame.Rect:
-        """绘制目标"""
-        first = self._draw_line(screen, (50, 220, 255), center, self.draw_radius * 4, math.pi / 4,5)
-        second = self._draw_line(screen, (50, 220, 255), center, self.draw_radius * 4, -math.pi / 4, 5)
-        left = min(first.left, second.left)
-        top = min(first.top, second.top)
-        right = max(first.right, second.right)
-        bottom = max(first.bottom, second.bottom)
-        return pygame.Rect(left, top, right-left, bottom-top)
+        def T(x, y): return (cx + (x - 64) * k, cy + (y - 64) * k)
 
-    def draw_defensive(self,
-                       screen: pygame.Surface,
-                       center: typing.Tuple[int, int])-> pygame.Rect:
-        """绘制防御阵地"""
-        x = center[0]
-        y = center[1]
-        return pygame.draw.rect(screen, (50, 220, 255), pygame.Rect(x - self.draw_radius, y - self.draw_radius, self.draw_radius * 2, self.draw_radius * 2))
+        tri = [T(64, 20), T(104, 104), T(24, 104)]
+        pygame.draw.polygon(surf, (77, 210, 255), tri, max(2, int(3 * k)))
+        pygame.draw.circle(surf, (77, 210, 255), T(64, 76), max(1, int(9 * k)))
 
-    def draw_autonomous_ship(self,
-                       screen: pygame.Surface,
-                       center: typing.Tuple[int, int])-> pygame.Rect:
-        """绘制无人船"""
-        return pygame.draw.circle(screen, (50, 220, 255), center, self.draw_radius)  # 拦截范围
+    def draw_scavenger(self, surf, cx, cy, size=50):
+        """清道夫：圆环 + 交叉线"""
+        k = size / 128.0
 
-    def draw_intercept(self,
-                       screen: pygame.Surface,
-                       center: typing.Tuple[int, int])-> pygame.Rect:
-        """绘制拦截弹"""
-        return self.draw_triangle(screen, (50, 220, 255), center, self.draw_radius, self.draw_radius, math.pi)
+        def T(x, y): return (cx + (x - 64) * k, cy + (y - 64) * k)
 
-    def draw_legend(self, screen: pygame.Surface):
-        """绘制图例
-        1、创建一个图例组件
-        2、将组件放置到屏幕右上角
-        """
+        w = max(2, int(3 * k))
+        pygame.draw.circle(surf, (255, 209, 102), T(64, 64), int(40 * k), w)
+        pygame.draw.line(surf, (255, 209, 102), T(40, 40), T(88, 88), w)
+        pygame.draw.line(surf, (255, 209, 102), T(88, 40), T(40, 88), w)
 
-        bg_width = 250
-        bg_height = 250
+    def draw_eye(self, surf, cx, cy, size=50):
+        """天眼：两段二次贝塞尔曲线 + 瞳孔"""
+        k = size / 128.0
 
-        shape_center_x = 50
-        shape_center_y = 20
-        text_color = (255, 255, 255)
-        text_left = shape_center_x + 50
-        line_space = 20
+        def T(x, y): return (cx + (x - 64) * k, cy + (y - 64) * k)
 
-        # 绘制半透明背景（右下角）
-        bg_surface = pygame.Surface((bg_width, bg_height))
-        bg_surface.set_alpha(200)
-        bg_surface.fill((0, 0, 0))
+        w = max(1, int(3 * k))
+        # 上弧：从 (16,64) 经 (64,16) 到 (112,64)
+        self.draw_bezier(surf, (155, 92, 255), T(16, 64), T(64, 16), T(112, 64), w)
+        # 下弧：从 (112,64) 经 (64,112) 到 (16,64)
+        self.draw_bezier(surf, (155, 92, 255), T(112, 64), T(64, 112), T(16, 64), w)
 
-        line_height = self.draw_single_legend(bg_surface, self.draw_missile_h, shape_center_x, shape_center_y, "高性能飞行器", text_left, text_color)
-        shape_center_y += line_height / 2 + line_space
+        pygame.draw.circle(surf, (155, 92, 255), T(64, 64), max(1, int(16 * k)))
+        pygame.draw.circle(surf, (14, 22, 32), T(64, 64), max(1, int(7 * k)))
 
-        line_height = self.draw_single_legend(bg_surface, self.draw_missile_m, shape_center_x, shape_center_y, "低性能飞行器", text_left, text_color)
-        shape_center_y += line_height / 2 + line_space
+    def draw_hive(self, surf, cx, cy, size=50):
+        """母巢：实心六边形 + 深色中心"""
+        k = size / 128.0
 
-        line_height = self.draw_single_legend(bg_surface, self.draw_missile_l, shape_center_x, shape_center_y, "无人机", text_left, text_color)
-        shape_center_y += line_height / 2 + line_space
+        def T(x, y): return (cx + (x - 64) * k, cy + (y - 64) * k)
 
-        line_height = self.draw_single_legend(bg_surface, self.draw_satellite, shape_center_x, shape_center_y, "卫星", text_left, text_color)
-        shape_center_y += line_height / 2 + line_space
+        hexp = [T(x, y) for x, y in self.get_poly_pts(64, 64, 40, 6)]
+        pygame.draw.polygon(surf, (255, 179, 71), hexp)
+        pygame.draw.circle(surf, (26, 18, 8), T(64, 64), max(1, int(12 * k)))
 
-        line_height = self.draw_single_legend(bg_surface, self.draw_target, shape_center_x, shape_center_y, "目标", text_left, text_color)
-        shape_center_y += line_height / 2 + line_space
+    def draw_sentry_hive(self, surf, cx, cy, size=50):
+        """哨卫巢：五边形 + 中心圆点"""
+        k = size / 128.0
 
-        line_height = self.draw_single_legend(bg_surface, self.draw_defensive, shape_center_x, shape_center_y, "防御阵地", text_left, text_color)
-        shape_center_y += line_height / 2 + line_space
+        def T(x, y): return (cx + (x - 64) * k, cy + (y - 64) * k)
 
-        line_height = self.draw_single_legend(bg_surface, self.draw_autonomous_ship, shape_center_x, shape_center_y, "无人船", text_left, text_color)
-        shape_center_y += line_height / 2 + line_space
+        pent = [T(x, y) for x, y in self.get_poly_pts(64, 64, 42, 5)]
+        pygame.draw.polygon(surf, (13, 26, 20), pent)
+        pygame.draw.polygon(surf, (77, 255, 158), pent, max(1, int(3 * k)))
+        pygame.draw.circle(surf, (77, 255, 158), T(64, 64), max(1, int(10 * k)))
 
-        line_height = self.draw_single_legend(bg_surface, self.draw_intercept, shape_center_x, shape_center_y, "拦截弹", text_left, text_color)
-        shape_center_y += line_height / 2 + line_space
+    def draw_dark_hive(self, surf, cx, cy, size=50):
+        """暗巢：菱形 + 深色中心"""
+        k = size / 128.0
 
-        screen.blit(bg_surface, (self.MAP_W - bg_width - 10, 10))
+        def T(x, y): return (cx + (x - 64) * k, cy + (y - 64) * k)
+
+        rhomb = [T(64, 20), T(104, 64), T(64, 108), T(24, 64)]
+        pygame.draw.polygon(surf, (122, 77, 255), rhomb)
+        pygame.draw.circle(surf, (16, 11, 24), T(64, 64), max(1, int(10 * k)))
+
+    def draw_swarm(self, surf, cx, cy, size=50):
+        """自爆虫群：三个圆 + 中心小圆"""
+        k = size / 128.0
+
+        def T(x, y): return (cx + (x - 64) * k, cy + (y - 64) * k)
+
+        r_big = max(1, int(22 * k))
+        r_small = max(1, int(8 * k))
+        pygame.draw.circle(surf, (255, 107, 53), T(64, 32), r_big, 1)
+        pygame.draw.circle(surf, (255, 107, 53), T(36, 92), r_big, 1)
+        pygame.draw.circle(surf, (255, 107, 53), T(92, 92), r_big, 1)
+        pygame.draw.circle(surf, (255, 209, 102), T(64, 72), r_small)
+
+    def draw_legend2(self, surface,
+                     margin=10,  # 距离窗口边缘的边距
+                     icon_size=32,  # 图例中图标的大小
+                     item_h=38,  # 每个条目的高度
+                     panel_w=160,  # 图例面板宽度
+                     bg_alpha=160):  # 背景透明度
+
+        icons = [
+            ("毁灭者", self.draw_destroyer),
+            ("突击者", self.draw_assault),
+            ("清道夫", self.draw_scavenger),
+            ("天眼", self.draw_eye),
+            ("母巢", self.draw_hive),
+            ("哨卫巢", self.draw_sentry_hive),
+            ("暗巢", self.draw_dark_hive),
+            ("自爆虫群", self.draw_swarm),
+        ]
+
+        W, H = surface.get_size()
+        n = len(icons)
+        panel_h = n * item_h + 12
+
+        # 右上角坐标
+        x0 = W - panel_w - margin
+        y0 = margin
+
+        # 半透明背景板
+        panel = pygame.Surface((panel_w, panel_h), pygame.SRCALPHA)
+        panel.fill((0, 0, 0, bg_alpha))
+        surface.blit(panel, (x0, y0))
+
+        # 逐个绘制图标 + 名称
+        for i, (name, func) in enumerate(icons):
+            # 图标中心
+            cx = x0 + 10 + icon_size // 2
+            cy = y0 + 8 + i * item_h + icon_size // 2
+            func(surface, cx, cy, icon_size)
+
+            # 名称文字
+            text = self.font_legend.render(name, True, (220, 230, 240))
+            tx = x0 + 10 + icon_size + 10
+            ty = y0 + 8 + i * item_h + (icon_size - text.get_height()) // 2
+            surface.blit(text, (tx, ty))
 
     def draw_single_legend(self,
                            bg_surface: pygame.Surface,
@@ -765,8 +779,41 @@ class Renderer:
         bg_surface.blit(text_surface, (text_left, y - text_surface.get_height()/2))
         return max(shape_rect.height, text_surface.get_height())
 
-    def _draw_line(self,
-                   screen: pygame.Surface,
+    def draw_single_legend2(self,
+                           bg_surface: pygame.Surface,
+                           draw_shape_func: typing.Callable[[pygame.Surface, int, int], pygame.Rect],
+                           x:int,
+                           y:int,
+                           text: str,
+                           text_left :int,
+                           text_color: typing.Tuple[int, int, int])->int:
+        shape_rect = draw_shape_func(bg_surface, x, y)
+        text_surface = self.font_legend.render(text, True, text_color)
+        bg_surface.blit(text_surface, (text_left, y - text_surface.get_height()/2))
+        return max(shape_rect.height, text_surface.get_height())
+
+    @staticmethod
+    def draw_bezier(surface, color, p0, p1, p2, width=1, steps=30):
+        """二次贝塞尔曲线，用线段逼近"""
+        pts = []
+        for i in range(steps + 1):
+            t = i / steps
+            x = (1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * p1[0] + t ** 2 * p2[0]
+            y = (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * p1[1] + t ** 2 * p2[1]
+            pts.append((x, y))
+        pygame.draw.lines(surface, color, False, pts, width)
+
+    @staticmethod
+    def get_poly_pts(cx, cy, r, n, rot_deg=-90):
+        """生成正 n 边形顶点，中心 (cx,cy)，半径 r，起始角度 rot_deg"""
+        pts = []
+        for i in range(n):
+            a = math.radians(rot_deg + i * 360 / n)
+            pts.append((cx + r * math.cos(a), cy + r * math.sin(a)))
+        return pts
+
+    @staticmethod
+    def _draw_line(screen: pygame.Surface,
                    color: typing.Tuple[int, int, int],
                    center: typing.Tuple[int, int],
                    length: float,
@@ -786,40 +833,8 @@ class Renderer:
         y = int(length * math.sin(rotation) / 2)
         return pygame.draw.line(screen, color, (center[0]+x, center[1]+y), (center[0]-x, center[1]-y), width)
 
-    def draw_regular_polygon(self,
-                      screen: pygame.Surface,
-                      color: typing.Tuple[int, int, int],
-                      center: typing.Tuple[int, int],
-                      sides: int,
-                      radius: float,
-                      rotation: float = 0,
-                      width: int = 0)-> pygame.Rect:
-        """
-        绘制六边形
-        :param screen: 要绘制到哪里
-        :param color: 颜色（填充或边线）
-        :param center: 多边形中心
-        :param sides: 边数
-        :param radius: 多边形半径，即center到多边形边点的距离
-        :param rotation: 旋转角度，单位：弧度
-        :param width: 边线粗细，width=0表示仅填充，width>0表示仅边线
-        """
-
-        if sides < 3:
-            raise ValueError("边数必须 >= 3")
-
-        points = []
-        for i in range(sides):
-            # 每个顶点间隔 2*pi/sides
-            angle = rotation + i * 2 * math.pi / sides
-            x = center[0] + radius * math.cos(angle)
-            y = center[1] + radius * math.sin(angle)
-            points.append((int(x), int(y)))
-
-        return pygame.draw.polygon(screen, color, points, width)
-
-    def draw_triangle(self,
-                      screen: pygame.Surface,
+    @staticmethod
+    def draw_triangle(screen: pygame.Surface,
                       color: typing.Tuple[int, int, int],
                       center: typing.Tuple[int, int],
                       length_a: float,

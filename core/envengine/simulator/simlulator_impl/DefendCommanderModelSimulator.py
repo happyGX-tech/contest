@@ -1,9 +1,7 @@
-"""Blue defense commander wired to the selectable baseline policies."""
+"""Simulation boundary for an injected built-in blue defense controller."""
 
-import json
 import logging
 import math
-import os
 from typing import Callable
 
 from envengine.sdk.Util.UtilsPy import Vector3D
@@ -15,7 +13,7 @@ from envengine.sdk.base_struct.Message import Command
 from envengine.simulator.decorator import Simulator
 from envengine.simulator.interfaces import ISimulator
 from envengine.simulator.simulator_factory import SimulatorFactory
-from policies.blue import (
+from blue_defense.base import (
     BlueObservation,
     DefendedAsset,
     InterceptorAssignment,
@@ -23,13 +21,15 @@ from policies.blue import (
     ScheduledInterceptorAssignment,
     ThreatTrack,
     Vector3 as BlueVector3,
-    build_blue_policy,
 )
+from blue_defense.contracts import BlueDefenseControllerProtocol
+from blue_defense.config import BlueDefenseConfig
+from blue_defense.controller import BlueDefenseController
 
 
 @Simulator.register("DefendCommanderS")
 class DefendCommanderModelSimulator(ISimulator):
-    """Translate engine observations into assignments from ``BLUE_POLICY``."""
+    """Build observations, validate launches and execute controller decisions."""
 
     def __init__(
         self,
@@ -43,29 +43,45 @@ class DefendCommanderModelSimulator(ISimulator):
         self.pending_launches: dict[int, ScheduledInterceptorAssignment] = {}
         self._executed_coordination_members: dict[str, set[int]] = {}
         self.coordination_metrics = self._new_coordination_metrics()
-        self._last_policy_decision_time = float("-inf")
-        self._asset_values = {
-            int(entity_id): float(value)
-            for entity_id, value in json.loads(
-                os.getenv("BLUE_ASSET_VALUES", "{}")
-            ).items()
-        }
-        self.blue_policy = build_blue_policy(
-            name=os.getenv("BLUE_POLICY", "b0_fixed_ratio_random"),
-            # Keep the engine's historic 2-on-1 fire scale unless the caller
-            # explicitly requests a different salvo size.
-            max_shots_per_target=self._read_int_env("BLUE_INTERCEPTOR_RATIO", 2),
-            seed=self._read_optional_int_env("BLUE_POLICY_SEED"),
+        # Blue defense is part of the scenario runtime, not an optional user
+        # agent.  Composition roots may replace this controller to apply an
+        # explicit configuration, while direct Engine/TrainingEnv users still
+        # receive the historic built-in B0 defense by default.
+        self.defense_controller: BlueDefenseControllerProtocol | None = (
+            BlueDefenseController(BlueDefenseConfig())
         )
-        logging.info("Blue defense policy activated: %s", self.blue_policy.name)
+        self._missing_controller_warned = False
+
+    def set_defense_controller(
+        self,
+        controller: BlueDefenseControllerProtocol | None,
+    ) -> None:
+        """为当前指控器注入一个配置完成的蓝方控制器。"""
+
+        if controller is not None and not isinstance(
+            controller,
+            BlueDefenseControllerProtocol,
+        ):
+            raise TypeError("controller does not satisfy BlueDefenseControllerProtocol")
+        self.defense_controller = controller
+        self._missing_controller_warned = False
+        self.pending_launches = {}
+        if controller is None:
+            logging.warning("Blue defense controller disabled")
+        else:
+            logging.info("Blue defense controller activated: %s", controller.name)
 
     @property
     def simulator_sim_step(self) -> float:
         return 1000
 
     def update(self) -> None:
-        if self.blue_policy.plans_launch_time:
+        if (
+            self.defense_controller is not None
+            and self.defense_controller.plans_launch_time
+        ):
             self._execute_due_launches()
+        self._decide_from_information()
 
     def set_lla(self, lla: Vector3d) -> None:
         pass
@@ -74,41 +90,23 @@ class DefendCommanderModelSimulator(ISimulator):
         pass
 
     def handel_detect_info(self, new_detect_info: dict[int, DetectInfo]) -> None:
-        """Store newer radar tracks and dispatch the selected policy."""
-        target_dict = self._entity_ext.entity.detectInfo
-        for key, new_value in new_detect_info.items():
-            old_value = target_dict.get(key)
-            if old_value is None or new_value.time > old_value.time:
-                target_dict[key] = new_value
+        """合并全部雷达来源，策略在统一步进时读取信息库。"""
+        tracks = [self._detect_info_to_threat_track(item) for item in new_detect_info.values()]
+        self._simulator_factory.blue_information.receive_tracks(tracks, self.sim_time)
 
-        detect_info_list = list(
-            target_dict.values()
-            if self.blue_policy.plans_launch_time
-            else new_detect_info.values()
-        )
-        if detect_info_list:
-            self.launch_intercept_missile(detect_info_list)
-
-    def launch_intercept_missile(self, detect_info_list: list[DetectInfo]) -> None:
-        if (
-            self.blue_policy.name == "b3_min_cost_assignment"
-            and self.sim_time - self._last_policy_decision_time
-            < self._read_int_env("BLUE_MIN_COST_DECISION_INTERVAL", 5)
-        ):
+    def _decide_from_information(self) -> None:
+        controller = self.defense_controller
+        if controller is None:
+            self._warn_missing_controller()
             return
-        if self.blue_policy.plans_launch_time:
-            if (
-                self.sim_time - self._last_policy_decision_time
-                < self._read_int_env("BLUE_JOINT_DECISION_INTERVAL_MS", 5000)
-            ):
+        if controller.plans_launch_time:
+            observation = self._build_blue_observation()
+            decision = controller.decide(observation)
+            if decision is None:
                 return
-            self._last_policy_decision_time = self.sim_time
-            observation = self._build_blue_observation(
-                detect_info_list,
-                include_future_candidates=True,
-            )
-            decisions = self.blue_policy.decide(observation)
-            self._record_solve_stats()
+            decisions = decision.assignments
+            if decision.solve_stats:
+                self._record_solve_stats(decision.solve_stats)
             immediate_decisions = [
                 item
                 for item in decisions
@@ -122,17 +120,18 @@ class DefendCommanderModelSimulator(ISimulator):
                 item.interceptor_id: item
                 for item in decisions
             }
-            if self.blue_policy.preserves_pending_launches:
+            if controller.preserves_pending_launches:
                 self.pending_launches.update(planned_launches)
             else:
                 self.pending_launches = planned_launches
             self._execute_due_launches()
             return
 
-        self._last_policy_decision_time = self.sim_time
-        observation = self._build_blue_observation(detect_info_list)
-        decisions = self.blue_policy.decide(observation)
-        self._execute_immediate_assignments(decisions)
+        observation = self._build_blue_observation()
+        decision = controller.decide(observation)
+        if decision is None:
+            return
+        self._execute_immediate_assignments(list(decision.assignments))
 
     def _execute_immediate_assignments(
         self,
@@ -154,38 +153,16 @@ class DefendCommanderModelSimulator(ISimulator):
         if command_list:
             self._send_commands(command_list)
 
-    def _build_blue_observation(
-        self,
-        detect_info_list: list[DetectInfo],
-        include_future_candidates: bool = False,
-    ) -> BlueObservation:
-        targets = [self._detect_info_to_threat_track(item) for item in detect_info_list]
-        targets = [item for item in targets if item is not None]
+    def _build_blue_observation(self) -> BlueObservation:
+        controller = self.defense_controller
+        if controller is None:
+            raise RuntimeError("blue defense observation requested without a controller")
         launched_interceptor_ids = {item for items in self.launched_list.values() for item in items}
         reserved_interceptor_ids = (
             set(self.pending_launches)
-            if self.blue_policy.preserves_pending_launches
+            if controller.preserves_pending_launches
             else set()
         )
-        candidate_entities = [
-            simulator.entity_ext.entity
-            for simulator in self._simulator_factory.get_simulators_by_type(24000)
-            if simulator.entity_ext.entity.survivePoints > 0
-            and simulator.entity_ext.entity.id not in launched_interceptor_ids
-            and simulator.entity_ext.entity.id not in reserved_interceptor_ids
-        ]
-        # A target with no currently eligible interceptor cannot receive an
-        # assignment this tick. Excluding it keeps min-cost matching bounded
-        # while allowing it to re-enter on a later radar update.
-        if not include_future_candidates:
-            targets = [
-                target for target in targets
-                if any(
-                    self._interceptor_is_launch_eligible(entity, target.pos_ecf, target.vel_ecf)
-                    for entity in candidate_entities
-                )
-            ]
-
         interceptors = []
         for simulator in self._simulator_factory.get_simulators_by_type(24000):
             entity = simulator.entity_ext.entity
@@ -196,18 +173,11 @@ class DefendCommanderModelSimulator(ISimulator):
                     lla=self._copy_vector(entity.lla),
                     pos_ecf=self._copy_vector(entity.posEcf),
                     vel_ecf=self._copy_vector(entity.velEcf),
-                    # Keep candidates that can engage at least one current
-                    # track. This prevents the optimization policy from
-                    # evaluating every stored interceptor on every radar tick.
                     available=(
                         entity.survivePoints > 0
                         and entity.id not in launched_interceptor_ids
                         and entity.id not in reserved_interceptor_ids
                         and max_launch_angle > 0
-                        and (
-                            include_future_candidates
-                            or self._interceptor_has_launch_window(entity, targets)
-                        )
                     ),
                     max_launch_angle_deg=max_launch_angle,
                 )
@@ -226,7 +196,7 @@ class DefendCommanderModelSimulator(ISimulator):
                         lla=self._copy_vector(entity.lla),
                         pos_ecf=self._copy_vector(entity.posEcf),
                         health=entity.survivePoints,
-                        value=self._asset_value(entity.id, entity.nameChn),
+                        value=self._asset_value(entity.id, entity.entityType),
                     )
                 )
 
@@ -234,40 +204,32 @@ class DefendCommanderModelSimulator(ISimulator):
             key: value.copy()
             for key, value in self.launched_list.items()
         }
-        if self.blue_policy.preserves_pending_launches:
+        if controller.preserves_pending_launches:
             for assignment in self.pending_launches.values():
                 launched_map.setdefault(assignment.target_id, []).append(
                     assignment.interceptor_id
                 )
 
-        return BlueObservation(
-            sim_time=self.sim_time,
-            targets=targets,
-            interceptors=interceptors,
-            assets=assets,
-            launched_map=launched_map,
-        )
+        information = self._simulator_factory.blue_information
+        information.update_own_state(interceptors, assets, launched_map)
+        return information.snapshot(self.sim_time)
 
-    def _detect_info_to_threat_track(self, detect_info: DetectInfo) -> ThreatTrack | None:
-        target_simulator = self._simulator_factory.get_simulator_by_id(detect_info.entity_id)
-        if target_simulator is not None:
-            entity = target_simulator.entity_ext.entity
-            if entity.survivePoints <= 0 or not entity.isVisible:
-                return None
-            target_type = entity.entityType
-            target_name = entity.nameChn
-        else:
-            target_type = 0
-            target_name = detect_info.nameChn
+    def _detect_info_to_threat_track(self, detect_info: DetectInfo) -> ThreatTrack:
+        radar_ids = {radar.entity_ext.entity.id
+                     for radar in self._simulator_factory.get_simulators_by_type(44000)
+                     if radar.entity_ext.entity.sideId == 1}
+        if detect_info.detect_from not in radar_ids:
+            raise ValueError("蓝方信息库只接受己方雷达的探测记录")
 
         return ThreatTrack(
             target_id=detect_info.entity_id,
-            name=target_name,
-            type=target_type,
+            name=detect_info.nameChn,
+            type=detect_info.entity_type,
             lla=self._copy_vector(detect_info.lla),
             pos_ecf=self._copy_vector(detect_info.pos_ecf),
             vel_ecf=self._copy_vector(detect_info.vel_ecf),
             detect_time=detect_info.time,
+            source_id=detect_info.detect_from,
         )
 
     def _assignment_to_command(self, assignment: InterceptorAssignment) -> Command:
@@ -287,6 +249,11 @@ class DefendCommanderModelSimulator(ISimulator):
         )
 
     def _execute_due_launches(self) -> None:
+        self.pending_launches = {
+            interceptor_id: assignment
+            for interceptor_id, assignment in self.pending_launches.items()
+            if self._current_assignment(assignment) is not None
+        }
         due = sorted(
             (
                 assignment
@@ -348,7 +315,7 @@ class DefendCommanderModelSimulator(ISimulator):
         scheduled: ScheduledInterceptorAssignment,
     ) -> InterceptorAssignment | None:
         interceptor = self._simulator_factory.get_simulator_by_id(scheduled.interceptor_id)
-        target = self._simulator_factory.get_simulator_by_id(scheduled.target_id)
+        target = self._simulator_factory.blue_information.get_track(scheduled.target_id, self.sim_time)
         if interceptor is None or target is None:
             return None
         launched_interceptor_ids = {
@@ -359,16 +326,13 @@ class DefendCommanderModelSimulator(ISimulator):
         if (
             scheduled.interceptor_id in launched_interceptor_ids
             or interceptor.entity_ext.entity.survivePoints <= 0
-            or target.entity_ext.entity.survivePoints <= 0
-            or not target.entity_ext.entity.isVisible
         ):
             return None
-        target_entity = target.entity_ext.entity
         return InterceptorAssignment(
             interceptor_id=scheduled.interceptor_id,
             target_id=scheduled.target_id,
-            target_pos_ecf=self._copy_vector(target_entity.posEcf),
-            target_vel_ecf=self._copy_vector(target_entity.velEcf),
+            target_pos_ecf=target.pos_ecf,
+            target_vel_ecf=target.vel_ecf,
             priority=scheduled.priority,
         )
 
@@ -377,24 +341,14 @@ class DefendCommanderModelSimulator(ISimulator):
         interceptor = self._simulator_factory.get_simulator_by_id(assignment.interceptor_id)
         if interceptor is None:
             return False
+        if (interceptor.entity_ext.entity.survivePoints <= 0
+                or any(assignment.interceptor_id in ids for ids in self.launched_list.values())
+                or self._simulator_factory.blue_information.get_track(assignment.target_id, self.sim_time) is None):
+            return False
         return self._interceptor_is_launch_eligible(
             interceptor.entity_ext.entity,
             assignment.target_pos_ecf,
             assignment.target_vel_ecf,
-        )
-
-    def _interceptor_has_launch_window(
-        self,
-        interceptor_entity,
-        targets: list[ThreatTrack],
-    ) -> bool:
-        return any(
-            self._interceptor_is_launch_eligible(
-                interceptor_entity,
-                target.pos_ecf,
-                target.vel_ecf,
-            )
-            for target in targets
         )
 
     def _interceptor_is_launch_eligible(self, interceptor_entity, target_pos, target_vel) -> bool:
@@ -412,11 +366,13 @@ class DefendCommanderModelSimulator(ISimulator):
 
     def reset(self) -> None:
         super().reset()
+        if self.defense_controller is not None:
+            self.defense_controller.reset()
         self.launched_list = {}
         self.pending_launches = {}
         self._executed_coordination_members = {}
         self.coordination_metrics = self._new_coordination_metrics()
-        self._last_policy_decision_time = float("-inf")
+        self._missing_controller_warned = False
 
     def init_model(self):
         pass
@@ -427,16 +383,10 @@ class DefendCommanderModelSimulator(ISimulator):
         else:
             super().command_received(command)
 
-    def _asset_value(self, entity_id: int, name: str) -> float:
-        if entity_id in self._asset_values:
-            return self._asset_values[entity_id]
-        if name.startswith("目标"):
-            return 10.0
-        if name.startswith("拦截阵地"):
-            return 6.0
-        if name.startswith("无人船"):
-            return 3.0
-        return 1.0
+    def _asset_value(self, entity_id: int, entity_type: int) -> float:
+        if self.defense_controller is None:
+            return 1.0
+        return self.defense_controller.asset_value(entity_id, entity_type)
 
     def _parent_max_launch_angle(self, parent_id: int) -> float:
         for entity_type, max_angle in ((9500, 30.0), (9600, 20.0)):
@@ -491,8 +441,10 @@ class DefendCommanderModelSimulator(ISimulator):
             "asset_clearance_m_total": 0.0,
         }
 
-    def _record_solve_stats(self) -> None:
-        stats = self.blue_policy.last_solve_stats
+    def _record_solve_stats(
+        self,
+        stats: dict[str, float | int | str | bool],
+    ) -> None:
         metrics = self.coordination_metrics
         metrics["optimization_runs"] += 1
         if stats["optimal"]:
@@ -615,13 +567,14 @@ class DefendCommanderModelSimulator(ISimulator):
                 if spatial_pair_plans
                 else 0.0
             )
-        if hasattr(self.blue_policy, "temporal_mode"):
-            metrics["temporal_mode"] = self.blue_policy.temporal_mode
-        if hasattr(self.blue_policy, "spatial_mode"):
-            metrics["spatial_mode"] = self.blue_policy.spatial_mode
-        if hasattr(self.blue_policy, "spatiotemporal_mode"):
+        controller = self.defense_controller
+        if controller is not None and hasattr(controller, "temporal_mode"):
+            metrics["temporal_mode"] = controller.temporal_mode
+        if controller is not None and hasattr(controller, "spatial_mode"):
+            metrics["spatial_mode"] = controller.spatial_mode
+        if controller is not None and hasattr(controller, "spatiotemporal_mode"):
             metrics["spatiotemporal_mode"] = (
-                self.blue_policy.spatiotemporal_mode
+                controller.spatiotemporal_mode
             )
         return metrics
 
@@ -659,22 +612,11 @@ class DefendCommanderModelSimulator(ISimulator):
         cosine = (left.x * right.x + left.y * right.y + left.z * right.z) / (left_length * right_length)
         return math.degrees(math.acos(max(-1.0, min(1.0, cosine))))
 
-    @staticmethod
-    def _read_int_env(name: str, default: int) -> int:
-        raw_value = os.getenv(name)
-        if raw_value is None:
-            return default
-        try:
-            return int(raw_value)
-        except ValueError:
-            return default
-
-    @staticmethod
-    def _read_optional_int_env(name: str) -> int | None:
-        raw_value = os.getenv(name)
-        if raw_value is None or raw_value == "":
-            return None
-        try:
-            return int(raw_value)
-        except ValueError:
-            return None
+    def _warn_missing_controller(self) -> None:
+        if self._missing_controller_warned:
+            return
+        logging.warning(
+            "DefendCommander %s has no blue defense controller; decision disabled",
+            self.entity_ext.entity.id,
+        )
+        self._missing_controller_warned = True

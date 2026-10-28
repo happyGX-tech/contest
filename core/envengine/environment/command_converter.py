@@ -1,62 +1,52 @@
-from envengine.agent_manager.actions.aircraft_action import SetDesiredAccZ, MissileLaunchAction, ChangeTargetAction
+"""Convert the current red action protocol without interpreting hidden state."""
+
+import numpy as np
+
+from envengine.action_validation import IllegalActionError
+from envengine.agent_manager.actions.aircraft_action import SetDesiredAccZ, ChangeTargetAction
 from envengine.agent_manager.actions.aircraft_action.use_satellite import UseSatelliteAction
 from envengine.common import Vector3d
 
 
 class CommandConverter:
-    """
-    指令转换器
-    """
     @staticmethod
-    def common_converter(actions):
+    def common_converter(actions) -> list[dict]:
+        """Accept maneuver (0), search (2), satellite (3), and target ID (4).
+
+        Deployment starts every red unit. An explicit launch action is invalid.
+        The engine resolves target IDs against each executor's legal knowledge.
         """
-        将np.array格式的指令转换为结构体指令
-        :return: 结构体指令
-        """
-        actions_converted = []
-        for action in actions:
-            for action_item in action:
-                # 设置Z轴加速度
-                if action_item[0] == 0:
-                    actions_converted.append(
-                        SetDesiredAccZ(
-                            executor_id=int(action_item[1]),
-                            acc_z=float(action_item[2])
-                        ).to_dict()
+        converted = []
+        for raw_action in actions:
+            try:
+                rows = np.asarray(raw_action, dtype=np.float64)
+            except (TypeError, ValueError) as exc:
+                raise IllegalActionError("动作必须是数值数组") from exc
+            if rows.shape in ((0,), (0, 4)):
+                continue
+            if rows.ndim != 2 or rows.shape[1] != 4 or not np.isfinite(rows).all():
+                raise IllegalActionError("动作必须是有限数值 N x 4 数组")
+            for action_type, executor_id, value, other in rows:
+                if not float(executor_id).is_integer() or executor_id < 0:
+                    raise IllegalActionError("执行实体编号必须是非负整数")
+                executor_id = int(executor_id)
+                if action_type == 0:
+                    command = SetDesiredAccZ(executor_id=executor_id, acc_z=float(value))
+                elif action_type == 2:
+                    command = ChangeTargetAction(
+                        executor_id=executor_id,
+                        intent="search",
+                        target=Vector3d(float(value), float(other), 0.0),
                     )
-
-                # 发射导弹
-                if action_item[0] == 1:
-                    actions_converted.append(
-                        MissileLaunchAction(
-                            executor_id=int(action_item[1]),
-                            target=Vector3d(
-                                float(action_item[2]),
-                                float(action_item[3]),
-                                0
-                            )
-                        ).to_dict()
+                elif action_type == 3:
+                    command = UseSatelliteAction(executor_id=executor_id)
+                elif action_type == 4:
+                    if not float(value).is_integer() or value < 0:
+                        raise IllegalActionError("攻击目标编号必须是非负整数")
+                    command = ChangeTargetAction(
+                        executor_id=executor_id, intent="track", target_id=int(value)
                     )
-
-                # 改变目标
-                if action_item[0] == 2:
-                    actions_converted.append(
-                        ChangeTargetAction(
-                            executor_id=int(action_item[1]),
-                            target=Vector3d(
-                                float(action_item[2]),
-                                float(action_item[3]),
-                                0
-                            )
-                        ).to_dict()
-                    )
-
-                # 使用卫星
-                if action_item[0] == 3:
-                    actions_converted.append(
-                        UseSatelliteAction(
-                            executor_id=int(action_item[1]),
-                        ).to_dict()
-                    )
-
-        return actions_converted
+                else:
+                    raise IllegalActionError(f"不支持动作类型 {action_type}；有效类型为 0、2、3、4")
+                converted.append(command.to_dict())
+        return converted

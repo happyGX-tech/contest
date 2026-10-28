@@ -2,11 +2,11 @@
 import heapq
 import logging
 import time
-from typing import Callable, Optional, Any
+from copy import deepcopy
+from typing import Callable, Optional, Any, Dict
 
 import fastdisjointset
 
-from envengine.common import SimmerCommandType
 from envengine.sdk.base_struct.Basic import Vector3d, DetectInfo
 from envengine.sdk.base_struct.Message import Command
 from envengine.sdk.base_struct.profile.profile import Profile
@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 
 
 MISSILE_COMMUNICATION_RANGE_M = {
-    21000: 500_000.0,
-    21001: 200_000.0,
-    21002: 100_000.0,
+    21000: 50_000.0,
+    21001: 20_000.0,
+    21002: 10_000.0,
 }
 
 
@@ -53,9 +53,11 @@ class Engine:
         """
         if ai_commands is None:
             ai_commands = []
+
         # 处理AI输入的指令
+        self.simulator_factory.update_sim_time(self.sim_time)
         self.simulator_factory.process_ai_commands(ai_commands)
-        t0 = time.perf_counter()
+
         start_time = time.time()  # 当前步开始时间
 
         # ===== 基于事件驱动的交替更新 =====
@@ -99,6 +101,7 @@ class Engine:
 
         self.current_step += 1
         self.sim_time += self.sim_step
+
         # 控制倍速
         if self.speed_multiplier > 0:
             elapsed = time.time() - start_time  # 计算当前步已经用了多久
@@ -106,7 +109,7 @@ class Engine:
             if sleep_time > 0:  # 如果任务执行得快，就睡一会儿补齐时间
                 time.sleep(sleep_time)
 
-    def run(self, max_steps: int = None, step_callback: Callable[[int, dict], dict] = None) -> None:
+    def run(self, max_steps: int = None, step_callback: Callable[[int, dict], list[Command]] = None) -> None:
         """
         运行仿真
         :param max_steps: 最大步数（None则使用想定配置）
@@ -124,7 +127,7 @@ class Engine:
                 current_situation = self._get_current_situation()
                 ai_commands = step_callback(step, current_situation)
             else:
-                ai_commands = {}
+                ai_commands = []
 
             # 执行步进
             self.step(ai_commands)
@@ -146,10 +149,13 @@ class Engine:
     def reset(self):
         """重置仿真到初始状态"""
         self.current_step = 0
-        self.simulator_factory.reset_all()
         self.sim_step = self.profile.imagineProfile.simStep
         self.sim_end_time = self.profile.imagineProfile.simEndLogicTime
         self.sim_time = self.profile.imagineProfile.simTime
+        # Simulator initialization and a later deployment-complete launch must
+        # observe the new round's clock, never the previous round's final time.
+        self.simulator_factory.update_sim_time(self.sim_time)
+        self.simulator_factory.reset_all()
         # 计算总步数
         self.total_steps = int(self.sim_end_time // self.sim_step) if self.sim_step > 0 else 0
         # 计算每步需要的真实时间（秒）
@@ -171,10 +177,18 @@ class Engine:
 
     ########################################## 弹间探测共享 ##################################################
     def share_detect_between_missiles(self):
-        """弹间探测共享"""
-        groups: Any = self.calculate_missile_clusters()
-        fuse_result: dict[int, dict[int, DetectInfo]] = self.fuse_cluster_detection(groups)
-        self.distribute_cluster_result(groups, fuse_result)
+        """Share timestamped red observations within current communication domains."""
+        self.refresh_red_communications()
+
+    def refresh_red_communications(self) -> tuple[tuple[int, ...], ...]:
+        """Refresh the authoritative domains without running queued commands.
+
+        Call before building player observations as well as after movement.
+        Previously received tracks remain local memory after a domain splits.
+        """
+        groups = tuple(sorted(tuple(sorted(group)) for group in self.calculate_missile_clusters()))
+        self.distribute_cluster_result(groups, self.fuse_cluster_detection(groups))
+        return groups
 
     # 1. 对所有弹进行弹群计算（并查集）
     def calculate_missile_clusters(self) -> Any:
@@ -184,7 +198,12 @@ class Engine:
         mf_list: list[ISimulator] = self.simulator_factory.get_lived_simulators_by_type(21001)
         lf_list: list[ISimulator] = self.simulator_factory.get_lived_simulators_by_type(21002)
 
-        allf_list: list[ISimulator] = hf_list + mf_list + lf_list
+        allf_list: list[ISimulator] = [
+            missile for missile in hf_list + mf_list + lf_list
+            if missile.entity_ext.entity.sideId == 0
+            and missile.entity_ext.entity.isVisible
+            and missile.entity_ext.entity.survivePoints > 0
+        ]
         ds = fastdisjointset.DisjointSet()
         for missile in allf_list:
             missile_id = missile.entity_ext.entity.id
@@ -197,60 +216,90 @@ class Engine:
                 # 获取两个弹的坐标
                 f1_pos: Vector3d = f1.entity_ext.entity.posEcf
                 f2_pos: Vector3d = f2.entity_ext.entity.posEcf
-                # A link is available when either platform can reach the other.
+                # A bidirectional link requires both platforms to reach each
+                # other, so the shorter communication radius is authoritative.
                 # entityType identifies the high/medium/low platform class;
                 # typeId is only a scenario-specific model instance identifier.
                 f1_type = f1.entity_ext.entity.entityType
                 f2_type = f2.entity_ext.entity.entityType
-                distance_limit = max(
+                distance_limit = min(
                     MISSILE_COMMUNICATION_RANGE_M[f1_type],
                     MISSILE_COMMUNICATION_RANGE_M[f2_type],
                 )
                 if self.is_geometrically_visible(f1_pos, f2_pos, distance_limit):
                     ds.union(f1.entity_ext.entity.id, f2.entity_ext.entity.id)
         groups = ds.sets()
-        # print(f"群的数量：{len(groups)}")
-        # for idx, group in enumerate(groups):
-        #     print(f"  群{idx + 1}: {sorted(group)} (共{len(group)}个飞行器)")
-        # print()
         # 为每个弹赋值通信范围内实体id信息
         for idx, group in enumerate(groups):
             for i in group:
-                self.simulator_factory.get_simulator_by_id(i).entity_ext.entity.commRangeInfo = list(group)
+                self.simulator_factory.get_simulator_by_id(i).entity_ext.entity.commRangeInfo = self._get_common_range_info(group)
         return groups
+
+    def _get_common_range_info(self, group) -> Dict[int, Any]:
+        result = {}
+        for g in group:
+            sim = self.simulator_factory.get_simulator_by_id(g)
+            if sim is None:
+                continue
+
+            result[g] = {
+                "pos_ecf": {
+                    "x": sim.entity_ext.entity.posEcf.x,
+                    "y": sim.entity_ext.entity.posEcf.y,
+                    "z": sim.entity_ext.entity.posEcf.z,
+                },
+                "velEcf": {
+                    "x": sim.entity_ext.entity.velEcf.x,
+                    "y": sim.entity_ext.entity.velEcf.y,
+                    "z": sim.entity_ext.entity.velEcf.z,
+                },
+            }
+
+        return result
 
     # 2. 计算弹群内的探测结果（融合）
     def fuse_cluster_detection(self, groups: Any) -> dict[int, dict[int, DetectInfo]]:
         """融合每个弹群内的探测数据"""
         fuse_result: dict[int, dict[int, DetectInfo]] = {}
+
+        # 红方天眼探测到的东西全局共享
+        sta_detect_info:dict[int, DetectInfo] = {}
+        sta_sims = self.simulator_factory.get_simulators_by_type(9202)
+        for sta in sta_sims:
+            entity = sta.entity_ext.entity
+            if entity.sideId == 0 and entity.isVisible and entity.survivePoints > 0:
+                for key, track in entity.detectInfo.items():
+                    previous = sta_detect_info.get(key)
+                    if previous is None or track.time > previous.time:
+                        sta_detect_info[key] = track
+
         for idx, group in enumerate(groups):
             if idx not in fuse_result:
                 fuse_result[idx] = {}
             for i in group:
                 # 获取弹
-                f: ISimulator = self.simulator_factory.get_simulator_by_id(i)
+                f: ISimulator | None = self.simulator_factory.get_simulator_by_id(i)
+                if not f:
+                    continue
+
                 # 获取弹的探测信息
-                detect_info: dict[int, DetectInfo] = f.entity_ext.entity.detectInfo
-                for key, new_value in detect_info.items():
+                # Do not mutate a platform's local track store while fusing.
+                tracks = list(f.entity_ext.entity.detectInfo.items()) + list(sta_detect_info.items())
+                for key, new_value in tracks:
                     old_value = fuse_result.get(idx).get(key)
                     # 如果不存在 或 新数据时间更新，则更新
                     if old_value is None or new_value.time > old_value.time:
-                        fuse_result[idx][key] = new_value
+                        fuse_result[idx][key] = deepcopy(new_value)
         return fuse_result
 
     # 3. 分发探测结果到单个弹
     def distribute_cluster_result(self, groups: Any, fuse_result: dict[int, dict[int, DetectInfo]]):
         """将弹群融合结果分发给群内各导弹"""
         for idx, group in enumerate(groups):
-            # 构建探测信息指令
-            command_list: list[Command] = [Command(
-                executorId=i,
-                commandTypeId=SimmerCommandType.DETECT_STATUS_UPDATE,
-                commandAttributes=fuse_result[idx]
-            ) for i in group]
-            if command_list:
-                # 指令转发
-                self.simulator_factory.command_queue.extend(command_list)
+            for entity_id in group:
+                simulator = self.simulator_factory.get_simulator_by_id(entity_id)
+                if simulator is not None:
+                    simulator.handel_detect_info(deepcopy(fuse_result[idx]))
 
     def is_geometrically_visible(self, a_pos: Vector3d, b_pos: Vector3d, max_range: float,
                                  ignore_z: bool = False) -> bool:

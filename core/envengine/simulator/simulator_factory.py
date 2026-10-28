@@ -2,8 +2,10 @@
 import json
 import logging
 import math
+from copy import deepcopy
 from typing import Optional
 
+from envengine.action_validation import IllegalActionError
 from envengine.sdk.base_struct.Message import Command
 from envengine.sdk.base_struct.profile.profile import Profile
 from envengine.sdk.base_struct.Entity.EntityExt import EntityExt
@@ -12,7 +14,9 @@ from .interfaces.isimulator import ISimulator
 from ..common import SimmerCommandType
 from ..sdk.base_struct.Basic import Vector3d
 from ..sdk.writer import write_event
+from blue_defense.information import BlueInformationStore
 
+logger = logging.getLogger(__name__)
 
 class SimulatorFactory:
     """
@@ -20,6 +24,10 @@ class SimulatorFactory:
     负责创建、管理和查询仿真器实例
 
     Attributes:
+        red_sat_max_use_count: 天眼最大使用次数
+        red_sat_use_count: 天眼已使用次数
+        sat_use_minutes: 天眼使用时间（分钟）
+        _satellite_use_end_time: 本次天眼使用结束时间
     """
 
     def __init__(self, profile: Profile):
@@ -29,15 +37,25 @@ class SimulatorFactory:
         self._simulators_by_side: dict[int, list[ISimulator]] = {}  # 按作战方索引
         self._command_queue: list[Command] = []  # 存储待处理的指令
         self.sim_step = profile.imagineProfile.simStep  # 引擎仿真步长
+        self.sim_time = 0  # 当前仿真时间
+        self.blue_information = BlueInformationStore()
 
         # 初始化所有仿真器
         self._initialize_simulators()
+        self._capture_public_red_targets()
 
         # 当前仿真轮次
         self.current_round = 0
 
         # 目标命中关系，记录击中每个目标的飞行器信息
         self.target_hit_relation:dict[int, list] = {}
+
+        # 天眼使用情况
+        self.red_sat_use_count = 0
+        self._satellite_use_end_time = 0
+        if self.profile and self.profile.imagineProfile:
+            self.red_sat_max_use_count = max(0, self.profile.imagineProfile.satelliteMaxUseCount)
+            self.sat_use_minutes = max(0, self.profile.imagineProfile.satelliteUseMinutes)
 
     @property
     def profile(self)->Profile:
@@ -73,8 +91,7 @@ class SimulatorFactory:
         :return: 仿真器类名
         """
         environment_profile: Profile.environmentProfile = self._profile.environmentProfile
-        dynamic_library_configs: list[
-            Profile.environmentProfile.dynamicLibraryConfigs] = environment_profile.dynamicLibraryConfigs
+        dynamic_library_configs: list[Profile.environmentProfile.dynamicLibraryConfigs] = environment_profile.dynamicLibraryConfigs
         for dynamic_library_config in dynamic_library_configs:
             if dynamic_library_config.entityType == entity_type:
                 class_name = dynamic_library_config.dynamicLibraryPath.rsplit("/")[-1].rsplit(".", 1)[0].rsplit("lib")[
@@ -152,13 +169,13 @@ class SimulatorFactory:
         """
 
         """
-        21000 高性能飞行器
-        21001 低性能飞行器
-        21002 无人机
+        21000 毁灭者
+        21001 清道夫
+        21002 清道夫
         
         9400 目标
-        9500 无人船
-        9600 拦截阵地
+        9500 暗巢
+        9600 哨卫巢
         """
 
         # 红方毁伤数值表
@@ -182,19 +199,19 @@ class SimulatorFactory:
 
         # 红方命中率表
         hit_rate_table = {
-            # 高性能飞行器
+            # 毁灭者
             21000: {
                 9400: 0.8,
                 9600: 0.6,
                 9500: 0
             },
-            # 低性能飞行器
+            # 清道夫
             21001: {
                 9400: 0.8,
                 9600: 0.6,
                 9500: 0
             },
-            # 无人机
+            # 清道夫
             21002: {
                 9400: 0.05,
                 9600: 0.05,
@@ -205,12 +222,17 @@ class SimulatorFactory:
         # 伤害来源
         prev_trigger_id = command.prevTriggerId
         prev_simulator = self.get_simulator_by_id(prev_trigger_id)
-        prev_simulator_type = prev_simulator._entity_ext.entity.entityType
+        if not prev_simulator:
+            return command
+
+        prev_simulator_type = prev_simulator.entity_ext.entity.entityType
 
         # 被击中的对象
         executor_id = command.executorId
         executor_simulator = self.get_simulator_by_id(executor_id)
-        executor_simulator_type = executor_simulator._entity_ext.entity.entityType
+        if not executor_simulator:
+            return command
+        executor_simulator_type = executor_simulator.entity_ext.entity.entityType
 
         # 获取命中率
         if prev_simulator_type not in hit_rate_table:
@@ -236,10 +258,10 @@ class SimulatorFactory:
         if not executor_simulator or not prev_simulator:
             return hit_rate
 
-        # 使用卫星期间，高性能飞行器对目标和阵地的命中率提升至 100%
+        # 使用天眼期间，毁灭者对母巢和阵地的命中率提升至 100%
         if (prev_simulator.entity_ext.entity.entityType == 21000
                 and executor_simulator.entity_ext.entity.entityType in [9400, 9600]
-                and prev_simulator.is_using_satellite()):
+                and self.is_using_satellite()):
             return 1
 
         # 命中率提升条件
@@ -252,7 +274,7 @@ class SimulatorFactory:
         """
         命中率提升
 
-        当任意两枚高/低性能飞行器在一定时间内命中同一目标，且入射夹角大于30°时，
+        当任意两枚红方单位在一定时间内命中同一目标，且入射夹角大于30°时，
         命中率最大提升20%，按照时间间隔线性递减，时间间隔0为20%
 
         :param prev_simulator: 进攻方
@@ -297,7 +319,7 @@ class SimulatorFactory:
         """
         命中率降低
 
-        当任意两枚高/低性能飞行器在一定时间内命中同一目标，且入射夹角小于10°时，
+        当任意两枚毁灭者/清道夫在一定时间内夹击同一目标，且入射夹角小于10°时，
         命中率最大降低40%，按照时间间隔线性递增，时间间隔0为40%
 
         :param prev_simulator: 进攻方
@@ -359,14 +381,131 @@ class SimulatorFactory:
         return math.degrees(math.acos(cos_theta))
 
     def process_ai_commands(self, ai_commands: list[Command]):
+        """Validate the complete red action batch before changing simulation state."""
+        validated = [self.validate_red_command(command) for command in ai_commands]
+        for ai_command in validated:
+            target_sim = self.get_simulator_by_id(ai_command.executorId)
+            if ai_command.commandTypeId == SimmerCommandType.EXECUTE_SATELLITE_DETECTION:
+                # 使用天眼是一个全局计数、全局视角的事件
+                self._process_missile_use_satellite(ai_command, target_sim)
+            else:
+                target_sim.command_received(ai_command)
+
+    def _capture_public_red_targets(self) -> None:
+        """Keep the opening public positions separate from live blue entities."""
+        self._public_red_targets = {
+            entity.id: (entity.entityType, deepcopy(entity.lla))
+            for simulator in self.get_all_simulators()
+            for entity in (simulator.entity_ext.entity,)
+            if entity.sideId == 1 and entity.entityType in (9400, 9600)
+        }
+
+    def validate_red_command(self, command: Command) -> Command:
+        """Resolve target intent using only the executor's legally received tracks.
+
+        A track action names an entity; the environment supplies its last known
+        position. A search action names a map point and never queries hidden
+        entities. Detection history remains usable when communication is lost.
         """
-        引擎调用： 收集并分发执行AI的所有指令
+        if not isinstance(command, Command):
+            raise IllegalActionError("Red actions must be converted into Command objects")
+        if isinstance(command.executorId, bool) or not isinstance(command.executorId, int):
+            raise IllegalActionError("A red command requires an integer executorId")
+        simulator = self.get_simulator_by_id(command.executorId)
+        if simulator is None:
+            raise IllegalActionError(f"Unknown red executor: {command.executorId}")
+        entity = simulator.entity_ext.entity
+        if (entity.sideId != 0 or entity.entityType not in (21000, 21001, 21002)
+                or not entity.isVisible or entity.survivePoints <= 0):
+            raise IllegalActionError(f"Executor {entity.id} is not an active red combat unit")
+
+        allowed = {
+            SimmerCommandType.SET_DESIRED_ACC_Z,
+            SimmerCommandType.SET_DESIRED_VEL_X,
+            SimmerCommandType.EXECUTE_SATELLITE_DETECTION,
+            SimmerCommandType.CHANGE_MISSILE_TARGET,
+        }
+        if command.commandTypeId not in allowed:
+            raise IllegalActionError(f"Unsupported red command: {command.commandTypeId}")
+        resolved = deepcopy(command)
+        attributes = resolved.commandAttributes
+        if not isinstance(attributes, dict):
+            raise IllegalActionError("Red command attributes must be an object")
+
+        if command.commandTypeId == SimmerCommandType.CHANGE_MISSILE_TARGET:
+            intent = attributes.get("intent")
+            if intent == "track":
+                if attributes.get("target") is not None:
+                    raise IllegalActionError("A track command supplies target_id, not a position")
+                target_id = attributes.get("target_id")
+                if isinstance(target_id, bool) or not isinstance(target_id, int):
+                    raise IllegalActionError("A track command requires an integer target_id")
+                track = entity.detectInfo.get(target_id)
+                if track is not None:
+                    target_type, target_lla = track.entity_type, track.lla
+                elif target_id in self._public_red_targets:
+                    target_type, target_lla = self._public_red_targets[target_id]
+                else:
+                    raise IllegalActionError(f"Target {target_id} is unknown to executor {entity.id}")
+                target_types = (9400, 9600)
+                if entity.entityType == 21002:
+                    target_types = (9500,)
+
+                if target_type not in target_types:
+                    raise IllegalActionError(f"Target {target_id} has no valid attack role for executor {entity.id}")
+                attributes["target"] = {
+                    "x": float(target_lla.x), "y": float(target_lla.y), "z": float(target_lla.z),
+                }
+                self._validate_target_position(attributes["target"], check_bounds=False)
+            elif intent == "search":
+                if attributes.get("target_id") is not None:
+                    raise IllegalActionError("A search command supplies a position, not target_id")
+                self._validate_target_position(attributes.get("target"), check_bounds=True)
+            else:
+                raise IllegalActionError("A target command requires intent='track' or intent='search'")
+        elif command.commandTypeId in (SimmerCommandType.SET_DESIRED_ACC_Z, SimmerCommandType.SET_DESIRED_VEL_X):
+            field = "acc_z" if command.commandTypeId == SimmerCommandType.SET_DESIRED_ACC_Z else "vel_x"
+            value = attributes.get(field)
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+                raise IllegalActionError(f"{field} must be finite")
+        return resolved
+
+    def _validate_target_position(self, position, *, check_bounds: bool) -> None:
+        if not isinstance(position, dict):
+            raise IllegalActionError("A search command requires a target position")
+        for axis in ("x", "y", "z"):
+            value = position.get(axis)
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+                raise IllegalActionError(f"Target {axis} must be finite")
+        if check_bounds:
+            area = self.profile.imagineProfile.mapArea
+            if not (area.lonMin <= position["x"] <= area.lonMax
+                    and area.latMin <= position["y"] <= area.latMax):
+                raise IllegalActionError("Search target lies outside the map")
+
+    def _process_missile_use_satellite(self, command: Command, target_simulator: ISimulator):
+        """
+        处理使用天眼的指令
+        :param command:
         :return:
         """
-        for ai_command in ai_commands:
-            target_sim = self.get_simulator_by_id(ai_command.executorId)
-            if target_sim:
-                target_sim.command_received(ai_command)
+
+        if self.red_sat_use_count >= self.red_sat_max_use_count:
+            logger.warning(f"使用天眼次数已经超出最大使用次数，来自【{target_simulator.entity_ext.entity.nameChn}】的天眼使用指令无效")
+            return
+
+        self.red_sat_use_count += 1
+        logger.info(f"entity_id:{target_simulator.entity_ext.entity.id}, name:{target_simulator.entity_ext.entity.nameChn} 使用天眼，剩余次数：{self.red_sat_max_use_count - self.red_sat_use_count}")
+
+        # 每次指令可以使用天眼 Y 分钟
+        self._satellite_use_end_time = self.sim_time + self.sat_use_minutes * 60 * 1000  # Y分钟 * 60秒 * 1000毫秒
+
+    def is_using_satellite(self) -> bool:
+        """
+        是否正在使用天眼
+        :return:
+        """
+        return self.sim_time < self._satellite_use_end_time
 
     def _send_events_callback(self, event: dict):
         """
@@ -428,8 +567,14 @@ class SimulatorFactory:
         """获取想定中的某种类型实体个数"""
         return sum(1 for e in self.profile.imagineProfile.entityList if e.entity.entityType == entity_type)
 
+    def update_sim_time(self, sim_time:float):
+        self.sim_time = sim_time
+        for simulator in self._simulators.values():
+            simulator.sim_time = sim_time
+
     def reset_all(self):
         """重置所有仿真器"""
+        self.blue_information.reset()
 
         # 必须先重置所有仿真器，再统一进行初始化
         for simulator in self._simulators.values():
@@ -438,10 +583,21 @@ class SimulatorFactory:
         for simulator in self._simulators.values():
             simulator.init_model()
 
+        self._capture_public_red_targets()
+
         self._command_queue.clear()
         self.current_round += 1
         self.target_hit_relation.clear()
+        self._satellite_use_end_time = 0
+        self.red_sat_use_count = 0
         logging.info("[仿真器工厂] 所有仿真器已重置")
+
+    def start_red_missions(self) -> None:
+        """Start every deployed red flight model exactly once."""
+
+        for entity_type in (21000, 21001, 21002):
+            for simulator in self.get_simulators_by_type(entity_type):
+                simulator.start_mission()
 
     def remove_simulator(self, id: int) -> bool:
         """

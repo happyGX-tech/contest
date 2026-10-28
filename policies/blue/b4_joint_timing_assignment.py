@@ -410,8 +410,8 @@ class B4JointTimingAssignmentPolicy(BluePolicy):
 
     @staticmethod
     def _expected_damage(target_type: int, asset_name: str) -> float:
-        is_ship = asset_name.startswith("无人船")
-        is_site = asset_name.startswith("拦截阵地")
+        is_ship = asset_name.startswith("暗巢")
+        is_site = asset_name.startswith("哨卫巢")
         if target_type == 21002:
             return 0.8 if is_ship else 0.0
         if target_type == 21000:

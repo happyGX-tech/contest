@@ -1,7 +1,7 @@
 # -*-coding:utf-8 -*-
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from envengine.sdk.base_struct.Basic import DetectInfo
 from envengine.sdk.base_struct.Basic.Vector3d import Vector3d
@@ -13,7 +13,7 @@ class Entity(object):
     """
     Attributes:
         id : 实体id
-        entityType : 实体类型（21000-高性能弹，21001-中性能弹，21002-低性能弹，9202-卫星，9400-船，24000-拦截弹）
+        entityType : 实体类型（21000-毁灭者，21001-突击者，21002-清道夫，9202-天眼，9400-母巢，24000-自爆虫群）
         lla : 经纬高位置
         posEcf : 地固系位置
         att : 姿态
@@ -69,4 +69,4 @@ class Entity(object):
     # 探测信息
     detectInfo: dict[int, DetectInfo] = field(default_factory=dict)
     # 通信范围内实体id
-    commRangeInfo: list[int] = field(default_factory=list)
+    commRangeInfo: Dict[int, Any] = field(default_factory=dict)

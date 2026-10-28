@@ -8,13 +8,13 @@
   "mission_type_name": "综合任务",
   "topology_id": "serial_double_gate",
   "topology_name": "串联双闸",
-  "design_intent": "两座雷达阵地沿同一纬线前后串联，构成宽前闸和窄后闸；一艘无人船前置在北侧前沿，另一艘位于中段，普通目标在末端展开成扇形。",
+  "design_intent": "两座视野塔阵地沿同一纬线前后串联，构成宽前闸和窄后闸；一艘暗巢前置在北侧前沿，另一艘位于中段，母巢在末端展开成扇形。",
   "structural_features": [
     "前沿—中段—末端层级",
     "双深度覆盖识别",
     "末端扇形分流"
   ],
-  "difficulty_mechanism": "7个计分目标、2部雷达和148枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.0。",
+  "difficulty_mechanism": "7个母巢、2部视野塔和148枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.0。",
   "objective_ids": [
     51,
     52,
@@ -104,7 +104,7 @@
       "initial_information": "public"
     }
   ],
-  "scenario_sha256": "8553352e1e03706a36b1ce26ba9e83adb4019341edb8503d062a78fb18528b72",
+  "scenario_sha256": "a5b6f278dc6632e22889ddc04f3eb4dcd99826430535805a70131f9977ce98d8",
   "entity_total": 323,
   "blue_entity_total": 157,
   "blue_root_total": 7,

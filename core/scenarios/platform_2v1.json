@@ -128,8 +128,8 @@
             "z": 0.0
           },
           "isVisible": true,
-          "nameChn": "红方_高性能飞行器_21000001_002",
-          "nameEn": "高性能Cruise_002",
+          "nameChn": "红方_毁灭者_21000001_002",
+          "nameEn": "destoryer_002",
           "detectInfo": {},
           "commRangeInfo": []
         },
@@ -176,8 +176,8 @@
             "z": 0.0
           },
           "isVisible": true,
-          "nameChn": "红方_高性能飞行器_21000001_0020",
-          "nameEn": "高性能Cruise_002",
+          "nameChn": "红方_毁灭者_21000001_0020",
+          "nameEn": "destoryer_002",
           "detectInfo": {},
           "commRangeInfo": []
         },
@@ -224,8 +224,8 @@
             "z": 0.0
           },
           "isVisible": true,
-          "nameChn": "红方_卫星_9202001_003",
-          "nameEn": "卫星_003",
+          "nameChn": "红方_天眼_9202001_003",
+          "nameEn": "天眼_003",
           "detectInfo": {},
           "commRangeInfo": []
         },
@@ -275,8 +275,8 @@
             "z": 0.0
           },
           "isVisible": true,
-          "nameChn": "蓝方_拦截阵地_9600001_004",
-          "nameEn": "拦截阵地_004",
+          "nameChn": "哨卫巢_9600001_004",
+          "nameEn": "哨卫巢_004",
           "detectInfo": {},
           "commRangeInfo": []
         },
@@ -323,7 +323,7 @@
             "z": 0.0
           },
           "isVisible": false,
-          "nameChn": "拦截弹-1-4",
+          "nameChn": "自爆虫群-1-4",
           "nameEn": "Interceptor_1_4",
           "detectInfo": {},
           "commRangeInfo": []
@@ -371,7 +371,7 @@
             "z": 0.0
           },
           "isVisible": false,
-          "nameChn": "普通雷达_44000_4",
+          "nameChn": "视野塔_44000_4",
           "nameEn": "NormalRadar_44000_4",
           "detectInfo": {},
           "commRangeInfo": []
@@ -419,8 +419,8 @@
             "z": 0.0
           },
           "isVisible": true,
-          "nameChn": "蓝方_目标_9400001_007",
-          "nameEn": "目标_007",
+          "nameChn": "蓝方_母巢_9400001_007",
+          "nameEn": "母巢_007",
           "detectInfo": {},
           "commRangeInfo": []
         },

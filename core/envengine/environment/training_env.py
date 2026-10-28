@@ -1,12 +1,13 @@
 # -*-coding:utf-8 -*-
 
 import logging
-from typing import Optional
+from copy import deepcopy
+from typing import Callable, Optional, Protocol
 
 import numpy as np
 
 from envengine.agent_manager import AgentManager
-from envengine.agent_manager.actions.deploy_action import SetLLA, DeployCompleted
+from envengine.agent_manager.actions.deploy_action import SetLLA
 from envengine.engine import Engine
 from envengine.environment.command_adapter import CommandAdapter
 from envengine.environment.command_converter import CommandConverter
@@ -15,9 +16,22 @@ from envengine.sdk.base_struct.profile.profile import Profile
 from envengine.sdk.writer import write_state, write_ai_action, write_config, write_immediately
 from envengine.simulator.util import SpeedDistributor
 from user_agents.base_agent import AgentType
-from envengine.common import SimmerCommandType, Vector3d
+from envengine.common import Vector3d
 
 logger = logging.getLogger(__name__)
+
+
+class TeamController(Protocol):
+    """Planner for exactly one engine-authorized communication component."""
+
+    def register_platform(self, entity_id: int) -> None:
+        """Register a live member of this component."""
+
+    def reset(self) -> None:
+        """Discard this component's planning state at round end."""
+
+    def begin_step(self, observations: tuple[dict, ...]) -> None:
+        """Receive only observations from members of this component."""
 
 
 class TrainingEnv:
@@ -44,6 +58,9 @@ class TrainingEnv:
         polygon = profile.imagineProfile.redArea.coordinates[0]
         lons = [point[0] for point in polygon]
         lats = [point[1] for point in polygon]
+        for p in profile.imagineProfile.redArea.coordinatesHM[0]:
+            lons.append(p[0])
+            lats.append(p[1])
         min_lon, max_lon = min(lons), max(lons)
         min_lat, max_lat = min(lats), max(lats)
         self.speed_distributor = SpeedDistributor(min_lon=min_lon, max_lon=max_lon,
@@ -53,6 +70,34 @@ class TrainingEnv:
         self._last_observation = None
         self._last_actions = None
         self._shared_learning_policy = None
+        self._team_controller_factory: Callable[[], TeamController] | None = None
+        self._team_controllers: dict[tuple[int, ...], TeamController] = {}
+        self._deployment_coordinates = profile.imagineProfile.redArea.coordinates
+        self._deployment_coordinates_hm = profile.imagineProfile.redArea.coordinatesHM
+        self._deployment_launch_altitude: float | None = None
+
+    def set_team_controller_factory(self, factory: Callable[[], TeamController]) -> None:
+        """Create independent planners as communication components form.
+
+        A factory may capture public mission configuration. It must return a
+        fresh instance: disconnected components cannot share mutable planners.
+        """
+        if not callable(factory):
+            raise TypeError("通信群指挥器工厂必须可调用")
+        self._team_controller_factory = factory
+        self._team_controllers.clear()
+
+    def set_deployment_constraints(
+        self,
+        coordinates,
+        coordinates_hm,
+        launch_altitude: float | None = None,
+    ) -> None:
+        """Set environment-owned bounds used to validate red deployment."""
+
+        self._deployment_coordinates = coordinates
+        self._deployment_coordinates_hm = coordinates_hm
+        self._deployment_launch_altitude = launch_altitude
 
     def set_shared_learning_policy(self, policy) -> None:
         """Register a training-only centralized critic lifecycle hook.
@@ -61,6 +106,8 @@ class TrainingEnv:
         policy is supplied the full state solely when explicitly training.
         """
 
+        if policy is not None and not bool(getattr(policy, "training", False)):
+            raise ValueError("全局 Critic 状态仅允许提供给显式训练的学习策略")
         self._shared_learning_policy = policy
 
     def reset(self) -> dict:
@@ -76,15 +123,12 @@ class TrainingEnv:
         self.current_step = 0
         self.current_round += 1
 
+        for controller in self._team_controllers.values():
+            controller.reset()
+        self._team_controllers.clear()
+
         # 重置所有智能体
         self.agent_manager.reset_all()
-        commanders = {
-            agent.commander
-            for agent in self.agent_manager.get_all_agents()
-            if getattr(agent, "commander", None) is not None
-        }
-        for commander in commanders:
-            commander.reset()
 
         # 获取初始态势作为观测
         observation = self._get_observation()
@@ -115,54 +159,152 @@ class TrainingEnv:
         :return:
         """
 
-        while True:
-            np_action: dict = self._generate_actions_from_deploy_agent()
-            # 转换np.array动作到结构体动作
-            action = []
-            for row in np_action:
-                action_type = int(row[0])
+        expected_ids = {
+            simulator.entity_ext.entity.id
+            for entity_type in (21000, 21001, 21002)
+            for simulator in self.engine.simulator_factory.get_simulators_by_type(entity_type)
+        }
+        deployed_ids: set[int] = set()
 
-                if action_type == 0:  # 移动动作
-                    action.append(
+        while True:
+            raw_actions = self._generate_actions_from_deploy_agent()
+            try:
+                rows = np.asarray(raw_actions, dtype=np.float64)
+            except (TypeError, ValueError) as exc:
+                raise ValueError("部署动作必须是有限数值组成的 N x 5 数组") from exc
+            if rows.ndim != 2 or rows.shape[0] == 0 or rows.shape[1] != 5:
+                raise ValueError("部署动作必须是非空 N x 5 数组")
+            if not np.isfinite(rows).all():
+                raise ValueError("部署动作不能包含 NaN 或无穷值")
+
+            actions = []
+            batch_ids: set[int] = set()
+            deploy_completed = False
+            for row in rows:
+                if not float(row[0]).is_integer():
+                    raise ValueError(f"未知部署动作类型 {row[0]}")
+                action_type = int(row[0])
+                if deploy_completed:
+                    raise ValueError("部署完成动作必须是本批次最后一项")
+
+                if action_type == 0:
+                    if not float(row[1]).is_integer():
+                        raise ValueError(f"部署实体编号必须是整数: {row[1]}")
+                    entity_id = int(row[1])
+                    if entity_id not in expected_ids:
+                        raise ValueError(f"实体 {entity_id} 不属于红方作战部署单位")
+                    if entity_id in deployed_ids or entity_id in batch_ids:
+                        raise ValueError(f"实体 {entity_id} 收到了重复部署动作")
+
+                    lon, lat, altitude = map(float, row[2:5])
+                    self._validate_deployment_position(
+                        entity_id,
+                        lon,
+                        lat,
+                        altitude,
+                    )
+                    actions.append(
                         SetLLA(
-                            executor_id=int(row[1]),
-                            lla=Vector3d(
-                                x=float(row[2]),
-                                y=float(row[3]),
-                                z=float(row[4])
-                            )
+                            executor_id=entity_id,
+                            lla=Vector3d(x=lon, y=lat, z=altitude),
                         ).to_dict()
                     )
-                elif action_type == 1:  # 完成动作
-                    action.append(DeployCompleted().to_dict())
-            # 判断是否部署结束
-            deploy_completed_flag = False
-            for action_item in action:
-                if action_item["commandType_id"] == SimmerCommandType.DEPLOY_COMPLETED:
-                    deploy_completed_flag = True
-                if not deploy_completed_flag:
-                    # 将AI动作数据写入文件
-                    write_ai_action(action_item, str(self.current_round) + ".json")
+                    batch_ids.add(entity_id)
+                elif action_type == 1:
+                    missing_ids = expected_ids - deployed_ids - batch_ids
+                    if missing_ids:
+                        preview = ", ".join(map(str, sorted(missing_ids)[:10]))
+                        raise ValueError(
+                            f"部署尚未覆盖全部红方作战单位，缺少 {len(missing_ids)} 个"
+                            f"（{preview}）"
+                        )
+                    deploy_completed = True
+                else:
+                    raise ValueError(f"未知部署动作类型 {action_type}")
 
-                    # 判断部署位置是否在区域内
-                    # in_region = self.speed_distributor.is_in_region(action_item["lla"]["x"], action_item["lla"]["y"])
-                    # if not in_region:
-                    #     logger.error(f"[训练环境] 部署位置不在区域内")
-                    #     continue
-
-                    # 更改模型位置
-                    self.engine.simulator_factory.modify_simulator_position(action_item["executor_id"],
-                                                                            action_item["lla"])
-                    # 更改模型初始速度
-                    # speed = self.speed_distributor.get_speed(action_item["lla"]["x"])
-                    # self.engine.simulator_factory.modify_simulator_speed(action_item["executor_id"], speed)
-                    # 渲染
-                    if self.render_mode == 'human' and self.renderer:
-                        # 获取观测
-                        observation = self._get_observation()
-                        self.renderer.update_data(observation["entities"])
-            if deploy_completed_flag:
+            # Validate the complete batch before mutating simulator state.
+            for action_item in actions:
+                write_ai_action(action_item, str(self.current_round) + ".json")
+                self.engine.simulator_factory.modify_simulator_position(
+                    action_item["executor_id"], action_item["lla"]
+                )
+                speed = self.speed_distributor.get_speed(action_item["lla"]["x"])
+                self.engine.simulator_factory.modify_simulator_speed(
+                    action_item["executor_id"], speed
+                )
+                if self.render_mode == 'human' and self.renderer:
+                    observation = self._get_observation()
+                    self.renderer.update_data(observation["entities"])
+            deployed_ids.update(batch_ids)
+            if deploy_completed:
                 break
+
+        # Red flight models are initialized during reset and repositioned during
+        # deployment. Start them once, only after every final position is known.
+        self.engine.simulator_factory.start_red_missions()
+
+    def _validate_deployment_position(
+        self,
+        entity_id: int,
+        lon: float,
+        lat: float,
+        altitude: float,
+    ) -> None:
+        simulator = self.engine.simulator_factory.get_simulator_by_id(entity_id)
+        if simulator is None:
+            raise ValueError(f"部署动作引用了不存在的实体 {entity_id}")
+
+        entity_type = simulator.entity_ext.entity.entityType
+        if entity_type in (21000, 21001):
+            regions = getattr(
+                self,
+                "_deployment_coordinates_hm",
+                self.engine.profile.imagineProfile.redArea.coordinatesHM,
+            )
+        elif entity_type == 21002:
+            regions = getattr(
+                self,
+                "_deployment_coordinates",
+                self.engine.profile.imagineProfile.redArea.coordinates,
+            )
+        else:
+            raise ValueError(f"实体 {entity_id} 的类型 {entity_type} 不允许红方部署")
+
+        if not any(self._point_in_polygon(lon, lat, polygon) for polygon in (regions or ())):
+            raise ValueError(
+                f"实体 {entity_id} 的部署位置 ({lon}, {lat}) 超出允许区域"
+            )
+
+        expected_altitude = getattr(self, "_deployment_launch_altitude", None)
+        if expected_altitude is not None and abs(altitude - expected_altitude) > 1e-6:
+            raise ValueError(
+                f"实体 {entity_id} 的部署高度 {altitude} 不符合要求 {expected_altitude}"
+            )
+
+    @staticmethod
+    def _point_in_polygon(lon: float, lat: float, polygon) -> bool:
+        """Return whether a point lies inside or on a polygon boundary."""
+
+        if len(polygon) < 3:
+            return False
+        inside = False
+        previous = polygon[-1]
+        for current in polygon:
+            x1, y1 = float(previous[0]), float(previous[1])
+            x2, y2 = float(current[0]), float(current[1])
+            cross = (lon - x1) * (y2 - y1) - (lat - y1) * (x2 - x1)
+            if (
+                abs(cross) <= 1e-12
+                and min(x1, x2) - 1e-12 <= lon <= max(x1, x2) + 1e-12
+                and min(y1, y2) - 1e-12 <= lat <= max(y1, y2) + 1e-12
+            ):
+                return True
+            if (y1 > lat) != (y2 > lat):
+                intersection = x1 + (lat - y1) * (x2 - x1) / (y2 - y1)
+                if lon < intersection:
+                    inside = not inside
+            previous = current
+        return inside
 
     def step(self) -> tuple[dict, dict, bool, dict]:
         """
@@ -242,7 +384,7 @@ class TrainingEnv:
         if self.current_step >= self.max_steps:
             return True
 
-        # 所有 红方弹、拦截弹 结束之后，仿真结束
+        # 所有 红方弹、自爆虫群 结束之后，仿真结束
         for h in self.engine.simulator_factory.get_simulators_by_type(21000):
             if h.entity_ext.entity.isVisible:
                 return False
@@ -261,11 +403,9 @@ class TrainingEnv:
 
         return True
 
-    def _generate_actions_from_agents(self) -> list[np.array]:
-        """
-        使用智能体工厂生成所有智能体的动作
-        :return: actions
-        """
+    def _generate_actions_from_agents(self) -> list[dict]:
+        """Plan from communication-scoped observations, then convert actions."""
+        groups = self.engine.refresh_red_communications()
         # 获取当前完整观测
         full_observation = self._get_observation()
         if self._shared_learning_policy is not None:
@@ -278,23 +418,58 @@ class TrainingEnv:
                 full_observation,
                 agent.agent_id
             )
+
             if isolated_obs:
+                isolated_obs["is_using_satellite"] = self.engine.simulator_factory.is_using_satellite()
                 agent_observations[agent.agent_id] = isolated_obs
 
-        commanders = {
-            agent.commander
-            for agent in self.agent_manager.get_all_agents()
-            if getattr(agent, "commander", None) is not None
-        }
-        for commander in commanders:
-            begin_step = getattr(commander, "begin_step", None)
-            if begin_step is not None:
-                begin_step(tuple(agent_observations.values()))
+        self._prepare_team_controllers(groups, agent_observations)
 
         # 收集所有智能体的动作
         actions = self.agent_manager.collect_actions_from_agents(agent_observations)
         # 转换所有智能体动作到结构体类型
         return CommandConverter.common_converter(actions)
+
+    def _prepare_team_controllers(
+        self,
+        groups: tuple[tuple[int, ...], ...],
+        observations: dict[int, dict],
+    ) -> None:
+        """Bind each agent to its current component without cross-domain state.
+
+        Stable components retain their planner. Merges and splits create fresh
+        planners from public priors and the members' engine-owned track memory.
+        A split therefore retains previously received intelligence but cannot
+        receive any new information from the disconnected component.
+        """
+        factory = self._team_controller_factory
+        if factory is None:
+            return
+        by_entity = {int(item["entity_id"]): item for item in observations.values()}
+        next_controllers: dict[tuple[int, ...], TeamController] = {}
+        for group in groups:
+            key = tuple(sorted(group))
+            members = tuple(by_entity[entity_id] for entity_id in key if entity_id in by_entity)
+            if not members:
+                continue
+            controller = self._team_controllers.get(key)
+            if controller is None:
+                controller = factory()
+                if any(controller is prior for prior in (
+                    *self._team_controllers.values(), *next_controllers.values()
+                )):
+                    raise ValueError("不同通信群必须使用独立的指挥器实例")
+                for observation in members:
+                    controller.register_platform(int(observation["entity_id"]))
+            next_controllers[key] = controller
+            controller.begin_step(deepcopy(members))
+            for observation in members:
+                agent = self.agent_manager.get_agent(observation["agent_id"])
+                agent.set_commander(controller)
+        covered_ids = {entity_id for group in next_controllers for entity_id in group}
+        if by_entity.keys() - covered_ids:
+            raise ValueError("红方观测中存在未被引擎通信分群覆盖的作战单位")
+        self._team_controllers = next_controllers
 
     def _generate_actions_from_deploy_agent(self) -> np.array:
         """
@@ -312,14 +487,10 @@ class TrainingEnv:
 
         return action
 
-    def _get_init_ship_observation(self) -> dict:
-        """获取初始化时，给红方 AI 的蓝方信息
-        仅传递，蓝方高中价值舰船（即：目标、拦截阵地）
-
-        9400：目标
-        9500：无人船
-        9600：拦截阵地
-        """
+    def get_public_targets_observation(self) -> dict:
+        """Return the public mother/sentry catalogue before combat starts."""
+        if self.current_step != 0:
+            raise RuntimeError("公开目标初始目录只能在战斗开始前读取")
 
         simulators = self.engine.simulator_factory.get_all_simulators()
 
@@ -344,8 +515,6 @@ class TrainingEnv:
                 "isVisible": entity_data.isVisible,
                 "type": entity_data.entityType,
                 "side": entity_data.sideId,
-                "detectInfo": entity_data.detectInfo,
-                "commRangeInfo": entity_data.commRangeInfo
             }
 
         return observation
@@ -378,8 +547,8 @@ class TrainingEnv:
                 "isVisible": entity_data.isVisible,
                 "type": entity_data.entityType,
                 "side": entity_data.sideId,
-                "detectInfo": entity_data.detectInfo,
-                "commRangeInfo": entity_data.commRangeInfo
+                "detectInfo": deepcopy(entity_data.detectInfo),
+                "commRangeInfo": deepcopy(entity_data.commRangeInfo)
             }
 
         return observation
@@ -405,7 +574,7 @@ class TrainingEnv:
                 "health": entity_data.survivePoints,
                 "type": entity_data.entityType,
                 "side": entity_data.sideId,
-                "detectInfo": entity_data.detectInfo
+                "detectInfo": deepcopy(entity_data.detectInfo)
             }
 
         return observation
@@ -430,27 +599,8 @@ class TrainingEnv:
 
             entity_data = simulator.entity_ext.entity
 
-            # ========== 示例：个体奖励设计 ==========
-            reward = 0.0
-
-            # 1. 生存奖励（活着就有基础分）
-            if entity_data.survivePoints > 0:
-                reward += 1.0
-
-            # 2. 健康值变化奖励（可选，需要记录上一帧）
-            # if entity_data.survivePoints > last_health:
-            #     reward += 0.5  # 健康值增加
-
-            # 3. 位置奖励（例如：接近目标）
-            # TODO: 根据任务目标设计
-
-            # 4. 击杀奖励（如果有战斗）
-            # TODO: 检测是否击毁敌方
-
-            # 5. 团队协作奖励（全局奖励）
-            # TODO: 团队完成任务时给所有人加分
-
-            rewards[agent_id] = reward
+            # Per-step learning reward; competition scoring lives in scenarios.
+            rewards[agent_id] = float(entity_data.survivePoints > 0)
 
         return rewards
 
@@ -462,7 +612,7 @@ class TrainingEnv:
 
     # 委托方法
     def get_simulator(self, entity_id: int):
-        return self.engine.get_simulator(entity_id)
+        return self.engine.get_simulator_by_id(entity_id)
 
     def get_simulators_by_type(self, entity_type: int):
         return self.engine.get_simulators_by_type(entity_type)

@@ -1,0 +1,710 @@
+{
+  "artifact_type": "logical_design_map_not_engine_scenario",
+  "map_id": "M05",
+  "title": "弧门侧切",
+  "tier_index": 1,
+  "distribution": "部分不均匀",
+  "source": {
+    "commit": "ad45a7bc804a88703d1259d6083ba57553a25dfb",
+    "scenario_sha256": "5beca9a77dd712f35f1de30e4b632ab5ae207d42a6994521ac6e81cd75e4c88f"
+  },
+  "revision": "自爆虫约增15%，红方总数约减15%；蓝方原点位、目标数量与1.5倍血量保留",
+  "units": "logical units, not km",
+  "size": [
+    87.5,
+    70
+  ],
+  "budget": {
+    "name": "中等",
+    "ids": "M01—M06",
+    "maps": 6,
+    "width": 87.5,
+    "height": 70,
+    "red": [
+      27,
+      37,
+      128
+    ],
+    "blue": [
+      3,
+      10,
+      8
+    ],
+    "swarm": 224,
+    "bounds": [
+      11.58,
+      12.665,
+      1.90125,
+      2.75875
+    ],
+    "red_total": 192,
+    "blue_total": 21,
+    "total_entities": 449,
+    "total_hp": 261.6,
+    "nominal_damage": 853,
+    "relative_area": 0.765625,
+    "public_target_budget_ratio": 0.3586206896551724,
+    "hidden_target_budget_ratio": 0.0625,
+    "swarm_ratio": 1.1666666666666667,
+    "hp_ratio": 0.30668229777256745
+  },
+  "deployment": {
+    "rows": 8,
+    "columns": 4,
+    "x_range": [
+      0,
+      17.5
+    ],
+    "y_range": [
+      0,
+      70
+    ],
+    "buffer_x_range": [
+      17.5,
+      21.0
+    ],
+    "shared_types": [
+      "毁灭者",
+      "突击者",
+      "清道夫"
+    ],
+    "per_cell_cap": null,
+    "red_assignment": null,
+    "cells": [
+      {
+        "row": 1,
+        "column": 1,
+        "rect": [
+          0.0,
+          0.0,
+          4.375,
+          8.75
+        ]
+      },
+      {
+        "row": 1,
+        "column": 2,
+        "rect": [
+          4.375,
+          0.0,
+          8.75,
+          8.75
+        ]
+      },
+      {
+        "row": 1,
+        "column": 3,
+        "rect": [
+          8.75,
+          0.0,
+          13.125,
+          8.75
+        ]
+      },
+      {
+        "row": 1,
+        "column": 4,
+        "rect": [
+          13.125,
+          0.0,
+          17.5,
+          8.75
+        ]
+      },
+      {
+        "row": 2,
+        "column": 1,
+        "rect": [
+          0.0,
+          8.75,
+          4.375,
+          17.5
+        ]
+      },
+      {
+        "row": 2,
+        "column": 2,
+        "rect": [
+          4.375,
+          8.75,
+          8.75,
+          17.5
+        ]
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "rect": [
+          8.75,
+          8.75,
+          13.125,
+          17.5
+        ]
+      },
+      {
+        "row": 2,
+        "column": 4,
+        "rect": [
+          13.125,
+          8.75,
+          17.5,
+          17.5
+        ]
+      },
+      {
+        "row": 3,
+        "column": 1,
+        "rect": [
+          0.0,
+          17.5,
+          4.375,
+          26.25
+        ]
+      },
+      {
+        "row": 3,
+        "column": 2,
+        "rect": [
+          4.375,
+          17.5,
+          8.75,
+          26.25
+        ]
+      },
+      {
+        "row": 3,
+        "column": 3,
+        "rect": [
+          8.75,
+          17.5,
+          13.125,
+          26.25
+        ]
+      },
+      {
+        "row": 3,
+        "column": 4,
+        "rect": [
+          13.125,
+          17.5,
+          17.5,
+          26.25
+        ]
+      },
+      {
+        "row": 4,
+        "column": 1,
+        "rect": [
+          0.0,
+          26.25,
+          4.375,
+          35.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 2,
+        "rect": [
+          4.375,
+          26.25,
+          8.75,
+          35.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 3,
+        "rect": [
+          8.75,
+          26.25,
+          13.125,
+          35.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 4,
+        "rect": [
+          13.125,
+          26.25,
+          17.5,
+          35.0
+        ]
+      },
+      {
+        "row": 5,
+        "column": 1,
+        "rect": [
+          0.0,
+          35.0,
+          4.375,
+          43.75
+        ]
+      },
+      {
+        "row": 5,
+        "column": 2,
+        "rect": [
+          4.375,
+          35.0,
+          8.75,
+          43.75
+        ]
+      },
+      {
+        "row": 5,
+        "column": 3,
+        "rect": [
+          8.75,
+          35.0,
+          13.125,
+          43.75
+        ]
+      },
+      {
+        "row": 5,
+        "column": 4,
+        "rect": [
+          13.125,
+          35.0,
+          17.5,
+          43.75
+        ]
+      },
+      {
+        "row": 6,
+        "column": 1,
+        "rect": [
+          0.0,
+          43.75,
+          4.375,
+          52.5
+        ]
+      },
+      {
+        "row": 6,
+        "column": 2,
+        "rect": [
+          4.375,
+          43.75,
+          8.75,
+          52.5
+        ]
+      },
+      {
+        "row": 6,
+        "column": 3,
+        "rect": [
+          8.75,
+          43.75,
+          13.125,
+          52.5
+        ]
+      },
+      {
+        "row": 6,
+        "column": 4,
+        "rect": [
+          13.125,
+          43.75,
+          17.5,
+          52.5
+        ]
+      },
+      {
+        "row": 7,
+        "column": 1,
+        "rect": [
+          0.0,
+          52.5,
+          4.375,
+          61.25
+        ]
+      },
+      {
+        "row": 7,
+        "column": 2,
+        "rect": [
+          4.375,
+          52.5,
+          8.75,
+          61.25
+        ]
+      },
+      {
+        "row": 7,
+        "column": 3,
+        "rect": [
+          8.75,
+          52.5,
+          13.125,
+          61.25
+        ]
+      },
+      {
+        "row": 7,
+        "column": 4,
+        "rect": [
+          13.125,
+          52.5,
+          17.5,
+          61.25
+        ]
+      },
+      {
+        "row": 8,
+        "column": 1,
+        "rect": [
+          0.0,
+          61.25,
+          4.375,
+          70.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 2,
+        "rect": [
+          4.375,
+          61.25,
+          8.75,
+          70.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 3,
+        "rect": [
+          8.75,
+          61.25,
+          13.125,
+          70.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 4,
+        "rect": [
+          13.125,
+          61.25,
+          17.5,
+          70.0
+        ]
+      }
+    ]
+  },
+  "requested_bands": {
+    "public_roots": [
+      2,
+      5,
+      4,
+      2
+    ],
+    "swarm_stock": [
+      22,
+      90,
+      69,
+      43
+    ]
+  },
+  "roots": [
+    {
+      "source_id": 54,
+      "kind": "watch",
+      "x_norm": 0.4758077230237336,
+      "y_norm": 0.11375,
+      "hp": 18.0,
+      "swarm_stock": 7,
+      "id": "M05-W10",
+      "x": 41.63317576457669,
+      "y": 7.9625,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 51,
+      "kind": "mother",
+      "x_norm": 0.7804913589371558,
+      "y_norm": 0.13125,
+      "hp": 24.0,
+      "swarm_stock": 0,
+      "id": "M05-B07",
+      "x": 68.29299390700113,
+      "y": 9.1875,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2753,
+      "kind": "hidden",
+      "x_norm": 0.5721990853502114,
+      "y_norm": 0.09749999999999999,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 8,
+      "id": "M05-D03",
+      "x": 50.0674199681435,
+      "y": 6.824999999999999,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2754,
+      "kind": "hidden",
+      "x_norm": 0.6319220968769649,
+      "y_norm": 0.185,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 7,
+      "id": "M05-D02",
+      "x": 55.29318347673443,
+      "y": 12.95,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 310,
+      "kind": "watch",
+      "x_norm": 0.45127746562695514,
+      "y_norm": 0.298125,
+      "hp": 18.0,
+      "swarm_stock": 15,
+      "id": "M05-W09",
+      "x": 39.486778242358575,
+      "y": 20.86875,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 312,
+      "kind": "watch",
+      "x_norm": 0.4909576516727083,
+      "y_norm": 0.341875,
+      "hp": 18.0,
+      "swarm_stock": 15,
+      "id": "M05-W08",
+      "x": 42.95879452136197,
+      "y": 23.93125,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2733,
+      "kind": "watch",
+      "x_norm": 0.5281866649791065,
+      "y_norm": 0.385625,
+      "hp": 18.0,
+      "swarm_stock": 15,
+      "id": "M05-W07",
+      "x": 46.216333185671814,
+      "y": 26.99375,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2735,
+      "kind": "watch",
+      "x_norm": 0.5629790473722096,
+      "y_norm": 0.42937499999999995,
+      "hp": 18.0,
+      "swarm_stock": 15,
+      "id": "M05-W06",
+      "x": 49.26066664506834,
+      "y": 30.056249999999995,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 52,
+      "kind": "mother",
+      "x_norm": 0.7715297212960823,
+      "y_norm": 0.3229166666666667,
+      "hp": 24.0,
+      "swarm_stock": 0,
+      "id": "M05-B06",
+      "x": 67.5088506134072,
+      "y": 22.604166666666668,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2755,
+      "kind": "hidden",
+      "x_norm": 0.6109959904938227,
+      "y_norm": 0.3475,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 15,
+      "id": "M05-D01",
+      "x": 53.462149168209486,
+      "y": 24.325,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2756,
+      "kind": "hidden",
+      "x_norm": 0.6443924643995138,
+      "y_norm": 0.435,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 15,
+      "id": "M05-D08",
+      "x": 56.38434063495746,
+      "y": 30.45,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2739,
+      "kind": "watch",
+      "x_norm": 0.445856743296221,
+      "y_norm": 0.5554166666666667,
+      "hp": 18.0,
+      "swarm_stock": 14,
+      "id": "M05-W05",
+      "x": 39.012465038419336,
+      "y": 38.87916666666667,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2741,
+      "kind": "watch",
+      "x_norm": 0.4678685393585642,
+      "y_norm": 0.61375,
+      "hp": 18.0,
+      "swarm_stock": 14,
+      "id": "M05-W04",
+      "x": 40.93849719387437,
+      "y": 42.9625,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2745,
+      "kind": "watch",
+      "x_norm": 0.48693760179334855,
+      "y_norm": 0.6720833333333334,
+      "hp": 18.0,
+      "swarm_stock": 13,
+      "id": "M05-W01",
+      "x": 42.607040156917996,
+      "y": 47.045833333333334,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2728,
+      "kind": "mother",
+      "x_norm": 0.7564619262266391,
+      "y_norm": 0.5875,
+      "hp": 24.0,
+      "swarm_stock": 0,
+      "id": "M05-B03",
+      "x": 66.19041854483092,
+      "y": 41.125,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2758,
+      "kind": "hidden",
+      "x_norm": 0.5736430074602767,
+      "y_norm": 0.5975,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 14,
+      "id": "M05-D06",
+      "x": 50.19376315277422,
+      "y": 41.825,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2760,
+      "kind": "hidden",
+      "x_norm": 0.583409626896213,
+      "y_norm": 0.685,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 14,
+      "id": "M05-D07",
+      "x": 51.04834235341864,
+      "y": 47.95,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2747,
+      "kind": "watch",
+      "x_norm": 0.37323408073140685,
+      "y_norm": 0.82,
+      "hp": 18.0,
+      "swarm_stock": 11,
+      "id": "M05-W02",
+      "x": 32.6579820639981,
+      "y": 57.4,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2751,
+      "kind": "watch",
+      "x_norm": 0.37564410268288506,
+      "y_norm": 0.9075,
+      "hp": 18.0,
+      "swarm_stock": 10,
+      "id": "M05-W03",
+      "x": 32.86885898475244,
+      "y": 63.525,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2761,
+      "kind": "hidden",
+      "x_norm": 0.4820210071155325,
+      "y_norm": 0.8475,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 11,
+      "id": "M05-D04",
+      "x": 42.17683812260909,
+      "y": 59.325,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2763,
+      "kind": "hidden",
+      "x_norm": 0.4846965035045016,
+      "y_norm": 0.935,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 11,
+      "id": "M05-D05",
+      "x": 42.41094405664389,
+      "y": 65.45,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    }
+  ],
+  "topology_idea": "弧门侧切骨架；母巢3座；红方192，自爆虫224。蓝方保留右移4%的点位，血量为原值1.5倍。",
+  "blue_translation_fraction": [
+    0.04,
+    0
+  ],
+  "map_area": {
+    "lonMin": 11.58,
+    "lonMax": 12.665,
+    "latMin": 1.90125,
+    "latMax": 2.75875
+  },
+  "detection": {
+    "source": "RadarModelSimulator.execute_detection + ISimulator._is_geometrically_visible",
+    "range_m": 20000,
+    "distance_axes": "ECEF X,Y only",
+    "minimum_target_stage": 3,
+    "slice_altitude_m": 3000
+  },
+  "launch_altitude_external_m": 3000,
+  "distribution_rule": {
+    "public_cv_limit": 0.2,
+    "stock_cv_limit": 0.2,
+    "small_count_rule": "public limit=max(0.20, minimum CV achievable by integer counts in four bands)"
+  },
+  "blue_health_multiplier": 1.5
+}

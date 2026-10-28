@@ -74,6 +74,7 @@ class LocalAvoidConfig:
     evade_clear_distance_m: float = 2500.0
     evade_clear_steps: int = 3
     arrival_radius_m: float = 500.0
+    arrival_segment_check: bool = False
     goal_distance_min_m: float = 40_000.0
     goal_distance_max_m: float = 80_000.0
     bug_spawn_min_m: float = 15_000.0
@@ -91,10 +92,13 @@ class LocalAvoidConfig:
     dangerous_spawn_only: bool = False
     dangerous_max_cpa_m: float = 500.0
     progress_scale: float = 1.0
+    progress_fraction_scale: float = 0.0
     hit_penalty: float = 20.0
     evade_bonus: float = 3.0
     deviation_penalty: float = 0.05
     oscillation_penalty: float = 0.02
+    action_switch_penalty: float = 0.0
+    turn_reversal_penalty: float = 0.0
     time_penalty: float = 0.001
     recovery_penalty: float = 0.05
     heading_error_penalty: float = 0.0
@@ -159,6 +163,7 @@ class LocalAvoidEnv:
         self.previous_action = STRAIGHT
         self.initial_goal_distance = 0.0
         self.path_length = 0.0
+        self.episode_return = 0.0
         self.had_threat = False
         self.clear_steps = 0
         self.closest_bug_distance = math.inf
@@ -186,6 +191,7 @@ class LocalAvoidEnv:
         self.step_count = 0
         self.previous_action = STRAIGHT
         self.path_length = 0.0
+        self.episode_return = 0.0
         self.had_threat = False
         self.clear_steps = 0
         self.closest_bug_distance = math.inf
@@ -485,7 +491,7 @@ class LocalAvoidEnv:
             values["track_source"] = str(bug.get("track_source", "local"))
             threats.append((values["distance"], values))
         threats.sort(key=lambda item: item[1]["bearing"])
-        sources = [0.0, 0.0]
+        sources = [0.0] * self.MAX_THREATS
         for slot in range(self.MAX_THREATS):
             if slot >= len(threats):
                 features.extend([0.0] * self.THREAT_FEATURES)
@@ -603,7 +609,14 @@ class LocalAvoidEnv:
             if not bug["active"]:
                 continue
             desired = _heading(self.own_position - np.asarray(bug["position"]))
-            turn = float(np.clip(wrap_angle(desired - float(bug["heading"])), -max_turn, max_turn))
+            bug_max_turn = max_turn * float(bug.get("turn_rate_scale", 1.0))
+            turn = float(
+                np.clip(
+                    wrap_angle(desired - float(bug["heading"])),
+                    -bug_max_turn,
+                    bug_max_turn,
+                )
+            )
             bug["heading"] = wrap_angle(float(bug["heading"]) + turn)
             bug["position"] = np.asarray(bug["position"]) + _unit(float(bug["heading"])) * self.config.bug_speed_mps * dt
 
@@ -626,6 +639,14 @@ class LocalAvoidEnv:
 
         current_goal_distance = self._goal_distance()
         arrived = current_goal_distance <= self.config.arrival_radius_m
+        if self.config.arrival_segment_check and not arrived:
+            arrived = (
+                closest_segment_distance(
+                    previous_own - self.goal_position,
+                    self.own_position - self.goal_position,
+                )
+                <= self.config.arrival_radius_m
+            )
         risk = self._risk()
         self.had_threat = self.had_threat or risk
         if self.had_threat and not risk and not hit:
@@ -669,8 +690,14 @@ class LocalAvoidEnv:
         )
         truncated = bool(self.step_count >= self.config.horizon_steps and not terminated)
 
-        progress_km = (previous_goal_distance - current_goal_distance) / 1000.0
-        reward = self.config.progress_scale * progress_km
+        reward_goal_distance = 0.0 if arrived else current_goal_distance
+        progress_m = previous_goal_distance - reward_goal_distance
+        progress_km = progress_m / 1000.0
+        progress_fraction = progress_m / max(self.initial_goal_distance, 1.0)
+        reward = (
+            self.config.progress_scale * progress_km
+            + self.config.progress_fraction_scale * progress_fraction
+        )
         if hit:
             reward -= self.config.hit_penalty
         if newly_evaded:
@@ -688,7 +715,15 @@ class LocalAvoidEnv:
             reward -= self.config.unsafe_straight_penalty * previous_risk_score
         deviation = abs(action - STRAIGHT)
         reward -= self.config.deviation_penalty * deviation
+        switched = action != self.previous_action
+        reversed_turn = (
+            self.previous_action in (LEFT, RIGHT)
+            and action in (LEFT, RIGHT)
+            and action != self.previous_action
+        )
         reward -= self.config.oscillation_penalty * abs(action - self.previous_action)
+        reward -= self.config.action_switch_penalty * float(switched)
+        reward -= self.config.turn_reversal_penalty * float(reversed_turn)
         reward -= self.config.time_penalty
         if not risk:
             reward -= self.config.recovery_penalty * deviation
@@ -702,7 +737,8 @@ class LocalAvoidEnv:
             )
             reward -= self.config.excess_maneuver_penalty * excess
         reward = float(np.clip(reward, -self.config.reward_clip, self.config.reward_clip))
-        oscillated = self.previous_action in (LEFT, RIGHT) and action in (LEFT, RIGHT) and action != self.previous_action
+        self.episode_return += reward
+        oscillated = reversed_turn
         self.oscillation_count += int(oscillated)
         self.heading_deviation_sum += abs(math.degrees(residual))
         self.previous_action = action
@@ -723,6 +759,7 @@ class LocalAvoidEnv:
             "risk_score": current_risk_score,
             "risk_improvement": previous_risk_score - current_risk_score,
             "progress_km": progress_km,
+            "progress_fraction": progress_fraction,
             "extra_path_m": extra_path,
             "extra_time_s": extra_path / max(self.unit_speed, 1.0),
             "recovery_time_s": self.clear_steps * dt,
@@ -731,6 +768,7 @@ class LocalAvoidEnv:
             "mean_heading_deviation_deg": self.heading_deviation_sum / max(self.step_count, 1),
             "closest_bug_distance_m": self.closest_bug_distance,
             "episode_steps": self.step_count,
+            "episode_return": self.episode_return,
             "maneuver_streak": self.maneuver_streak,
             "encounter_pattern": self.encounter_pattern,
             "active_threats": sum(bool(bug["active"]) for bug in self.bugs),

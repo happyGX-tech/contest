@@ -14,7 +14,7 @@ from .Vector3d import Vector3d
 class RaderExternal:
 	# 张角限制（欧拉角）
 	range: Vector3d = field(default_factory=Vector3d)
-	# 雷达探测距离(米)
+	# 视野塔探测距离(米)
 	distance: float = 0.0
-	# 雷达扫描周期(度/秒)
+	# 视野塔扫描周期(度/秒)
 	scanSpeed: float = 0.0

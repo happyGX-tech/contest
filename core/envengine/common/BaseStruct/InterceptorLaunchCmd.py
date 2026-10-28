@@ -13,7 +13,7 @@ from .PosVelAcc import PosVelAcc
 @dataclass_json
 @dataclass
 class InterceptorLaunchCmd:
-	# 拦截弹id
+	# 自爆虫群id
 	weaponId: int = 0
 	# 目标id
 	targetId: int = 0

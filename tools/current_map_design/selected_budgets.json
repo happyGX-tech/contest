@@ -1,0 +1,14 @@
+{
+  "easy": {
+    "stock": 97,
+    "extra_mother": 1
+  },
+  "medium": {
+    "stock": 224,
+    "extra_mother": 1
+  },
+  "hard": {
+    "stock": 435,
+    "extra_mother": 1
+  }
+}

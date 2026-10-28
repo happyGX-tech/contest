@@ -1,0 +1,1506 @@
+{
+  "artifact_type": "logical_design_map_not_engine_scenario",
+  "map_id": "H08",
+  "title": "双弧包络",
+  "tier_index": 2,
+  "distribution": "比较均匀",
+  "source": {
+    "commit": "ad45a7bc804a88703d1259d6083ba57553a25dfb",
+    "scenario_sha256": "f223b4744e7b7bfea7eabb1b8b3c250ccee39e6380e03e5882ff7aa88195b63b"
+  },
+  "revision": "原位置与库存保留",
+  "units": "logical units, not km",
+  "size": [
+    100,
+    80
+  ],
+  "budget": {
+    "name": "复杂",
+    "ids": "H01—H08",
+    "maps": 8,
+    "width": 100,
+    "height": 80,
+    "red": [
+      70,
+      98,
+      252
+    ],
+    "blue": [
+      10,
+      20,
+      18
+    ],
+    "swarm": 378,
+    "bounds": [
+      11.58,
+      12.82,
+      1.84,
+      2.82
+    ],
+    "red_total": 420,
+    "blue_total": 48,
+    "total_entities": 868,
+    "total_hp": 414.4,
+    "nominal_damage": 2142,
+    "relative_area": 1.0,
+    "public_target_budget_ratio": 0.31746031746031744,
+    "hidden_target_budget_ratio": 0.07142857142857142,
+    "swarm_ratio": 0.9,
+    "hp_ratio": 0.19346405228758168
+  },
+  "deployment": {
+    "rows": 8,
+    "columns": 4,
+    "x_range": [
+      0,
+      20.0
+    ],
+    "y_range": [
+      0,
+      80
+    ],
+    "buffer_x_range": [
+      20.0,
+      24.0
+    ],
+    "shared_types": [
+      "毁灭者",
+      "突击者",
+      "清道夫"
+    ],
+    "per_cell_cap": null,
+    "red_assignment": null,
+    "cells": [
+      {
+        "row": 1,
+        "column": 1,
+        "rect": [
+          0.0,
+          0.0,
+          5.0,
+          10.0
+        ]
+      },
+      {
+        "row": 1,
+        "column": 2,
+        "rect": [
+          5.0,
+          0.0,
+          10.0,
+          10.0
+        ]
+      },
+      {
+        "row": 1,
+        "column": 3,
+        "rect": [
+          10.0,
+          0.0,
+          15.0,
+          10.0
+        ]
+      },
+      {
+        "row": 1,
+        "column": 4,
+        "rect": [
+          15.0,
+          0.0,
+          20.0,
+          10.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 1,
+        "rect": [
+          0.0,
+          10.0,
+          5.0,
+          20.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 2,
+        "rect": [
+          5.0,
+          10.0,
+          10.0,
+          20.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "rect": [
+          10.0,
+          10.0,
+          15.0,
+          20.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 4,
+        "rect": [
+          15.0,
+          10.0,
+          20.0,
+          20.0
+        ]
+      },
+      {
+        "row": 3,
+        "column": 1,
+        "rect": [
+          0.0,
+          20.0,
+          5.0,
+          30.0
+        ]
+      },
+      {
+        "row": 3,
+        "column": 2,
+        "rect": [
+          5.0,
+          20.0,
+          10.0,
+          30.0
+        ]
+      },
+      {
+        "row": 3,
+        "column": 3,
+        "rect": [
+          10.0,
+          20.0,
+          15.0,
+          30.0
+        ]
+      },
+      {
+        "row": 3,
+        "column": 4,
+        "rect": [
+          15.0,
+          20.0,
+          20.0,
+          30.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 1,
+        "rect": [
+          0.0,
+          30.0,
+          5.0,
+          40.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 2,
+        "rect": [
+          5.0,
+          30.0,
+          10.0,
+          40.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 3,
+        "rect": [
+          10.0,
+          30.0,
+          15.0,
+          40.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 4,
+        "rect": [
+          15.0,
+          30.0,
+          20.0,
+          40.0
+        ]
+      },
+      {
+        "row": 5,
+        "column": 1,
+        "rect": [
+          0.0,
+          40.0,
+          5.0,
+          50.0
+        ]
+      },
+      {
+        "row": 5,
+        "column": 2,
+        "rect": [
+          5.0,
+          40.0,
+          10.0,
+          50.0
+        ]
+      },
+      {
+        "row": 5,
+        "column": 3,
+        "rect": [
+          10.0,
+          40.0,
+          15.0,
+          50.0
+        ]
+      },
+      {
+        "row": 5,
+        "column": 4,
+        "rect": [
+          15.0,
+          40.0,
+          20.0,
+          50.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 1,
+        "rect": [
+          0.0,
+          50.0,
+          5.0,
+          60.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 2,
+        "rect": [
+          5.0,
+          50.0,
+          10.0,
+          60.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 3,
+        "rect": [
+          10.0,
+          50.0,
+          15.0,
+          60.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 4,
+        "rect": [
+          15.0,
+          50.0,
+          20.0,
+          60.0
+        ]
+      },
+      {
+        "row": 7,
+        "column": 1,
+        "rect": [
+          0.0,
+          60.0,
+          5.0,
+          70.0
+        ]
+      },
+      {
+        "row": 7,
+        "column": 2,
+        "rect": [
+          5.0,
+          60.0,
+          10.0,
+          70.0
+        ]
+      },
+      {
+        "row": 7,
+        "column": 3,
+        "rect": [
+          10.0,
+          60.0,
+          15.0,
+          70.0
+        ]
+      },
+      {
+        "row": 7,
+        "column": 4,
+        "rect": [
+          15.0,
+          60.0,
+          20.0,
+          70.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 1,
+        "rect": [
+          0.0,
+          70.0,
+          5.0,
+          80.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 2,
+        "rect": [
+          5.0,
+          70.0,
+          10.0,
+          80.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 3,
+        "rect": [
+          10.0,
+          70.0,
+          15.0,
+          80.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 4,
+        "rect": [
+          15.0,
+          70.0,
+          20.0,
+          80.0
+        ]
+      }
+    ]
+  },
+  "requested_bands": null,
+  "roots": [
+    {
+      "source_id": 51,
+      "kind": "mother",
+      "x_norm": 0.6859677419354836,
+      "y_norm": 0.8796585519620453,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B01",
+      "x": 68.59677419354836,
+      "y": 70.37268415696363,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 52,
+      "kind": "mother",
+      "x_norm": 0.8682258064516143,
+      "y_norm": 0.8287953218346529,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B02",
+      "x": 86.82258064516142,
+      "y": 66.30362574677223,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 53,
+      "kind": "mother",
+      "x_norm": 0.899677419354839,
+      "y_norm": 0.7716311619852011,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B03",
+      "x": 89.9677419354839,
+      "y": 61.730492958816086,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 54,
+      "kind": "watch",
+      "x_norm": 0.29698274463945484,
+      "y_norm": 0.851564861326066,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3420,
+        3421,
+        3422,
+        3423,
+        3424,
+        3425,
+        3426,
+        3427,
+        3428,
+        3429
+      ],
+      "id": "H08-W01",
+      "x": 29.698274463945484,
+      "y": 68.12518890608528,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 106,
+      "kind": "watch",
+      "x_norm": 0.3262708145635274,
+      "y_norm": 0.7900269890297511,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3430,
+        3431,
+        3432,
+        3433,
+        3434,
+        3435,
+        3436,
+        3437,
+        3438,
+        3439
+      ],
+      "id": "H08-W02",
+      "x": 32.62708145635274,
+      "y": 63.20215912238009,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 168,
+      "kind": "hidden",
+      "x_norm": 0.35955913698762043,
+      "y_norm": 0.10654831256250255,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3620,
+        3621,
+        3622,
+        3623,
+        3624,
+        3625,
+        3626,
+        3627,
+        3628,
+        3629
+      ],
+      "id": "H08-D01",
+      "x": 35.955913698762046,
+      "y": 8.523865005000204,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 169,
+      "kind": "hidden",
+      "x_norm": 0.4357741851564079,
+      "y_norm": 0.17495828537115637,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3630,
+        3631,
+        3632,
+        3633,
+        3634,
+        3635,
+        3636,
+        3637,
+        3638,
+        3639
+      ],
+      "id": "H08-D02",
+      "x": 43.577418515640794,
+      "y": 13.99666282969251,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 301,
+      "kind": "mother",
+      "x_norm": 0.9617741935483883,
+      "y_norm": 0.7449747708907015,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B04",
+      "x": 96.17741935483883,
+      "y": 59.59798167125612,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 302,
+      "kind": "mother",
+      "x_norm": 0.817956989247312,
+      "y_norm": 0.5230036987100923,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B05",
+      "x": 81.7956989247312,
+      "y": 41.84029589680739,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 310,
+      "kind": "watch",
+      "x_norm": 0.34830081997147067,
+      "y_norm": 0.6852348901197828,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3440,
+        3441,
+        3442,
+        3443,
+        3444,
+        3445,
+        3446,
+        3447,
+        3448,
+        3449
+      ],
+      "id": "H08-W03",
+      "x": 34.83008199714707,
+      "y": 54.81879120958262,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 312,
+      "kind": "watch",
+      "x_norm": 0.3461372769923162,
+      "y_norm": 0.6149733285872541,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3450,
+        3451,
+        3452,
+        3453,
+        3454,
+        3455,
+        3456,
+        3457,
+        3458,
+        3459
+      ],
+      "id": "H08-W04",
+      "x": 34.613727699231625,
+      "y": 49.19786628698033,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 314,
+      "kind": "watch",
+      "x_norm": 0.39979076421544907,
+      "y_norm": 0.5289404887864299,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3460,
+        3461,
+        3462,
+        3463,
+        3464,
+        3465,
+        3466,
+        3467,
+        3468,
+        3469
+      ],
+      "id": "H08-W05",
+      "x": 39.97907642154491,
+      "y": 42.31523910291439,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 316,
+      "kind": "watch",
+      "x_norm": 0.41028816427908554,
+      "y_norm": 0.45910085862463357,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3470,
+        3471,
+        3472,
+        3473,
+        3474,
+        3475,
+        3476,
+        3477,
+        3478,
+        3479
+      ],
+      "id": "H08-W06",
+      "x": 41.02881642790855,
+      "y": 36.728068689970684,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 330,
+      "kind": "hidden",
+      "x_norm": 0.5604397908768629,
+      "y_norm": 0.21970059441713952,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3640,
+        3641,
+        3642,
+        3643,
+        3644,
+        3645,
+        3646,
+        3647,
+        3648,
+        3649
+      ],
+      "id": "H08-D03",
+      "x": 56.04397908768629,
+      "y": 17.57604755337116,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2952,
+      "kind": "mother",
+      "x_norm": 0.8891935483870986,
+      "y_norm": 0.4975287414231435,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B06",
+      "x": 88.91935483870986,
+      "y": 39.80229931385148,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2953,
+      "kind": "mother",
+      "x_norm": 0.9531720430107538,
+      "y_norm": 0.4182274619884093,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B07",
+      "x": 95.31720430107538,
+      "y": 33.458196959072744,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2954,
+      "kind": "mother",
+      "x_norm": 0.6744086021505388,
+      "y_norm": 0.19749180609452432,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B08",
+      "x": 67.44086021505387,
+      "y": 15.799344487561946,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2955,
+      "kind": "mother",
+      "x_norm": 0.8819354838709682,
+      "y_norm": 0.1386468453555392,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B09",
+      "x": 88.19354838709683,
+      "y": 11.091747628443136,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2956,
+      "kind": "mother",
+      "x_norm": 0.9168817204301094,
+      "y_norm": 0.09449462051329917,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "swarm_source_ids": [],
+      "id": "H08-B10",
+      "x": 91.68817204301094,
+      "y": 7.559569641063933,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2957,
+      "kind": "watch",
+      "x_norm": 0.4667533062782042,
+      "y_norm": 0.40742659337223525,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3480,
+        3481,
+        3482,
+        3483,
+        3484,
+        3485,
+        3486,
+        3487,
+        3488,
+        3489
+      ],
+      "id": "H08-W07",
+      "x": 46.67533062782042,
+      "y": 32.59412746977882,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2959,
+      "kind": "watch",
+      "x_norm": 0.5042177689707663,
+      "y_norm": 0.31143762864899227,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3490,
+        3491,
+        3492,
+        3493,
+        3494,
+        3495,
+        3496,
+        3497,
+        3498,
+        3499
+      ],
+      "id": "H08-W08",
+      "x": 50.42177689707663,
+      "y": 24.91501029191938,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2961,
+      "kind": "watch",
+      "x_norm": 0.5406274355760082,
+      "y_norm": 0.28021749122405515,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3500,
+        3501,
+        3502,
+        3503,
+        3504,
+        3505,
+        3506,
+        3507,
+        3508,
+        3509
+      ],
+      "id": "H08-W09",
+      "x": 54.062743557600825,
+      "y": 22.417399297924412,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2963,
+      "kind": "watch",
+      "x_norm": 0.6101016183102834,
+      "y_norm": 0.20998329629591947,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3510,
+        3511,
+        3512,
+        3513,
+        3514,
+        3515,
+        3516,
+        3517,
+        3518,
+        3519
+      ],
+      "id": "H08-W10",
+      "x": 61.01016183102834,
+      "y": 16.798663703673558,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2965,
+      "kind": "watch",
+      "x_norm": 0.39749337917600963,
+      "y_norm": 0.1239333922344249,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3520,
+        3521,
+        3522,
+        3523,
+        3524,
+        3525,
+        3526,
+        3527,
+        3528,
+        3529
+      ],
+      "id": "H08-W11",
+      "x": 39.74933791760096,
+      "y": 9.914671378753992,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2967,
+      "kind": "watch",
+      "x_norm": 0.45522207301189904,
+      "y_norm": 0.2238300306787092,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3530,
+        3531,
+        3532,
+        3533,
+        3534,
+        3535,
+        3536,
+        3537,
+        3538,
+        3539
+      ],
+      "id": "H08-W12",
+      "x": 45.5222073011899,
+      "y": 17.90640245429674,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2969,
+      "kind": "watch",
+      "x_norm": 0.4790797991058528,
+      "y_norm": 0.280160999291281,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3540,
+        3541,
+        3542,
+        3543,
+        3544,
+        3545,
+        3546,
+        3547,
+        3548,
+        3549
+      ],
+      "id": "H08-W13",
+      "x": 47.90797991058528,
+      "y": 22.41287994330248,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2971,
+      "kind": "watch",
+      "x_norm": 0.5259553937984277,
+      "y_norm": 0.3785488132900546,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3550,
+        3551,
+        3552,
+        3553,
+        3554,
+        3555,
+        3556,
+        3557,
+        3558,
+        3559
+      ],
+      "id": "H08-W14",
+      "x": 52.59553937984277,
+      "y": 30.283905063204365,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2973,
+      "kind": "watch",
+      "x_norm": 0.5585656376124187,
+      "y_norm": 0.44027643731594246,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3560,
+        3561,
+        3562,
+        3563,
+        3564,
+        3565,
+        3566,
+        3567,
+        3568,
+        3569
+      ],
+      "id": "H08-W15",
+      "x": 55.85656376124187,
+      "y": 35.2221149852754,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2975,
+      "kind": "watch",
+      "x_norm": 0.5669823330393132,
+      "y_norm": 0.5379466684827522,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3570,
+        3571,
+        3572,
+        3573,
+        3574,
+        3575,
+        3576,
+        3577,
+        3578,
+        3579
+      ],
+      "id": "H08-W16",
+      "x": 56.698233303931325,
+      "y": 43.03573347862017,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2977,
+      "kind": "watch",
+      "x_norm": 0.7183152251503342,
+      "y_norm": 0.6101362943344135,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3580,
+        3581,
+        3582,
+        3583,
+        3584,
+        3585,
+        3586,
+        3587,
+        3588,
+        3589
+      ],
+      "id": "H08-W17",
+      "x": 71.83152251503341,
+      "y": 48.81090354675308,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2979,
+      "kind": "watch",
+      "x_norm": 0.6135661746465528,
+      "y_norm": 0.7007252466191012,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3590,
+        3591,
+        3592,
+        3593,
+        3594,
+        3595,
+        3596,
+        3597,
+        3598,
+        3599
+      ],
+      "id": "H08-W18",
+      "x": 61.35661746465529,
+      "y": 56.0580197295281,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2981,
+      "kind": "watch",
+      "x_norm": 0.7443009951105126,
+      "y_norm": 0.8108483821007813,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3600,
+        3601,
+        3602,
+        3603,
+        3604,
+        3605,
+        3606,
+        3607,
+        3608,
+        3609
+      ],
+      "id": "H08-W19",
+      "x": 74.43009951105127,
+      "y": 64.8678705680625,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2983,
+      "kind": "watch",
+      "x_norm": 0.7685842026712469,
+      "y_norm": 0.8667663104213097,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3610,
+        3611,
+        3612,
+        3613,
+        3614,
+        3615,
+        3616,
+        3617,
+        3618,
+        3619
+      ],
+      "id": "H08-W20",
+      "x": 76.8584202671247,
+      "y": 69.34130483370478,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2985,
+      "kind": "hidden",
+      "x_norm": 0.6628459183865401,
+      "y_norm": 0.13388666529301638,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3650,
+        3651,
+        3652,
+        3653,
+        3654,
+        3655,
+        3656,
+        3657,
+        3658,
+        3659
+      ],
+      "id": "H08-D04",
+      "x": 66.28459183865401,
+      "y": 10.71093322344131,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2986,
+      "kind": "hidden",
+      "x_norm": 0.752363960187296,
+      "y_norm": 0.16435426231233893,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3660,
+        3661,
+        3662,
+        3663,
+        3664,
+        3665,
+        3666,
+        3667,
+        3668,
+        3669
+      ],
+      "id": "H08-D05",
+      "x": 75.23639601872961,
+      "y": 13.148340984987115,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2987,
+      "kind": "hidden",
+      "x_norm": 0.8688525028581313,
+      "y_norm": 0.2362908186870371,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3670,
+        3671,
+        3672,
+        3673,
+        3674,
+        3675,
+        3676,
+        3677,
+        3678,
+        3679
+      ],
+      "id": "H08-D06",
+      "x": 86.88525028581313,
+      "y": 18.90326549496297,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2988,
+      "kind": "hidden",
+      "x_norm": 0.3478067852463059,
+      "y_norm": 0.8919299422925564,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3680,
+        3681,
+        3682,
+        3683,
+        3684,
+        3685,
+        3686,
+        3687,
+        3688,
+        3689
+      ],
+      "id": "H08-D07",
+      "x": 34.780678524630595,
+      "y": 71.35439538340451,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2989,
+      "kind": "hidden",
+      "x_norm": 0.4674526138034344,
+      "y_norm": 0.8509895826162857,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3690,
+        3691,
+        3692,
+        3693,
+        3694,
+        3695,
+        3696,
+        3697,
+        3698,
+        3699
+      ],
+      "id": "H08-D08",
+      "x": 46.745261380343436,
+      "y": 68.07916660930286,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2990,
+      "kind": "hidden",
+      "x_norm": 0.552936271373353,
+      "y_norm": 0.8147592209729856,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3700,
+        3701,
+        3702,
+        3703,
+        3704,
+        3705,
+        3706,
+        3707,
+        3708,
+        3709
+      ],
+      "id": "H08-D09",
+      "x": 55.2936271373353,
+      "y": 65.18073767783885,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2991,
+      "kind": "hidden",
+      "x_norm": 0.6701788854554231,
+      "y_norm": 0.9055966535809644,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3710,
+        3711,
+        3712,
+        3713,
+        3714,
+        3715,
+        3716,
+        3717,
+        3718,
+        3719
+      ],
+      "id": "H08-D10",
+      "x": 67.01788854554232,
+      "y": 72.44773228647715,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2992,
+      "kind": "hidden",
+      "x_norm": 0.7769091474305384,
+      "y_norm": 0.9030581402263769,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3720,
+        3721,
+        3722,
+        3723,
+        3724,
+        3725,
+        3726,
+        3727,
+        3728,
+        3729
+      ],
+      "id": "H08-D11",
+      "x": 77.69091474305384,
+      "y": 72.24465121811015,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2993,
+      "kind": "hidden",
+      "x_norm": 0.8517654147349107,
+      "y_norm": 0.8224728042826651,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3730,
+        3731,
+        3732,
+        3733,
+        3734,
+        3735,
+        3736,
+        3737,
+        3738,
+        3739
+      ],
+      "id": "H08-D12",
+      "x": 85.17654147349107,
+      "y": 65.79782434261321,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2994,
+      "kind": "hidden",
+      "x_norm": 0.39486275668379844,
+      "y_norm": 0.5085092368144556,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3740,
+        3741,
+        3742,
+        3743,
+        3744,
+        3745,
+        3746,
+        3747,
+        3748,
+        3749
+      ],
+      "id": "H08-D13",
+      "x": 39.48627566837985,
+      "y": 40.68073894515645,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2995,
+      "kind": "hidden",
+      "x_norm": 0.4771689152126852,
+      "y_norm": 0.4687166741939886,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3750,
+        3751,
+        3752,
+        3753,
+        3754,
+        3755,
+        3756,
+        3757,
+        3758,
+        3759
+      ],
+      "id": "H08-D14",
+      "x": 47.716891521268515,
+      "y": 37.49733393551909,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2996,
+      "kind": "hidden",
+      "x_norm": 0.6043138208566903,
+      "y_norm": 0.4706034387038293,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3760,
+        3761,
+        3762,
+        3763,
+        3764,
+        3765,
+        3766,
+        3767,
+        3768,
+        3769
+      ],
+      "id": "H08-D15",
+      "x": 60.43138208566903,
+      "y": 37.64827509630634,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2997,
+      "kind": "hidden",
+      "x_norm": 0.699381698063913,
+      "y_norm": 0.5056993891303291,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "swarm_source_ids": [
+        3770,
+        3771,
+        3772,
+        3773,
+        3774,
+        3775,
+        3776,
+        3777,
+        3778,
+        3779
+      ],
+      "id": "H08-D16",
+      "x": 69.9381698063913,
+      "y": 40.45595113042633,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2998,
+      "kind": "hidden",
+      "x_norm": 0.786385059142104,
+      "y_norm": 0.5854913167111242,
+      "hp": 0.8,
+      "swarm_stock": 9,
+      "swarm_source_ids": [
+        3780,
+        3781,
+        3782,
+        3783,
+        3784,
+        3785,
+        3786,
+        3787,
+        3788
+      ],
+      "id": "H08-D17",
+      "x": 78.6385059142104,
+      "y": 46.839305336889936,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2999,
+      "kind": "hidden",
+      "x_norm": 0.8805953756622041,
+      "y_norm": 0.47727098656388345,
+      "hp": 0.8,
+      "swarm_stock": 9,
+      "swarm_source_ids": [
+        3789,
+        3790,
+        3791,
+        3792,
+        3793,
+        3794,
+        3795,
+        3796,
+        3797
+      ],
+      "id": "H08-D18",
+      "x": 88.05953756622041,
+      "y": 38.181678925110674,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    }
+  ],
+  "topology_idea": "保留复杂图内部结构、巢体类型和逐巢库存。 蓝方整体右移地图宽度的4%，不收紧点位。",
+  "blue_translation_fraction": [
+    0.04,
+    0
+  ],
+  "map_area": {
+    "lonMin": 11.58,
+    "lonMax": 12.82,
+    "latMin": 1.84,
+    "latMax": 2.82
+  },
+  "detection": {
+    "source": "RadarModelSimulator.execute_detection + ISimulator._is_geometrically_visible",
+    "range_m": 20000,
+    "distance_axes": "ECEF X,Y only",
+    "minimum_target_stage": 3,
+    "slice_altitude_m": 3000
+  },
+  "launch_altitude_external_m": 3000
+}

@@ -18,7 +18,7 @@ from .MissileDefenseElectromagneticInfo import MissileDefenseElectromagneticInfo
 @dataclass_json
 @dataclass
 class TargetCharacterInfoSetCmd:
-	# 雷达工作频率
+	# 视野塔工作频率
 	radarFrequency: float = 0.0
 	# 信号带宽
 	signalBandWidth: float = 0.0
@@ -30,7 +30,7 @@ class TargetCharacterInfoSetCmd:
 	aircraftElectromagneticInfo: list[AircraftElectromagneticInfo] = field(default_factory=list[AircraftElectromagneticInfo])
 	# 舰船目标电磁特征
 	shipElectromagneticInfo: list[ShipElectromagneticInfo] = field(default_factory=list[ShipElectromagneticInfo])
-	# 时敏雷达目标电磁特征
+	# 时敏视野塔目标电磁特征
 	radarElectromagneticInfo: list[RadarElectromagneticInfo] = field(default_factory=list[RadarElectromagneticInfo])
 	# 机场环境电磁特征
 	airportElectromagneticInfo: list[AirportElectromagneticInfo] = field(default_factory=list[AirportElectromagneticInfo])

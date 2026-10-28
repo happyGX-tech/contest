@@ -121,13 +121,13 @@
       "mission_type_name": "综合任务",
       "topology_id": "serial_double_gate",
       "topology_name": "串联双闸",
-      "design_intent": "两座雷达阵地沿同一纬线前后串联，构成宽前闸和窄后闸；一艘无人船前置在北侧前沿，另一艘位于中段，普通目标在末端展开成扇形。",
+      "design_intent": "两座视野塔阵地沿同一纬线前后串联，构成宽前闸和窄后闸；一艘暗巢前置在北侧前沿，另一艘位于中段，母巢在末端展开成扇形。",
       "structural_features": [
         "前沿—中段—末端层级",
         "双深度覆盖识别",
         "末端扇形分流"
       ],
-      "difficulty_mechanism": "7个计分目标、2部雷达和148枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.0。",
+      "difficulty_mechanism": "7个计分母巢、2部视野塔和148枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.0。",
       "objective_ids": [
         51,
         52,
@@ -267,13 +267,13 @@
       "mission_type_name": "综合任务",
       "topology_id": "separated_twin_islands",
       "topology_name": "南北双岛",
-      "design_intent": "蓝方资源被拆成北岛和南岛，中部留下大面积空域；两艘无人船位于西侧前沿，阵地居中，普通目标和另一艘船位于东部纵深。",
+      "design_intent": "蓝方资源被拆成北岛和南岛，中部留下大面积空域；两艘暗巢位于西侧前沿，阵地居中，母巢和另一艘船位于东部纵深。",
       "structural_features": [
         "南北双岛",
         "前沿—阵地—纵深分层",
         "跨岛资源差异"
       ],
-      "difficulty_mechanism": "8个计分目标、2部雷达和154枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.0。",
+      "difficulty_mechanism": "8个计分母巢、2部视野塔和154枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.0。",
       "objective_ids": [
         51,
         301,
@@ -426,13 +426,13 @@
       "mission_type_name": "综合任务",
       "topology_id": "hub_and_twin_islands",
       "topology_name": "堡垒双岛",
-      "design_intent": "公开目标和两座雷达收缩成中央堡垒，一艘计分无人船前置在西北侧，另一艘留在东南纵深，形成斜向双岛。",
+      "design_intent": "公开母巢和两座视野塔收缩成中央堡垒，一艘计分暗巢前置在西北侧，另一艘留在东南纵深，形成斜向双岛。",
       "structural_features": [
         "前沿西北孤岛",
         "中央高密度堡垒",
         "东南纵深孤岛"
       ],
-      "difficulty_mechanism": "7个计分目标、2部雷达和146枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.0。",
+      "difficulty_mechanism": "7个计分母巢、2部视野塔和146枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.0。",
       "objective_ids": [
         51,
         52,
@@ -572,13 +572,13 @@
       "mission_type_name": "综合任务",
       "topology_id": "staggered_s_gates",
       "topology_name": "折线四关",
-      "design_intent": "四个雷达节点从西北到东南交替错位，形成清晰的S形关卡；北侧无人船前置到第一关之前，其余节点分布在中段和末端。",
+      "design_intent": "四个视野塔节点从西北到东南交替错位，形成清晰的S形关卡；北侧暗巢前置到第一关之前，其余节点分布在中段和末端。",
       "structural_features": [
         "前沿节点先行暴露",
         "多关卡连续规避",
         "末端分支选择"
       ],
-      "difficulty_mechanism": "10个计分目标、4部雷达和268枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.5。",
+      "difficulty_mechanism": "10个计分母巢、4部视野塔和268枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.5。",
       "objective_ids": [
         51,
         52,
@@ -762,13 +762,13 @@
       "mission_type_name": "综合任务",
       "topology_id": "three_resource_islands",
       "topology_name": "三角三岛",
-      "design_intent": "北岛、南岛和东部中央岛构成巨大三角形；北/南无人船前置在西侧，阵地居中，普通目标与东部无人船拉开纵深。",
+      "design_intent": "北岛、南岛和东部中央岛构成巨大三角形；北/南暗巢前置在西侧，哨卫巢居中，普通母巢与东部暗巢拉开纵深。",
       "structural_features": [
         "三角三岛",
         "双前沿节点",
         "不同纵深资源组合"
       ],
-      "difficulty_mechanism": "9个计分目标、3部雷达和213枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.5。",
+      "difficulty_mechanism": "9个计分母巢、3部视野塔和213枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.5。",
       "objective_ids": [
         51,
         301,
@@ -930,20 +930,20 @@
     {
       "scenario_id": "M03",
       "display_id": "M03",
-      "title": "中等·双翼雷达结",
+      "title": "中等·双翼视野塔结",
       "difficulty": "medium",
       "difficulty_name": "中等",
       "mission_type": "comprehensive",
       "mission_type_name": "综合任务",
       "topology_id": "central_knot_dual_wings",
-      "topology_name": "双翼雷达结",
-      "design_intent": "三座雷达压缩成中央重叠结，一艘计分无人船前置在正西，另两艘分布在东北与东南纵深，构成前哨—核心—双翼。",
+      "topology_name": "双翼视野塔结",
+      "design_intent": "三座视野塔压缩成中央重叠结，一艘计分暗巢前置在正西，另两艘分布在东北与东南纵深，构成前哨—核心—双翼。",
       "structural_features": [
         "西侧前沿哨点",
-        "中央重叠雷达结",
+        "中央重叠视野塔结",
         "东部双翼节点"
       ],
-      "difficulty_mechanism": "9个计分目标、3部雷达和220枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.5。",
+      "difficulty_mechanism": "9个母巢、3部视野塔和220枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.5。",
       "objective_ids": [
         51,
         52,
@@ -1112,13 +1112,13 @@
       "mission_type_name": "综合任务",
       "topology_id": "nested_diamond_rings",
       "topology_name": "双环菱阵",
-      "design_intent": "六座雷达阵地组成外菱形与内门阵，两艘无人船前置在西北/西南前沿，第三艘留在东部纵深，形成前后夹层。",
+      "design_intent": "六座视野塔哨卫巢组成外菱形与内门阵，两艘暗巢前置在西北/西南前沿，第三艘留在东部纵深，形成前后夹层。",
       "structural_features": [
         "双前沿节点",
         "嵌套覆盖区判断",
         "分流—汇合—再分流"
       ],
-      "difficulty_mechanism": "14个计分目标、6部雷达和432枚拦截弹；蓝方拦截弹/红方高中性能打击弹=3.0。",
+      "difficulty_mechanism": "14个母巢、6部视野塔和432枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=3.0。",
       "objective_ids": [
         51,
         301,
@@ -1359,13 +1359,13 @@
       "mission_type_name": "综合任务",
       "topology_id": "honeycomb_archipelago",
       "topology_name": "蜂窝资源群",
-      "design_intent": "五个阵地与九个目标/无人船节点形成横跨全图的蜂窝资源群；两艘无人船前置在西侧上下边缘，另两艘保留在东部纵深。",
+      "design_intent": "五个哨卫巢与九个母巢/暗巢节点形成横跨全图的蜂窝资源群；两艘暗巢前置在西侧上下边缘，另两艘保留在东部纵深。",
       "structural_features": [
         "前后双层蜂窝",
         "多节点资源组合",
         "交叉覆盖与边缘节点"
       ],
-      "difficulty_mechanism": "14个计分目标、5部雷达和408枚拦截弹；蓝方拦截弹/红方高中性能打击弹=3.0。",
+      "difficulty_mechanism": "14个母巢、5部视野塔和408枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=3.0。",
       "objective_ids": [
         51,
         52,
@@ -1603,13 +1603,13 @@
       "mission_type_name": "综合任务",
       "topology_id": "four_quadrant_cells",
       "topology_name": "四象限断网",
-      "design_intent": "四艘计分无人船分置前沿西北/西南与纵深东北/东南四个象限，中央公开资源与上下雷达带把战场分成多块。",
+      "design_intent": "四艘计分暗巢分置前沿西北/西南与纵深东北/东南四个象限，中央公开资源与上下视野塔带把战场分成多块。",
       "structural_features": [
         "前后四象限节点",
         "中央公开资源簇",
-        "上下雷达带分区"
+        "上下视野塔带分区"
       ],
-      "difficulty_mechanism": "11个计分目标、4部雷达和288枚拦截弹；蓝方拦截弹/红方高中性能打击弹=3.0。",
+      "difficulty_mechanism": "11个母巢、4部视野塔和288枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=3.0。",
       "objective_ids": [
         51,
         52,

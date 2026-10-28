@@ -53,7 +53,6 @@ def build_learning_motion_policy(
             policy = PPOSharedPolicy(PPOConfig(
                 seed=0 if seed is None else seed,
                 observation_dim=observation_dim,
-                max_steps=max_steps,
             ))
         else:
             from .mappo_policy import MAPPOConfig, MAPPOSharedPolicy

@@ -16,5 +16,5 @@ class RadarDetectRegionChangeCmd:
 	status: bool = False
 	# 新的探测范围
 	maxDistance: float = 0.0
-	# 修改当前雷达扫描指向角度
+	# 修改当前视野塔扫描指向角度
 	direct: Vector3d = field(default_factory=Vector3d)

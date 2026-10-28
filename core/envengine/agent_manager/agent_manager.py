@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-#
 import logging
+from copy import deepcopy
 from typing import Dict, Optional, List
 import numpy as np
+from envengine.action_validation import IllegalActionError
 from user_agents.base_agent import BaseAgent, AgentType
 
 logger = logging.getLogger(__name__)
@@ -40,7 +42,7 @@ class AgentManager:
     def get_agent_by_entity(self, entity_id: int) -> Optional[BaseAgent]:
         """通过实体ID获取对应的智能体"""
         agent_id = self._entity_to_agent.get(entity_id)
-        if agent_id:
+        if agent_id is not None:
             return self._agents.get(agent_id)
         return None
 
@@ -82,7 +84,7 @@ class AgentManager:
                     "step": full_observation.get("step", 0),
                     "entity_id": entity_id,
                     "agent_id": agent_id,
-                    "self": entities[entity_id]  # 只包含自己的信息
+                    "self": deepcopy(entities[entity_id])
                 }
             return {}
         else:
@@ -98,25 +100,26 @@ class AgentManager:
         actions = []
         for agent_id, observation in agent_observations.items():
             agent = self._agents.get(agent_id)
-            if agent:
-                try:
-                    agent.set_observation(observation)
-                except Exception as e:
-                    logger.error(f"[智能体工厂] 智能体 {agent_id} 输入观测信息错误: {e}")
-            else:
-                logger.warning(f"[智能体工厂] 智能体 {agent_id} 不存在")
+            if agent is None:
+                raise IllegalActionError(f"智能体 {agent_id} 未注册")
+            agent.set_observation(deepcopy(observation))
 
-
-        for agent_id, observation in agent_observations.items():
-            agent = self._agents.get(agent_id)
-            if agent:
-                try:
-                    action = agent.get_action()
-                    actions.append(action)
-                except Exception as e:
-                    logger.error(f"[智能体工厂] 智能体 {agent_id} 获取动作失败: {e}")
-            else:
-                logger.warning(f"[智能体工厂] 智能体 {agent_id} 不存在")
+        for agent_id in agent_observations:
+            # Ownership comes from registration, never from the mutable agent.
+            entity_id = self._agent_to_entity[agent_id]
+            raw_action = self._agents[agent_id].get_action()
+            try:
+                action = np.asarray(raw_action, dtype=np.float64)
+            except (TypeError, ValueError) as exc:
+                raise IllegalActionError(f"智能体 {agent_id} 的动作必须是数值数组") from exc
+            if action.shape in ((0,), (0, 4)):
+                actions.append(np.empty((0, 4), dtype=np.float64))
+                continue
+            if action.ndim != 2 or action.shape[1] != 4 or not np.isfinite(action).all():
+                raise IllegalActionError(f"智能体 {agent_id} 的动作必须是有限数值 N x 4 数组")
+            if np.any(action[:, 1] != entity_id):
+                raise IllegalActionError(f"智能体 {agent_id} 只能控制自身实体 {entity_id}")
+            actions.append(action.copy())
 
         return actions
 
@@ -126,18 +129,17 @@ class AgentManager:
         :param agent_observations: {agent_id: observation}
         :return: {entity_id: actions} 格式的总动作字典
         """
-        action = {}
         agent = self._agents.get(-1)
-        if agent:
-            try:
-                agent.set_observation(agent_observations[-1])
-                action = agent.get_action()
-            except Exception as e:
-                logger.error(f"[智能体工厂] 部署智能体 生成动作失败: {e}")
-        else:
-            logger.warning(f"[智能体工厂] 部署智能体 不存在")
+        if agent is None:
+            raise RuntimeError("部署智能体不存在")
+        if -1 not in agent_observations:
+            raise RuntimeError("部署智能体未收到部署观测")
 
-        return action
+        # Deployment defines the initial state of the whole round. Propagate
+        # failures instead of swallowing them and returning an empty object,
+        # which would otherwise leave TrainingEnv in an infinite deploy loop.
+        agent.set_observation(agent_observations[-1])
+        return agent.get_action()
 
     def reset_all(self):
         """重置所有智能体"""

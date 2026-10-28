@@ -12,5 +12,5 @@ from ..BaseStruct import *
 @dataclass_json
 @dataclass
 class InterceptorGuidanceC:
-	# 拦截弹制导指令
+	# 自爆虫群制导指令
 	cmd: InterceptorGuidanceCmd = field(default_factory=InterceptorGuidanceCmd)

@@ -22,7 +22,7 @@ class SeekerOutput_17s:
 	Elevation: float = 0.0
 	# 搜索状态
 	SearchState: str = ""
-	# 雷达图
+	# 视野塔图
 	RDImage: list[float] = field(default_factory=list[float])
 	# BeamAzimuth
 	BeamAzimuth: float = 0.0

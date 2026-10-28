@@ -1,0 +1,593 @@
+{
+  "artifact_type": "logical_design_map_not_engine_scenario",
+  "map_id": "E04",
+  "title": "三岛跳转",
+  "tier_index": 0,
+  "distribution": "部分不均匀",
+  "source": {
+    "commit": "ad45a7bc804a88703d1259d6083ba57553a25dfb",
+    "scenario_sha256": "e18908bb7194cabb2eac2773198ea8bd5b3c998b7b1fc8b2c02491e7365d1012"
+  },
+  "revision": "current_map_design",
+  "units": "logical units, not km",
+  "size": [
+    75,
+    60
+  ],
+  "budget": {
+    "name": "简单",
+    "ids": "E01—E06",
+    "maps": 6,
+    "width": 75,
+    "height": 60,
+    "red": [
+      17,
+      24,
+      85
+    ],
+    "blue": [
+      3,
+      5,
+      4
+    ],
+    "swarm": 97,
+    "bounds": [
+      11.58,
+      12.51,
+      1.9625,
+      2.6975
+    ],
+    "red_total": 126,
+    "blue_total": 12,
+    "total_entities": 242,
+    "total_hp": 166.8,
+    "nominal_damage": 545,
+    "relative_area": 0.5625,
+    "public_target_budget_ratio": 0.34782608695652173,
+    "hidden_target_budget_ratio": 0.047058823529411764,
+    "swarm_ratio": 0.7698412698412699,
+    "hp_ratio": 0.30605504587155963
+  },
+  "deployment": {
+    "rows": 8,
+    "columns": 4,
+    "x_range": [
+      0,
+      15.0
+    ],
+    "y_range": [
+      0,
+      60
+    ],
+    "buffer_x_range": [
+      15.0,
+      18.0
+    ],
+    "shared_types": [
+      "毁灭者",
+      "突击者",
+      "清道夫"
+    ],
+    "per_cell_cap": null,
+    "red_assignment": "uniform_integer_counts",
+    "cells": [
+      {
+        "row": 1,
+        "column": 1,
+        "rect": [
+          0.0,
+          0.0,
+          3.75,
+          7.5
+        ]
+      },
+      {
+        "row": 1,
+        "column": 2,
+        "rect": [
+          3.75,
+          0.0,
+          7.5,
+          7.5
+        ]
+      },
+      {
+        "row": 1,
+        "column": 3,
+        "rect": [
+          7.5,
+          0.0,
+          11.25,
+          7.5
+        ]
+      },
+      {
+        "row": 1,
+        "column": 4,
+        "rect": [
+          11.25,
+          0.0,
+          15.0,
+          7.5
+        ]
+      },
+      {
+        "row": 2,
+        "column": 1,
+        "rect": [
+          0.0,
+          7.5,
+          3.75,
+          15.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 2,
+        "rect": [
+          3.75,
+          7.5,
+          7.5,
+          15.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "rect": [
+          7.5,
+          7.5,
+          11.25,
+          15.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 4,
+        "rect": [
+          11.25,
+          7.5,
+          15.0,
+          15.0
+        ]
+      },
+      {
+        "row": 3,
+        "column": 1,
+        "rect": [
+          0.0,
+          15.0,
+          3.75,
+          22.5
+        ]
+      },
+      {
+        "row": 3,
+        "column": 2,
+        "rect": [
+          3.75,
+          15.0,
+          7.5,
+          22.5
+        ]
+      },
+      {
+        "row": 3,
+        "column": 3,
+        "rect": [
+          7.5,
+          15.0,
+          11.25,
+          22.5
+        ]
+      },
+      {
+        "row": 3,
+        "column": 4,
+        "rect": [
+          11.25,
+          15.0,
+          15.0,
+          22.5
+        ]
+      },
+      {
+        "row": 4,
+        "column": 1,
+        "rect": [
+          0.0,
+          22.5,
+          3.75,
+          30.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 2,
+        "rect": [
+          3.75,
+          22.5,
+          7.5,
+          30.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 3,
+        "rect": [
+          7.5,
+          22.5,
+          11.25,
+          30.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 4,
+        "rect": [
+          11.25,
+          22.5,
+          15.0,
+          30.0
+        ]
+      },
+      {
+        "row": 5,
+        "column": 1,
+        "rect": [
+          0.0,
+          30.0,
+          3.75,
+          37.5
+        ]
+      },
+      {
+        "row": 5,
+        "column": 2,
+        "rect": [
+          3.75,
+          30.0,
+          7.5,
+          37.5
+        ]
+      },
+      {
+        "row": 5,
+        "column": 3,
+        "rect": [
+          7.5,
+          30.0,
+          11.25,
+          37.5
+        ]
+      },
+      {
+        "row": 5,
+        "column": 4,
+        "rect": [
+          11.25,
+          30.0,
+          15.0,
+          37.5
+        ]
+      },
+      {
+        "row": 6,
+        "column": 1,
+        "rect": [
+          0.0,
+          37.5,
+          3.75,
+          45.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 2,
+        "rect": [
+          3.75,
+          37.5,
+          7.5,
+          45.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 3,
+        "rect": [
+          7.5,
+          37.5,
+          11.25,
+          45.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 4,
+        "rect": [
+          11.25,
+          37.5,
+          15.0,
+          45.0
+        ]
+      },
+      {
+        "row": 7,
+        "column": 1,
+        "rect": [
+          0.0,
+          45.0,
+          3.75,
+          52.5
+        ]
+      },
+      {
+        "row": 7,
+        "column": 2,
+        "rect": [
+          3.75,
+          45.0,
+          7.5,
+          52.5
+        ]
+      },
+      {
+        "row": 7,
+        "column": 3,
+        "rect": [
+          7.5,
+          45.0,
+          11.25,
+          52.5
+        ]
+      },
+      {
+        "row": 7,
+        "column": 4,
+        "rect": [
+          11.25,
+          45.0,
+          15.0,
+          52.5
+        ]
+      },
+      {
+        "row": 8,
+        "column": 1,
+        "rect": [
+          0.0,
+          52.5,
+          3.75,
+          60.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 2,
+        "rect": [
+          3.75,
+          52.5,
+          7.5,
+          60.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 3,
+        "rect": [
+          7.5,
+          52.5,
+          11.25,
+          60.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 4,
+        "rect": [
+          11.25,
+          52.5,
+          15.0,
+          60.0
+        ]
+      }
+    ]
+  },
+  "requested_bands": {
+    "public_roots": [
+      1,
+      3,
+      2,
+      2
+    ],
+    "swarm_stock": [
+      9,
+      40,
+      29,
+      19
+    ]
+  },
+  "roots": [
+    {
+      "source_id": 54,
+      "kind": "watch",
+      "x_norm": 0.365,
+      "y_norm": 0.155,
+      "hp": 18.0,
+      "swarm_stock": 5,
+      "id": "E04-W02",
+      "x": 27.375,
+      "y": 9.3,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 168,
+      "kind": "hidden",
+      "x_norm": 0.415,
+      "y_norm": 0.165,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 4,
+      "id": "E04-D02",
+      "x": 31.125,
+      "y": 9.9,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2553,
+      "kind": "watch",
+      "x_norm": 0.606,
+      "y_norm": 0.4175,
+      "hp": 18.0,
+      "swarm_stock": 13,
+      "id": "E04-W01",
+      "x": 45.449999999999996,
+      "y": 25.049999999999997,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2555,
+      "kind": "watch",
+      "x_norm": 0.644,
+      "y_norm": 0.4425,
+      "hp": 18.0,
+      "swarm_stock": 13,
+      "id": "E04-W05",
+      "x": 48.300000000000004,
+      "y": 26.55,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 51,
+      "kind": "mother",
+      "x_norm": 0.7160000000000001,
+      "y_norm": 0.4375,
+      "hp": 24.0,
+      "swarm_stock": 0,
+      "id": "E04-B05",
+      "x": 53.7,
+      "y": 26.25,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 169,
+      "kind": "hidden",
+      "x_norm": 0.675,
+      "y_norm": 0.44,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 14,
+      "id": "E04-D03",
+      "x": 50.625,
+      "y": 26.4,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2559,
+      "kind": "watch",
+      "x_norm": 0.625,
+      "y_norm": 0.55,
+      "hp": 18.0,
+      "swarm_stock": 14,
+      "id": "E04-W04",
+      "x": 46.875,
+      "y": 33.0,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 53,
+      "kind": "mother",
+      "x_norm": 0.7160000000000001,
+      "y_norm": 0.5575,
+      "hp": 24.0,
+      "swarm_stock": 0,
+      "id": "E04-B03",
+      "x": 53.7,
+      "y": 33.45,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2570,
+      "kind": "hidden",
+      "x_norm": 0.675,
+      "y_norm": 0.56,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 15,
+      "id": "E04-D01",
+      "x": 50.625,
+      "y": 33.6,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2565,
+      "kind": "watch",
+      "x_norm": 0.815,
+      "y_norm": 0.8200000000000001,
+      "hp": 18.0,
+      "swarm_stock": 9,
+      "id": "E04-W03",
+      "x": 61.12499999999999,
+      "y": 49.2,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2573,
+      "kind": "hidden",
+      "x_norm": 0.865,
+      "y_norm": 0.83,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 10,
+      "id": "E04-D04",
+      "x": 64.875,
+      "y": 49.8,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2552,
+      "kind": "mother",
+      "x_norm": 0.925,
+      "y_norm": 0.84,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "id": "E04-B01",
+      "x": 69.375,
+      "y": 50.4,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    }
+  ],
+  "topology_idea": "三岛跳转：以哨卫巢视野组织通道，母巢提供纵深目标，暗巢形成搜索支线；默认红方在32格均匀部署。",
+  "blue_translation_fraction": [
+    0.04,
+    0
+  ],
+  "map_area": {
+    "lonMin": 11.58,
+    "lonMax": 12.51,
+    "latMin": 1.9625,
+    "latMax": 2.6975
+  },
+  "detection": {
+    "source": "RadarModelSimulator.execute_detection + ISimulator._is_geometrically_visible",
+    "range_m": 20000,
+    "distance_axes": "ECEF X,Y only",
+    "minimum_target_stage": 3,
+    "slice_altitude_m": 3000
+  },
+  "launch_altitude_external_m": 3000,
+  "distribution_rule": {
+    "public_cv_limit": 0.2,
+    "stock_cv_limit": 0.2,
+    "small_count_rule": "public limit=max(0.20, minimum CV achievable by integer counts in four bands)"
+  },
+  "blue_health_multiplier": 1.5
+}

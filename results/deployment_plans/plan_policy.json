@@ -1,0 +1,12 @@
+{
+  "comment": "按难度档选择部署布局（不做图内细分）。easy 用基线布局；medium/hard 用 M 东列诱饵布局。",
+  "variants": [
+    "HLopt4launch20",
+    "HMLopt4launch20"
+  ],
+  "bands": {
+    "easy": "HLopt4launch20",
+    "medium": "HMLopt4launch20",
+    "hard": "HMLopt4launch20"
+  }
+}

@@ -1,20 +1,20 @@
 {
   "scenario_id": "M03",
   "display_id": "M03",
-  "title": "中等·双翼雷达结",
+  "title": "中等·双翼视野塔结",
   "difficulty": "medium",
   "difficulty_name": "中等",
   "mission_type": "comprehensive",
   "mission_type_name": "综合任务",
   "topology_id": "central_knot_dual_wings",
-  "topology_name": "双翼雷达结",
-  "design_intent": "三座雷达压缩成中央重叠结，一艘计分无人船前置在正西，另两艘分布在东北与东南纵深，构成前哨—核心—双翼。",
+  "topology_name": "双翼视野塔结",
+  "design_intent": "三座视野塔压缩成中央重叠结，一艘计分暗巢前置在正西，另两艘分布在东北与东南纵深，构成前哨—核心—双翼。",
   "structural_features": [
     "西侧前沿哨点",
-    "中央重叠雷达结",
+    "中央重叠视野塔结",
     "东部双翼节点"
   ],
-  "difficulty_mechanism": "9个计分目标、3部雷达和220枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.5。",
+  "difficulty_mechanism": "9个母巢、3部视野塔和220枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.5。",
   "objective_ids": [
     51,
     52,
@@ -129,7 +129,7 @@
       "initial_information": "public"
     }
   ],
-  "scenario_sha256": "81dbb128708e15afce63c19ad12f4bcecf31b5b66712cf003c39407bc6d059c7",
+  "scenario_sha256": "6b151eee78c4353737ab677c0f8d4f9e74751b8a4e5a7eb0a4b35567351cddd9",
   "entity_total": 422,
   "blue_entity_total": 232,
   "blue_root_total": 9,

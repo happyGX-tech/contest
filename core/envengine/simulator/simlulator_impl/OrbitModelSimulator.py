@@ -1,25 +1,17 @@
-import datetime
-import time
 from typing import Callable
 
-from envengine.common import SimmerCommandType
 from envengine.sdk.base_struct.Basic import Vector3d, DetectInfo
 from envengine.sdk.base_struct.Entity import EntityExt
 from envengine.sdk.base_struct.Message import Command
-from envengine.sdk.Util import UtilsPy
-from envengine.sdk.Util import State_py
-from envengine.simulator.decorator import Simulator, timer_decorator
+from envengine.simulator.decorator import Simulator
 from envengine.simulator.interfaces import ISimulator
-# from envengine.simulator.models.OrbitModel.OrbitModelPy import JTC_OrbitModel
 from envengine.simulator.simulator_factory import SimulatorFactory
-
-EARTH_RADIUS = 6371000.0
 
 
 @Simulator.register("TleSatelliteS")
 class OrbitModelSimulator(ISimulator):
     """
-    轨道模型仿真器
+    天眼
     """
 
     def __init__(self, entity_ext: EntityExt,
@@ -42,25 +34,10 @@ class OrbitModelSimulator(ISimulator):
         执行仿真步进
         """
 
-        # 卫星轨道解算
-        # dt = datetime.datetime.fromtimestamp(self.sim_time / 1000)
-        # self.model.update(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second + dt.microsecond / 1000. / 1000.,
-        #                   50 / 1000)
-        # state: State_py = self.model.getState()
-        #
-        # pos = state.posEcf()
-        # vel = state.velEcf()
-        # lla = UtilsPy.CoordinateHelper.ecefToLla_py(pos)
-        # entity = self.entity_ext.entity
-        # entity.lla.x, entity.lla.y, entity.lla.z = lla.x(), lla.y(), lla.z()
-        # entity.posEcf.x, entity.posEcf.y, entity.posEcf.z = pos.x(), pos.y(), pos.z()
-        # entity.velEcf.x, entity.velEcf.y, entity.velEcf.z = vel.x(), vel.y(), vel.z()
-
         # 执行探测
-        self.execute_detection(Vector3d(124.625763, 27.482257, 0))
+        if self.sim_time % 1000 == 0:
+            self.execute_detection()
 
-        # 发送探测信息
-        self.send_detect_info()
 
     def set_lla(self, lla: Vector3d) -> None:
         """
@@ -74,51 +51,31 @@ class OrbitModelSimulator(ISimulator):
         """
         pass
 
-    # @timer_decorator
-    def send_detect_info(self):
+    def execute_detection(self):
         """
-        发送探测信息
-        """
-        if self.entity_ext.entity.detectInfo:
-            t0 = time.perf_counter()
-            # 基于通信距离触发
-            communication_candidate_simulators: list[ISimulator] = self._simulator_factory.get_simulators_by_side(
-                self.entity_ext.entity.sideId)
-            t1 = time.perf_counter()
-
-            can_communication_simulators: list[ISimulator] = self._get_targets_within_self_range(
-                communication_candidate_simulators,
-                max_range=500 * 1000)
-            t2 = time.perf_counter()
-            # 如果已经发送过同样的探测信息，则不再发送
-            can_communication_send_simulators = []
-            for i in can_communication_simulators:
-                if i.entity_ext.entity.id not in self._delivered_to:
-                    can_communication_send_simulators.append(i)
-                    self._delivered_to.add(i.entity_ext.entity.id)
-            # 构建探测信息指令
-            command_list: list[Command] = [Command(
-                executorId=i.entity_ext.entity.id,
-                commandTypeId=SimmerCommandType.DETECT_STATUS_UPDATE,
-                commandAttributes=self.entity_ext.entity.detectInfo
-            ) for i in can_communication_send_simulators]
-            t3 = time.perf_counter()
-            # print(f"获取己方实体时间：{t1-t0},获取通信距离内实体时间：{t2 - t1}, 构建探测指令时间{t3 - t2}")
-            # 指令转发
-            self._send_commands(command_list)
-
-    def execute_detection(self, detect_point: Vector3d = None):
-        """
-        执行探测
-        :param detect_point: 探测点
+        天眼启用期间，全局探测各类虫巢和已出巢虫群
         :return:
         """
-        detected_candidate_simulators: list[ISimulator] = self._simulator_factory.get_simulators_by_side(
-            1 if self.entity_ext.entity.sideId == 0 else 0)
-        detected: list[ISimulator] = self.detect_targets(detected_candidate_simulators, max_range=500 * 1000,
-                                                         detect_radius=200 * 1000, detect_point=detect_point)
+
+        """
+        9400:   母巢
+        9500:   暗巢
+        9600:   哨卫巢
+        24000:  自爆虫群
+        """
+
+        if self._simulator_factory is None or not self._simulator_factory.is_using_satellite():
+            return
+
+        detected: list[ISimulator] = []
+        for detect_t in [24000, 9400, 9500, 9600]:
+            for sim in self._simulator_factory.get_simulators_by_type(detect_t):
+                if sim.entity_ext.entity.isVisible and sim.entity_ext.entity.survivePoints > 0:
+                    detected.append(sim)
+
         if not detected:
             return
+
         # 组装探测信息
         detect_info: dict[int, DetectInfo] = {
             target.entity_ext.entity.id: DetectInfo(
@@ -139,6 +96,5 @@ class OrbitModelSimulator(ISimulator):
         super().reset()
 
     def init_model(self) -> None:
-        # self.model = JTC_OrbitModel("1 68310U 26057S   26147.90258910  .00262022  00000-0  17035-2 0  9994",
         #                             "2 68310  97.2843 274.2645 0001211  70.9562 289.1834 15.75199990")
         pass

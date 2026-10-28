@@ -7,10 +7,14 @@ from enum import IntEnum
 
 
 class SimmerCommandType(IntEnum):
+    """
+    Attributes:
+        ATTACK_COMMANDER_START: 进攻指控装订
+    """
     MISSILE_LAUNCH = 200  # 进攻弹发射
-    INTERCEPTOR_LAUNCH = 201  # 拦截弹发射
+    INTERCEPTOR_LAUNCH = 201  # 自爆虫群发射
     MISSILE_GUIDANCE = 202  # 进攻弹制导
-    INTERCEPTOR_GUIDANCE = 203  # 拦截弹制导
+    INTERCEPTOR_GUIDANCE = 203  # 自爆虫群制导
     MISSILE_CHANGE_ROUTE = 204  # 进攻弹修改航迹
     LASER_EMIT = 205  # 发射激光
     PAINT_EMIT = 206  # 发射喷涂
@@ -18,7 +22,7 @@ class SimmerCommandType(IntEnum):
     MOVE = 300  # 开始移动
     PATROL_ALONG_ROUTE = 301  # 按路径点巡逻
     PATROL_CIRCLE = 302  # 大圆巡逻
-    CHANGE_ORBIT = 303  # 卫星变轨
+    CHANGE_ORBIT = 303  # 天眼变轨
     GROUP_MOVE = 310  # 编组移动
     GROUP_PATROL_ROUTE = 311  # 编组按路径巡逻
     GROUP_PATROL_CIRCLE = 312  # 编组大圆巡逻
@@ -64,10 +68,10 @@ class SimmerCommandType(IntEnum):
     SET_DESIRED_ACC_Z = 3007  # 设置飞行器侧向加速度
     DEPLOY = 3008  # 部署
     DEPLOY_COMPLETED = 3009  # 部署完成
-    RADAR_DETECT_STATUS_UPDATE = 3010  # 雷达探测状态更新
+    RADAR_DETECT_STATUS_UPDATE = 3010  # 视野塔探测状态更新
     EXECUTE_DETECTION = 3011  # 执行探测
     SET_DESIRED_VEL_X = 3012  # 设置飞行器轴向速度
-    EXECUTE_SATELLITE_DETECTION = 3013  # 请求卫星探测
+    EXECUTE_SATELLITE_DETECTION = 3013  # 请求天眼探测
     CHANGE_MISSILE_TARGET = 3014  # 修改导弹目标点
 
 

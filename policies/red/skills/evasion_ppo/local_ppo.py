@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 import torch
@@ -12,6 +12,12 @@ from torch import nn
 from torch.distributions import Categorical
 
 from .local_env import ACTION_COUNT, LocalAvoidConfig, STRAIGHT, VectorLocalAvoidEnv
+
+
+ActionMaskFn = Callable[[np.ndarray], np.ndarray]
+ExpertPriorFn = Callable[
+    [np.ndarray], tuple[np.ndarray, np.ndarray, np.ndarray]
+]
 
 
 @dataclass
@@ -38,6 +44,13 @@ class LocalPPOConfig:
     symmetry_critic_coef: float = 0.0
     permutation_actor_coef: float = 0.0
     permutation_critic_coef: float = 0.0
+    # Update-side switches, all off by default. They only change how the
+    # collected rollout is optimised, never what the actor observes.
+    target_kl: float = 0.0
+    clip_range_value: float | None = None
+    dual_clip: float | None = None
+    reward_clip: float | None = None
+    advantage_standardize: bool = False
     seed: int = 20260924
     device: str = "auto"
 
@@ -92,8 +105,19 @@ def _mlp(input_dim: int, hidden: tuple[int, ...], output_dim: int) -> nn.Sequent
 def mirror_actor_observations(values: np.ndarray) -> np.ndarray:
     """Reflect local observations across the missile's longitudinal axis."""
     result = np.asarray(values, dtype=np.float32).copy()
+    if result.shape[-1] == 85:
+        # Set-attention ABI: six ego/goal features, eight 9-float threat
+        # tokens, action-history/elapsed context, and three type bits.
+        result[..., 1] *= -1.0
+        result[..., 4] *= -1.0
+        threat_blocks = result[..., 6:78].reshape(result.shape[:-1] + (8, 9))
+        threat_blocks[..., :, 2] *= -1.0
+        action_history = result[..., 78:81].copy()
+        result[..., 78] = action_history[..., 2]
+        result[..., 80] = action_history[..., 0]
+        return result
     if result.shape[-1] != 33:
-        raise ValueError("actor observation must have 33 features")
+        raise ValueError("actor observation must have 33 or 85 features")
     result[..., 1] *= -1.0
     result[..., 4] *= -1.0
 
@@ -120,8 +144,16 @@ def mirror_actor_observations(values: np.ndarray) -> np.ndarray:
 def mirror_critic_states(values: np.ndarray) -> np.ndarray:
     """Reflect privileged geometry while preserving each threat's identity slot."""
     result = np.asarray(values, dtype=np.float32).copy()
+    if result.shape[-1] == 125:
+        result[..., :85] = mirror_actor_observations(result[..., :85])
+        threat_extras = result[..., 85:125].reshape(
+            result.shape[:-1] + (8, 5)
+        )
+        threat_extras[..., :, 2] *= -1.0
+        threat_extras[..., :, 4] *= -1.0
+        return result
     if result.shape[-1] != 43:
-        raise ValueError("critic state must have 43 features")
+        raise ValueError("critic state must have 43 or 125 features")
     result[..., :33] = mirror_actor_observations(result[..., :33])
     threat_extras = result[..., 33:43].reshape(result.shape[:-1] + (2, 5))
     threat_extras[..., :, 2] *= -1.0
@@ -231,6 +263,8 @@ class LocalAvoidPPO:
         *,
         deterministic: bool = False,
         update_normalizer: bool = False,
+        action_masks: np.ndarray | None = None,
+        logit_biases: np.ndarray | None = None,
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         actor_normalized = self._normalize_actor(
             actor_observation, update_normalizer
@@ -244,6 +278,28 @@ class LocalAvoidPPO:
         )
         with torch.no_grad():
             logits = self.network.actor_logits(actor_tensor)
+            if logit_biases is not None:
+                biases = torch.as_tensor(
+                    logit_biases, dtype=logits.dtype, device=self.device
+                )
+                if biases.shape != logits.shape:
+                    raise ValueError(
+                        f"logit bias shape {tuple(biases.shape)} does not match "
+                        f"logits {tuple(logits.shape)}"
+                    )
+                logits = logits + biases
+            if action_masks is not None:
+                masks = torch.as_tensor(
+                    action_masks, dtype=torch.bool, device=self.device
+                )
+                if masks.shape != logits.shape:
+                    raise ValueError(
+                        f"action mask shape {tuple(masks.shape)} does not match "
+                        f"logits {tuple(logits.shape)}"
+                    )
+                if not bool(torch.all(masks.any(dim=-1))):
+                    raise ValueError("every action mask row must allow at least one action")
+                logits = logits.masked_fill(~masks, torch.finfo(logits.dtype).min)
             distribution = Categorical(logits=logits)
             actions = (
                 torch.argmax(logits, dim=-1)
@@ -283,7 +339,12 @@ class LocalAvoidPPO:
             rewards / np.sqrt(self.reward_rms.var + 1e-8), -10.0, 10.0
         ).astype(np.float32)
 
-    def update(self, rollout: dict[str, np.ndarray]) -> dict[str, float]:
+    def update(
+        self,
+        rollout: dict[str, np.ndarray],
+        *,
+        expert_bc_coef: float = 0.0,
+    ) -> dict[str, float]:
         device = self.device
         observations = torch.as_tensor(
             rollout["observations"], dtype=torch.float32, device=device
@@ -299,11 +360,53 @@ class LocalAvoidPPO:
             rollout["values"], dtype=torch.float32, device=device
         )
         returns = torch.as_tensor(rollout["returns"], dtype=torch.float32, device=device)
+        if self.config.reward_clip is not None:
+            returns = torch.clamp(
+                returns, -self.config.reward_clip, self.config.reward_clip
+            )
         advantages = torch.as_tensor(
             rollout["advantages"], dtype=torch.float32, device=device
         )
-        advantages = (advantages - advantages.mean()) / (
-            advantages.std(unbiased=False) + 1e-8
+        if self.config.advantage_standardize:
+            advantages = advantages / (advantages.std(unbiased=False) + 1e-8)
+        else:
+            advantages = (advantages - advantages.mean()) / (
+                advantages.std(unbiased=False) + 1e-8
+            )
+        action_masks = torch.as_tensor(
+            rollout.get(
+                "action_masks",
+                np.ones((len(rollout["actions"]), self.config.action_dim), dtype=np.bool_),
+            ),
+            dtype=torch.bool,
+            device=device,
+        )
+        logit_biases = torch.as_tensor(
+            rollout.get(
+                "logit_biases",
+                np.zeros(
+                    (len(rollout["actions"]), self.config.action_dim),
+                    dtype=np.float32,
+                ),
+            ),
+            dtype=torch.float32,
+            device=device,
+        )
+        expert_actions = torch.as_tensor(
+            rollout.get(
+                "expert_actions",
+                np.zeros(len(rollout["actions"]), dtype=np.int64),
+            ),
+            dtype=torch.long,
+            device=device,
+        )
+        expert_valid = torch.as_tensor(
+            rollout.get(
+                "expert_valid",
+                np.zeros(len(rollout["actions"]), dtype=np.bool_),
+            ),
+            dtype=torch.bool,
+            device=device,
         )
         mirrored_observations = None
         mirrored_critic_states = None
@@ -351,15 +454,23 @@ class LocalAvoidPPO:
             "symmetry_critic_loss": 0.0,
             "permutation_actor_loss": 0.0,
             "permutation_critic_loss": 0.0,
+            "expert_bc_loss": 0.0,
         }
         updates = 0
+        stopped_early = False
         sample_count = observations.shape[0]
         for _ in range(self.config.ppo_epochs):
             permutation = torch.randperm(sample_count, device=device)
             for start in range(0, sample_count, self.config.minibatch_size):
                 index = permutation[start:start + self.config.minibatch_size]
-                logits = self.network.actor_logits(observations[index])
-                distribution = Categorical(logits=logits)
+                bare_logits = self.network.actor_logits(observations[index])
+                bare_masked_logits = bare_logits.masked_fill(
+                    ~action_masks[index], torch.finfo(bare_logits.dtype).min
+                )
+                guided_logits = (bare_logits + logit_biases[index]).masked_fill(
+                    ~action_masks[index], torch.finfo(bare_logits.dtype).min
+                )
+                distribution = Categorical(logits=guided_logits)
                 new_log_probs = distribution.log_prob(actions[index])
                 entropy = distribution.entropy().mean()
                 ratio = torch.exp(new_log_probs - old_log_probs[index])
@@ -369,16 +480,36 @@ class LocalAvoidPPO:
                     1.0 - self.config.clip_range,
                     1.0 + self.config.clip_range,
                 ) * advantages[index]
-                policy_loss = -torch.minimum(unclipped, clipped).mean()
+                policy_loss = -torch.minimum(unclipped, clipped)
+                if self.config.dual_clip is not None:
+                    policy_loss = -torch.maximum(
+                        -policy_loss,
+                        self.config.dual_clip * advantages[index].abs(),
+                    )
+                policy_loss = policy_loss.mean()
                 predicted = self.network.value(critic_states[index])
-                value_loss = 0.5 * (predicted - returns[index]).pow(2).mean()
+                if self.config.clip_range_value is not None:
+                    value_clip = self.config.clip_range_value
+                    clipped_values = old_values[index] + torch.clamp(
+                        predicted - old_values[index], -value_clip, value_clip
+                    )
+                    value_loss = 0.5 * torch.maximum(
+                        (predicted - returns[index]).pow(2),
+                        (clipped_values - returns[index]).pow(2),
+                    ).mean()
+                else:
+                    value_loss = 0.5 * (predicted - returns[index]).pow(2).mean()
                 symmetry_actor_loss = torch.zeros((), device=device)
                 if mirrored_observations is not None:
                     mirrored_logits = self.network.actor_logits(
                         mirrored_observations[index]
                     )
+                    mirrored_masks = action_masks[index][:, [2, 1, 0]]
+                    mirrored_logits = mirrored_logits.masked_fill(
+                        ~mirrored_masks, torch.finfo(mirrored_logits.dtype).min
+                    )
                     target_probabilities = torch.softmax(
-                        logits.detach(), dim=-1
+                        bare_masked_logits.detach(), dim=-1
                     )[:, [2, 1, 0]]
                     symmetry_actor_loss = torch.sum(
                         target_probabilities
@@ -401,7 +532,12 @@ class LocalAvoidPPO:
                     permuted_logits = self.network.actor_logits(
                         permuted_observations[index]
                     )
-                    target_probabilities = torch.softmax(logits.detach(), dim=-1)
+                    permuted_logits = permuted_logits.masked_fill(
+                        ~action_masks[index], torch.finfo(permuted_logits.dtype).min
+                    )
+                    target_probabilities = torch.softmax(
+                        bare_masked_logits.detach(), dim=-1
+                    )
                     permutation_actor_loss = torch.sum(
                         target_probabilities
                         * (
@@ -416,6 +552,12 @@ class LocalAvoidPPO:
                     permutation_critic_loss = 0.5 * (
                         permuted_values - predicted.detach()
                     ).pow(2).mean()
+                expert_bc_loss = torch.zeros((), device=device)
+                valid = expert_valid[index]
+                if expert_bc_coef > 0.0 and bool(valid.any()):
+                    expert_bc_loss = nn.functional.cross_entropy(
+                        bare_masked_logits[valid], expert_actions[index][valid]
+                    )
                 loss = (
                     policy_loss
                     + self.config.value_coef * value_loss
@@ -424,6 +566,7 @@ class LocalAvoidPPO:
                     + self.config.symmetry_critic_coef * symmetry_critic_loss
                     + self.config.permutation_actor_coef * permutation_actor_loss
                     + self.config.permutation_critic_coef * permutation_critic_loss
+                    + expert_bc_coef * expert_bc_loss
                 )
                 self.optimizer.zero_grad(set_to_none=True)
                 loss.backward()
@@ -452,11 +595,29 @@ class LocalAvoidPPO:
                 totals["permutation_critic_loss"] += float(
                     permutation_critic_loss.item()
                 )
+                totals["expert_bc_loss"] += float(expert_bc_loss.item())
                 updates += 1
+                if (
+                    self.config.target_kl is not None
+                    and self.config.target_kl > 0.0
+                    and updates > 0
+                ):
+                    approximate_kl = totals["approx_kl"] / updates
+                    if approximate_kl > 1.5 * self.config.target_kl:
+                        stopped_early = True
+                        break
+            if stopped_early:
+                break
         self.update_count += 1
         result = {key: value / max(updates, 1) for key, value in totals.items()}
         result["samples"] = float(sample_count)
+        result["expert_samples"] = float(expert_valid.sum().item())
+        result["expert_bc_coef"] = float(expert_bc_coef)
+        result["kl_stopped_early"] = 1.0 if stopped_early else 0.0
         result["reward_mean"] = float(rollout["raw_rewards"].mean())
+        result["reward_std"] = float(rollout["raw_rewards"].std())
+        result["normalized_reward_mean"] = float(rollout["rewards"].mean())
+        result["normalized_reward_std"] = float(rollout["rewards"].std())
         result["explained_variance"] = float(
             1.0
             - np.var(rollout["returns"] - rollout["values"])
@@ -523,6 +684,9 @@ def collect_rollout(
     environment: VectorLocalAvoidEnv,
     actor_observation: np.ndarray,
     critic_state: np.ndarray,
+    *,
+    action_mask_fn: ActionMaskFn | None = None,
+    expert_prior_fn: ExpertPriorFn | None = None,
 ) -> tuple[dict[str, np.ndarray], np.ndarray, np.ndarray, list[dict[str, Any]]]:
     rows: dict[str, list[np.ndarray]] = {
         key: []
@@ -532,19 +696,47 @@ def collect_rollout(
             "raw_observations",
             "raw_critic_states",
             "actions",
+            "action_masks",
             "log_probs",
             "values",
             "rewards",
             "raw_rewards",
             "dones",
+            "logit_biases",
+            "expert_actions",
+            "expert_valid",
         )
     }
     completed: list[dict[str, Any]] = []
     for _ in range(policy.config.rollout_steps):
+        action_masks = (
+            np.asarray(action_mask_fn(actor_observation), dtype=np.bool_)
+            if action_mask_fn is not None
+            else np.ones(
+                (actor_observation.shape[0], policy.config.action_dim),
+                dtype=np.bool_,
+            )
+        )
+        if expert_prior_fn is None:
+            logit_biases = np.zeros(
+                (actor_observation.shape[0], policy.config.action_dim),
+                dtype=np.float32,
+            )
+            expert_actions = np.zeros(actor_observation.shape[0], dtype=np.int64)
+            expert_valid = np.zeros(actor_observation.shape[0], dtype=np.bool_)
+        else:
+            logit_biases, expert_actions, expert_valid = expert_prior_fn(
+                actor_observation
+            )
+            logit_biases = np.asarray(logit_biases, dtype=np.float32)
+            expert_actions = np.asarray(expert_actions, dtype=np.int64)
+            expert_valid = np.asarray(expert_valid, dtype=np.bool_)
         actions, log_probs, values, normalized_actor, normalized_critic = policy.act(
             actor_observation,
             critic_state,
             update_normalizer=not policy.config.freeze_observation_normalizer,
+            action_masks=action_masks,
+            logit_biases=logit_biases,
         )
         next_actor, next_critic, raw_rewards, dones, infos = environment.step(actions)
         rewards = policy.normalize_rewards(raw_rewards, dones)
@@ -553,11 +745,15 @@ def collect_rollout(
         rows["raw_observations"].append(actor_observation.copy())
         rows["raw_critic_states"].append(critic_state.copy())
         rows["actions"].append(actions)
+        rows["action_masks"].append(action_masks)
         rows["log_probs"].append(log_probs)
         rows["values"].append(values)
         rows["rewards"].append(rewards)
         rows["raw_rewards"].append(raw_rewards)
         rows["dones"].append(dones)
+        rows["logit_biases"].append(logit_biases)
+        rows["expert_actions"].append(expert_actions)
+        rows["expert_valid"].append(expert_valid)
         completed.extend(
             info for info in infos if "terminated" in info or "truncated" in info
         )
@@ -610,6 +806,14 @@ def summarize_episodes(
         "arrival_rate": arrivals / max(count, 1),
         "recovery_rate": recoveries / max(count, 1),
         "timeout_rate": timeouts / max(count, 1),
+        "mean_episode_return": float(
+            np.mean([item.get("episode_return", 0.0) for item in episodes])
+            if episodes else 0.0
+        ),
+        "mean_episode_length": float(
+            np.mean([item.get("episode_steps", 0.0) for item in episodes])
+            if episodes else 0.0
+        ),
         "mean_extra_path_length_m": float(
             np.mean([item["extra_path_m"] for item in episodes]) if episodes else 0.0
         ),
@@ -644,6 +848,7 @@ def evaluate_policy(
     episodes: int,
     seed: int,
     straight_baseline: bool = False,
+    action_mask_fn: ActionMaskFn | None = None,
 ) -> dict[str, float]:
     num_envs = min(policy.config.num_parallel_envs, max(1, episodes))
     environment = VectorLocalAvoidEnv(
@@ -656,11 +861,17 @@ def evaluate_policy(
         if straight_baseline:
             actions = np.full(num_envs, STRAIGHT, dtype=np.int64)
         else:
+            action_masks = (
+                np.asarray(action_mask_fn(actor_observation), dtype=np.bool_)
+                if action_mask_fn is not None
+                else None
+            )
             actions = policy.act(
                 actor_observation,
                 critic_state,
                 deterministic=True,
                 update_normalizer=False,
+                action_masks=action_masks,
             )[0]
         actor_observation, critic_state, _reward, _done, infos = environment.step(actions)
         selected.append(actions.copy())

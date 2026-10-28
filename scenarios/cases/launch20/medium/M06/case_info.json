@@ -1,0 +1,555 @@
+{
+  "scenario_id": "M06",
+  "display_id": "M06",
+  "title": "北窗南堡",
+  "difficulty": "medium",
+  "scenario_sha256": "5be4f8c39f10c342857e868084426b371ad30ad5ec25b60801639c35ae1e039f",
+  "design_intent": "北窗南堡布局中，集中清除关键哨卫巢，为后续攻击母巢提供局部通道。",
+  "max_steps": 3000,
+  "topology_model": "tier_inventory_balance_20261016",
+  "map_area": {
+    "lonMin": 11.314289598619148,
+    "lonMax": 12.665,
+    "latMin": 1.90125,
+    "latMax": 2.75875
+  },
+  "map_size_m": [
+    150233.43517597238,
+    94818.14801094892
+  ],
+  "public_engagement_polygon": [
+    [
+      11.85125,
+      1.90125
+    ],
+    [
+      12.665,
+      1.90125
+    ],
+    [
+      12.665,
+      2.75875
+    ],
+    [
+      11.85125,
+      2.75875
+    ]
+  ],
+  "public_engagement_polygon_source": "场景预先公开的固定边界，数值记录在public_engagement_polygon。",
+  "deployment_rule": "连续矩形内自由选择每个单位初始位置；格子方案仅作部署策略对照。全体红方在首次战斗推进前出发。",
+  "launch_altitude_external_m": 3000,
+  "roots": [
+    {
+      "id": 51,
+      "kind": "target",
+      "lon": 12.313067458155222,
+      "lat": 2.631375019121482,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 53,
+      "kind": "target",
+      "lon": 12.454739522565486,
+      "lat": 2.276965731073545,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 54,
+      "kind": "site",
+      "lon": 11.986696814449775,
+      "lat": 2.645429603886936,
+      "hp": 18.0,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 55
+    },
+    {
+      "id": 169,
+      "kind": "ship",
+      "lon": 12.077778650936558,
+      "lat": 2.657792544992615,
+      "hp": 1.2000000000000002,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 310,
+      "kind": "site",
+      "lon": 12.056761805933672,
+      "lat": 2.511207615697285,
+      "hp": 18.0,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 311
+    },
+    {
+      "id": 2728,
+      "kind": "target",
+      "lon": 12.516267101353408,
+      "lat": 2.0619017572047262,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2731,
+      "kind": "site",
+      "lon": 12.08642375,
+      "lat": 2.5121023816423946,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2732
+    },
+    {
+      "id": 2733,
+      "kind": "site",
+      "lon": 12.131078431919141,
+      "lat": 2.3131406003918293,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2734
+    },
+    {
+      "id": 2735,
+      "kind": "site",
+      "lon": 12.095116088513992,
+      "lat": 2.2407908617552605,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2736
+    },
+    {
+      "id": 2739,
+      "kind": "site",
+      "lon": 12.190660883842945,
+      "lat": 2.0418290805046952,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2740
+    },
+    {
+      "id": 2741,
+      "kind": "site",
+      "lon": 12.16965678645215,
+      "lat": 2.0418290805046952,
+      "hp": 18.0,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2742
+    },
+    {
+      "id": 2745,
+      "kind": "site",
+      "lon": 12.212892763165856,
+      "lat": 2.0404366447215088,
+      "hp": 18.0,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2746
+    },
+    {
+      "id": 2749,
+      "kind": "site",
+      "lon": 12.253439247565371,
+      "lat": 2.0098836278263468,
+      "hp": 18.0,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2750
+    },
+    {
+      "id": 2751,
+      "kind": "site",
+      "lon": 12.309683628579243,
+      "lat": 1.9646456642044214,
+      "hp": 18.0,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2752
+    },
+    {
+      "id": 2753,
+      "kind": "ship",
+      "lon": 12.116257124460772,
+      "lat": 2.5496371620164497,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2755,
+      "kind": "ship",
+      "lon": 12.180509059344468,
+      "lat": 2.4505620404042388,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2758,
+      "kind": "ship",
+      "lon": 12.188205957795644,
+      "lat": 2.394490742348283,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2759,
+      "kind": "ship",
+      "lon": 12.275485,
+      "lat": 2.24639375,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2760,
+      "kind": "ship",
+      "lon": 12.26332621887959,
+      "lat": 2.1742054119897096,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2761,
+      "kind": "ship",
+      "lon": 12.352862740575379,
+      "lat": 2.041783172821079,
+      "hp": 1.2000000000000002,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2763,
+      "kind": "ship",
+      "lon": 12.395868060829718,
+      "lat": 1.9698322499029695,
+      "hp": 1.2000000000000002,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2729,
+      "kind": "target",
+      "lon": 12.55857252908042,
+      "lat": 2.0140951942249288,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 3289,
+      "kind": "ship",
+      "lon": 12.29059818248953,
+      "lat": 2.0458147510822378,
+      "hp": 1.2000000000000002,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 3290,
+      "kind": "ship",
+      "lon": 12.212944511345615,
+      "lat": 2.2299175854408624,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 3292,
+      "kind": "ship",
+      "lon": 12.176031361175577,
+      "lat": 2.299575024397473,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 3293,
+      "kind": "ship",
+      "lon": 12.154931738654385,
+      "lat": 2.1113375,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 3294,
+      "kind": "ship",
+      "lon": 12.09519896946705,
+      "lat": 2.5304426622023293,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 3295,
+      "kind": "ship",
+      "lon": 12.248633123936377,
+      "lat": 2.0821481960701305,
+      "hp": 1.2000000000000002,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 3296,
+      "kind": "ship",
+      "lon": 12.140069017770427,
+      "lat": 2.254356437749617,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 3297,
+      "kind": "site",
+      "lon": 12.359421983337871,
+      "lat": 2.463285849855793,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 3298
+    },
+    {
+      "id": 3299,
+      "kind": "site",
+      "lon": 12.466345105556867,
+      "lat": 2.1934675936607215,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 3300
+    },
+    {
+      "id": 3301,
+      "kind": "target",
+      "lon": 12.153431414977131,
+      "lat": 2.3664626654490313,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 3302,
+      "kind": "target",
+      "lon": 12.045264525534193,
+      "lat": 2.6886232214484433,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    }
+  ],
+  "root_counts": {
+    "target": 6,
+    "site": 12,
+    "ship": 15
+  },
+  "red_missile_counts": {
+    "high": 27,
+    "medium": 37,
+    "low": 128
+  },
+  "blue_root_total": 33,
+  "radar_total": 12,
+  "interceptor_total": 146,
+  "entity_total": 385,
+  "interceptor_counts": {
+    "54": 6,
+    "169": 6,
+    "310": 6,
+    "2731": 5,
+    "2733": 5,
+    "2735": 5,
+    "2739": 5,
+    "2741": 6,
+    "2745": 6,
+    "2749": 6,
+    "2751": 6,
+    "2753": 5,
+    "2755": 5,
+    "2758": 5,
+    "2759": 5,
+    "2760": 5,
+    "2761": 6,
+    "2763": 6,
+    "3289": 6,
+    "3290": 5,
+    "3292": 5,
+    "3293": 5,
+    "3294": 5,
+    "3295": 6,
+    "3296": 5,
+    "3297": 5,
+    "3299": 5
+  },
+  "objective_ids": [
+    51,
+    53,
+    54,
+    169,
+    310,
+    2728,
+    2731,
+    2733,
+    2735,
+    2739,
+    2741,
+    2745,
+    2749,
+    2751,
+    2753,
+    2755,
+    2758,
+    2759,
+    2760,
+    2761,
+    2763,
+    2729,
+    3289,
+    3290,
+    3292,
+    3293,
+    3294,
+    3295,
+    3296,
+    3297,
+    3299,
+    3301,
+    3302
+  ],
+  "public_objective_ids": [
+    51,
+    53,
+    54,
+    310,
+    2728,
+    2731,
+    2733,
+    2735,
+    2739,
+    2741,
+    2745,
+    2749,
+    2751,
+    2729,
+    3297,
+    3299,
+    3301,
+    3302
+  ],
+  "hidden_objective_ids": [
+    169,
+    2753,
+    2755,
+    2758,
+    2759,
+    2760,
+    2761,
+    2763,
+    3289,
+    3290,
+    3292,
+    3293,
+    3294,
+    3295,
+    3296
+  ],
+  "dark_to_mother_ratio": 2.5,
+  "balance_status": "减量与布局调整；全组合成绩以当前版本真实测试为准。",
+  "initial_speed_note": "毁灭者、突击者、清道夫的标称速度分别为200、180、100m/s；实际到达时间由原生模型的加速、转向和飞行阶段决定。",
+  "detection": {
+    "range_m": 20000,
+    "altitude_m": 3000,
+    "deployment_front_to_nearest_sentinel_center_km": 24.784540937196525,
+    "conservative_horizontal_clearance_km": 4.784540937196525,
+    "note": "按各哨卫巢初始纬度计算其到部署东侧边界的东西距离，最小距离减20公里作为静态水平间距。实际探测使用三维距离及目标飞行阶段。"
+  },
+  "layout_revision": "tier_inventory_balance_20261016",
+  "satelliteMaxUseCount": 1,
+  "balance_design": {
+    "interceptors_before": 224,
+    "interceptors_after": 146,
+    "remaining_ratio": 0.6517857142857143,
+    "ratio_denominator": "毁灭者数量＋突击者数量",
+    "non_scavenger_agents": 64,
+    "interceptors_per_attack_agent_before": 3.5,
+    "interceptors_per_attack_agent_after": 2.28125,
+    "desired_score_gain": 15,
+    "score_rule": "完整摧毁目标加权计分",
+    "geometry": "波次接续布局"
+  },
+  "scoring": "destroyed_objective_weight_ratio",
+  "wave_handoff": {
+    "mother_id": 53,
+    "gate_ids": [
+      2735,
+      2733
+    ],
+    "dark_ids": [
+      3296,
+      3292
+    ],
+    "gap_km": 38,
+    "rear_lateral_offset_km": 0,
+    "corridor_lla": [
+      [
+        12.077134916811417,
+        2.276965731073545
+      ],
+      [
+        12.20300311872944,
+        2.276965731073545
+      ]
+    ],
+    "gate_center_lla": [
+      12.113097260216566,
+      2.276965731073545
+    ],
+    "corridor_half_width_km": 2,
+    "planning_note": "先集中攻击关键哨卫巢，搜索力量检查邻近暗巢，后续攻击力量沿形成的通道接近母巢。",
+    "information_note": "本文件用于场景设计与评估，策略只使用正式观测接口。"
+  }
+}

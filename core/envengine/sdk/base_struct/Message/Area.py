@@ -11,5 +11,5 @@ class Area(object):
     # 区域坐标
     coordinates: list[list[list[float]]] = field(default_factory=list)
 
-    # 高中性能弹区域
+    # 毁灭者/突击者区域
     coordinatesHM:list[list[list[float]]] = field(default_factory=list)

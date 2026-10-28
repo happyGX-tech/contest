@@ -3,7 +3,7 @@
 EnvEngine - Multi-Agent Reinforcement Learning Simulation Engine
 
 Usage:
-    from envengine import TrainingEnv, BaseAgent
+    from envengine import TrainingEnv, Profile
 """
 
 # 核心类

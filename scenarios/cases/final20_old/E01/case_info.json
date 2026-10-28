@@ -1,0 +1,194 @@
+{
+  "scenario_id": "E01",
+  "display_id": "E01",
+  "title": "单门扇形",
+  "difficulty": "easy",
+  "difficulty_name": "简单",
+  "source_commit": "ad45a7bc804a88703d1259d6083ba57553a25dfb",
+  "scenario_sha256": "85876c67db4b120b564d32ef034dc335fec121ce2842989db9faf77931072c72",
+  "max_steps": 3000,
+  "topology_model": "retained_blue_topology_scarce_mothers_v1",
+  "topology_name": "单门扇形",
+  "blue_translation_fraction": [
+    0.04,
+    0
+  ],
+  "design_intent": "单门扇形：以哨卫巢视野组织通道，母巢提供纵深目标，暗巢形成搜索支线；默认红方在32格均匀部署。",
+  "distribution": "比较均匀",
+  "band_counts": [
+    {
+      "public": 2,
+      "swarm": 24
+    },
+    {
+      "public": 2,
+      "swarm": 25
+    },
+    {
+      "public": 2,
+      "swarm": 24
+    },
+    {
+      "public": 2,
+      "swarm": 24
+    }
+  ],
+  "band_cv": {
+    "public": 0.0,
+    "swarm": 0.017856193892462652
+  },
+  "objective_ids": [
+    51,
+    52,
+    53,
+    54,
+    106,
+    168,
+    169
+  ],
+  "public_objective_ids": [
+    54,
+    106,
+    2553,
+    52,
+    2555,
+    53,
+    2557,
+    2552
+  ],
+  "hidden_objective_ids": [
+    168,
+    2570,
+    2573,
+    2575
+  ],
+  "roots": [
+    {
+      "id": 51,
+      "kind": "target",
+      "lon": 123.25,
+      "lat": 24.75,
+      "hp": 32.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 52,
+      "kind": "target",
+      "lon": 123.6,
+      "lat": 23.0,
+      "hp": 32.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 53,
+      "kind": "target",
+      "lon": 123.25,
+      "lat": 21.25,
+      "hp": 32.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 54,
+      "kind": "site",
+      "lon": 119.95,
+      "lat": 23.0,
+      "hp": 20.0,
+      "interceptors": 37,
+      "radar_id": 55,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 106,
+      "kind": "site",
+      "lon": 121.55,
+      "lat": 23.0,
+      "hp": 20.0,
+      "interceptors": 37,
+      "radar_id": 107,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 168,
+      "kind": "ship",
+      "lon": 119.3,
+      "lat": 25.35,
+      "hp": 1.6,
+      "interceptors": 37,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 169,
+      "kind": "ship",
+      "lon": 121.2,
+      "lat": 20.55,
+      "hp": 1.6,
+      "interceptors": 37,
+      "objective": true,
+      "initial_information": "public"
+    }
+  ],
+  "root_counts": {
+    "target": 3,
+    "site": 5,
+    "ship": 4
+  },
+  "interceptor_counts": {
+    "54": 8,
+    "106": 8,
+    "168": 8,
+    "2553": 12,
+    "2555": 11,
+    "2557": 11,
+    "2570": 13,
+    "2573": 13,
+    "2575": 13
+  },
+  "red_missile_counts": {
+    "high": 17,
+    "medium": 24,
+    "low": 85
+  },
+  "blue_root_total": 12,
+  "radar_total": 5,
+  "interceptor_total": 97,
+  "entity_total": 242,
+  "blue_root_health_total": 166.8,
+  "red_nominal_damage_total": 545,
+  "blue_health_to_red_nominal_damage_ratio": 0.30605504587155963,
+  "map_area": {
+    "lonMin": 11.58,
+    "lonMax": 12.51,
+    "latMin": 1.9625,
+    "latMax": 2.6975
+  },
+  "logical_map_size": [
+    75,
+    60
+  ],
+  "launch_altitude_external_m": 3000,
+  "initial_speed_note": "Initial speed 300 is the supplied model rule; no supported scenario speed override was found.",
+  "detection": {
+    "source": "RadarModelSimulator.execute_detection + ISimulator._is_geometrically_visible",
+    "range_m": 20000,
+    "distance_axes": "ECEF X,Y only",
+    "minimum_target_stage": 3,
+    "slice_altitude_m": 3000
+  },
+  "validation_status": "Current design; see representative_results.json for sampled native results.",
+  "distribution_rule": {
+    "public_cv_limit": 0.2,
+    "stock_cv_limit": 0.2,
+    "small_count_rule": "public limit=max(0.20, minimum CV achievable by integer counts in four bands)"
+  },
+  "blue_health_multiplier": 1.5,
+  "deployment_rule": "For each type and all types combined, cell counts differ by at most one."
+}

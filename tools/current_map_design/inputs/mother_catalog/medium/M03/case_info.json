@@ -1,0 +1,415 @@
+{
+  "scenario_id": "M03",
+  "display_id": "M03",
+  "title": "沙漏双颈",
+  "difficulty": "medium",
+  "difficulty_name": "中等",
+  "source_commit": "ad45a7bc804a88703d1259d6083ba57553a25dfb",
+  "scenario_sha256": "38a58d66eaa3af058c2036dc889c93fc7369872da6269a32b8b071b85c903d2c",
+  "max_steps": 3000,
+  "topology_model": "explicit_motifs_shared_grid_right4_v3",
+  "topology_name": "沙漏双颈",
+  "blue_translation_fraction": [
+    0.04,
+    0
+  ],
+  "design_intent": "沙漏结构：上下展开、中部收窄；南侧较多节点形成局部差异。 蓝方整体右移地图宽度的4%，不收紧点位。",
+  "distribution": "部分不均匀",
+  "band_counts": [
+    {
+      "public": 3,
+      "swarm": 39
+    },
+    {
+      "public": 2,
+      "swarm": 19
+    },
+    {
+      "public": 7,
+      "swarm": 78
+    },
+    {
+      "public": 5,
+      "swarm": 59
+    }
+  ],
+  "band_cv": {
+    "public": 0.45183210281580044,
+    "swarm": 0.45183532517747876
+  },
+  "objective_ids": [
+    106,
+    310,
+    51,
+    169,
+    2754,
+    312,
+    52,
+    2755,
+    2756,
+    2731,
+    2733,
+    2737,
+    2743,
+    53,
+    301,
+    2728,
+    2757,
+    2760,
+    2745,
+    2747,
+    2749,
+    2729,
+    2730,
+    2762,
+    2763
+  ],
+  "public_objective_ids": [
+    106,
+    310,
+    51,
+    312,
+    52,
+    2731,
+    2733,
+    2737,
+    2743,
+    53,
+    301,
+    2728,
+    2745,
+    2747,
+    2749,
+    2729,
+    2730
+  ],
+  "hidden_objective_ids": [
+    169,
+    2754,
+    2755,
+    2756,
+    2757,
+    2760,
+    2762,
+    2763
+  ],
+  "roots": [
+    {
+      "id": 106,
+      "kind": "site",
+      "lon": 11.967779,
+      "lat": 2.698725,
+      "hp": 12.0,
+      "interceptors": 10,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 107
+    },
+    {
+      "id": 310,
+      "kind": "site",
+      "lon": 12.0583765,
+      "lat": 2.62369375,
+      "hp": 12.0,
+      "interceptors": 9,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 311
+    },
+    {
+      "id": 51,
+      "kind": "target",
+      "lon": 12.34845125,
+      "lat": 2.646203125,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 169,
+      "kind": "ship",
+      "lon": 12.1134945,
+      "lat": 2.67514375,
+      "hp": 0.8,
+      "interceptors": 10,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2754,
+      "kind": "ship",
+      "lon": 12.204092,
+      "lat": 2.6001125,
+      "hp": 0.8,
+      "interceptors": 10,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 312,
+      "kind": "site",
+      "lon": 12.154127749999999,
+      "lat": 2.446834375,
+      "hp": 12.0,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 313
+    },
+    {
+      "id": 52,
+      "kind": "target",
+      "lon": 12.48950125,
+      "lat": 2.431828125,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2755,
+      "kind": "ship",
+      "lon": 12.2545445,
+      "lat": 2.46076875,
+      "hp": 0.8,
+      "interceptors": 7,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2756,
+      "kind": "ship",
+      "lon": 12.345142,
+      "lat": 2.3857375000000003,
+      "hp": 0.8,
+      "interceptors": 6,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2731,
+      "kind": "site",
+      "lon": 12.142002875,
+      "lat": 2.2887328125,
+      "hp": 12.0,
+      "interceptors": 13,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2732
+    },
+    {
+      "id": 2733,
+      "kind": "site",
+      "lon": 12.158549125,
+      "lat": 2.2512171875,
+      "hp": 12.0,
+      "interceptors": 13,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2734
+    },
+    {
+      "id": 2737,
+      "kind": "site",
+      "lon": 12.175095375,
+      "lat": 2.2137015625,
+      "hp": 12.0,
+      "interceptors": 13,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2738
+    },
+    {
+      "id": 2743,
+      "kind": "site",
+      "lon": 12.191641624999999,
+      "lat": 2.1761859375,
+      "hp": 12.0,
+      "interceptors": 13,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2744
+    },
+    {
+      "id": 53,
+      "kind": "target",
+      "lon": 12.474130416666666,
+      "lat": 2.2674739583333334,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 301,
+      "kind": "target",
+      "lon": 12.48244875,
+      "lat": 2.217453125,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2728,
+      "kind": "target",
+      "lon": 12.490767083333333,
+      "lat": 2.1674322916666666,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2757,
+      "kind": "ship",
+      "lon": 12.2855755,
+      "lat": 2.24639375,
+      "hp": 0.8,
+      "interceptors": 13,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2760,
+      "kind": "ship",
+      "lon": 12.277438,
+      "lat": 2.1713625,
+      "hp": 0.8,
+      "interceptors": 13,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2745,
+      "kind": "site",
+      "lon": 12.017453916666666,
+      "lat": 2.0681052083333333,
+      "hp": 12.0,
+      "interceptors": 12,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2746
+    },
+    {
+      "id": 2747,
+      "kind": "site",
+      "lon": 12.02577225,
+      "lat": 2.018084375,
+      "hp": 12.0,
+      "interceptors": 12,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2748
+    },
+    {
+      "id": 2749,
+      "kind": "site",
+      "lon": 12.034090583333333,
+      "lat": 1.9680635416666667,
+      "hp": 12.0,
+      "interceptors": 11,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2750
+    },
+    {
+      "id": 2729,
+      "kind": "target",
+      "lon": 12.3454675,
+      "lat": 2.04059375,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2730,
+      "kind": "target",
+      "lon": 12.33733,
+      "lat": 1.9655625,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2762,
+      "kind": "ship",
+      "lon": 12.1445255,
+      "lat": 2.03201875,
+      "hp": 0.8,
+      "interceptors": 12,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2763,
+      "kind": "ship",
+      "lon": 12.136388,
+      "lat": 1.9569875,
+      "hp": 0.8,
+      "interceptors": 12,
+      "objective": true,
+      "initial_information": "hidden"
+    }
+  ],
+  "root_counts": {
+    "target": 7,
+    "site": 10,
+    "ship": 8
+  },
+  "interceptor_counts": {
+    "106": 10,
+    "310": 9,
+    "169": 10,
+    "2754": 10,
+    "312": 6,
+    "2755": 7,
+    "2756": 6,
+    "2731": 13,
+    "2733": 13,
+    "2737": 13,
+    "2743": 13,
+    "2757": 13,
+    "2760": 13,
+    "2745": 12,
+    "2747": 12,
+    "2749": 11,
+    "2762": 12,
+    "2763": 12
+  },
+  "red_missile_counts": {
+    "high": 50,
+    "medium": 70,
+    "low": 180
+  },
+  "blue_root_total": 25,
+  "radar_total": 10,
+  "interceptor_total": 195,
+  "entity_total": 532,
+  "blue_root_health_total": 238.4,
+  "red_nominal_damage_total": 1530,
+  "blue_health_to_red_nominal_damage_ratio": 0.15581699346405228,
+  "map_area": {
+    "lonMin": 11.58,
+    "lonMax": 12.665,
+    "latMin": 1.90125,
+    "latMax": 2.75875
+  },
+  "logical_map_size": [
+    87.5,
+    70
+  ],
+  "launch_altitude_external_m": 3000,
+  "initial_speed_note": "Initial speed 300 is the supplied model rule; no supported scenario speed override was found.",
+  "detection": {
+    "source": "RadarModelSimulator.execute_detection + ISimulator._is_geometrically_visible",
+    "range_m": 20000,
+    "distance_axes": "ECEF X,Y only",
+    "minimum_target_stage": 3,
+    "slice_altitude_m": 3000
+  },
+  "validation_status": "configuration and API contract; full dynamics not certified"
+}

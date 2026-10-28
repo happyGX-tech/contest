@@ -101,7 +101,7 @@
             "y": 25.2,
             "z": 0.0
           },
-          "nameChn": "目标_51",
+          "nameChn": "母巢_51",
           "nameEn": "Target_51",
           "parentId": -1,
           "posEcf": {
@@ -141,7 +141,7 @@
             "y": 24.0,
             "z": 0.0
           },
-          "nameChn": "目标_52",
+          "nameChn": "母巢_52",
           "nameEn": "Target_52",
           "parentId": -1,
           "posEcf": {
@@ -181,7 +181,7 @@
             "y": 22.0,
             "z": 0.0
           },
-          "nameChn": "目标_53",
+          "nameChn": "母巢_53",
           "nameEn": "Target_53",
           "parentId": -1,
           "posEcf": {
@@ -258,7 +258,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截阵地_54",
+          "nameChn": "哨卫巢_54",
           "nameEn": "DefenseSite_54",
           "parentId": -1,
           "posEcf": {
@@ -298,7 +298,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "普通雷达_55",
+          "nameChn": "视野塔_55",
           "nameEn": "Radar_55",
           "parentId": 54,
           "posEcf": {
@@ -375,7 +375,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截阵地_106",
+          "nameChn": "哨卫巢_106",
           "nameEn": "DefenseSite_106",
           "parentId": -1,
           "posEcf": {
@@ -415,7 +415,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "普通雷达_107",
+          "nameChn": "视野塔_107",
           "nameEn": "Radar_107",
           "parentId": 106,
           "posEcf": {
@@ -528,7 +528,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "无人船_168",
+          "nameChn": "暗巢_168",
           "nameEn": "UnmannedShip_168",
           "parentId": -1,
           "posEcf": {
@@ -603,7 +603,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "无人船_169",
+          "nameChn": "暗巢_169",
           "nameEn": "UnmannedShip_169",
           "parentId": -1,
           "posEcf": {
@@ -681,7 +681,7 @@
             "y": 20.8,
             "z": 0.0
           },
-          "nameChn": "目标_301",
+          "nameChn": "母巢_301",
           "nameEn": "Target_301",
           "parentId": -1,
           "posEcf": {
@@ -758,7 +758,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截阵地_310",
+          "nameChn": "哨卫巢_310",
           "nameEn": "DefenseSite_310",
           "parentId": -1,
           "posEcf": {
@@ -798,7 +798,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "普通雷达_311",
+          "nameChn": "视野塔_311",
           "nameEn": "Radar_311",
           "parentId": 310,
           "posEcf": {
@@ -875,7 +875,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截阵地_312",
+          "nameChn": "哨卫巢_312",
           "nameEn": "DefenseSite_312",
           "parentId": -1,
           "posEcf": {
@@ -915,7 +915,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "普通雷达_313",
+          "nameChn": "视野塔_313",
           "nameEn": "Radar_313",
           "parentId": 312,
           "posEcf": {
@@ -11412,7 +11412,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_001",
+          "nameChn": "自爆虫群_54_001",
           "nameEn": "Interceptor_54_001",
           "parentId": 54,
           "posEcf": {
@@ -11452,7 +11452,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_002",
+          "nameChn": "自爆虫群_54_002",
           "nameEn": "Interceptor_54_002",
           "parentId": 54,
           "posEcf": {
@@ -11492,7 +11492,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_003",
+          "nameChn": "自爆虫群_54_003",
           "nameEn": "Interceptor_54_003",
           "parentId": 54,
           "posEcf": {
@@ -11532,7 +11532,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_004",
+          "nameChn": "自爆虫群_54_004",
           "nameEn": "Interceptor_54_004",
           "parentId": 54,
           "posEcf": {
@@ -11572,7 +11572,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_005",
+          "nameChn": "自爆虫群_54_005",
           "nameEn": "Interceptor_54_005",
           "parentId": 54,
           "posEcf": {
@@ -11612,7 +11612,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_006",
+          "nameChn": "自爆虫群_54_006",
           "nameEn": "Interceptor_54_006",
           "parentId": 54,
           "posEcf": {
@@ -11652,7 +11652,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_007",
+          "nameChn": "自爆虫群_54_007",
           "nameEn": "Interceptor_54_007",
           "parentId": 54,
           "posEcf": {
@@ -11692,7 +11692,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_008",
+          "nameChn": "自爆虫群_54_008",
           "nameEn": "Interceptor_54_008",
           "parentId": 54,
           "posEcf": {
@@ -11732,7 +11732,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_009",
+          "nameChn": "自爆虫群_54_009",
           "nameEn": "Interceptor_54_009",
           "parentId": 54,
           "posEcf": {
@@ -11772,7 +11772,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_010",
+          "nameChn": "自爆虫群_54_010",
           "nameEn": "Interceptor_54_010",
           "parentId": 54,
           "posEcf": {
@@ -11812,7 +11812,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_011",
+          "nameChn": "自爆虫群_54_011",
           "nameEn": "Interceptor_54_011",
           "parentId": 54,
           "posEcf": {
@@ -11852,7 +11852,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_012",
+          "nameChn": "自爆虫群_54_012",
           "nameEn": "Interceptor_54_012",
           "parentId": 54,
           "posEcf": {
@@ -11892,7 +11892,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_013",
+          "nameChn": "自爆虫群_54_013",
           "nameEn": "Interceptor_54_013",
           "parentId": 54,
           "posEcf": {
@@ -11932,7 +11932,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_014",
+          "nameChn": "自爆虫群_54_014",
           "nameEn": "Interceptor_54_014",
           "parentId": 54,
           "posEcf": {
@@ -11972,7 +11972,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_015",
+          "nameChn": "自爆虫群_54_015",
           "nameEn": "Interceptor_54_015",
           "parentId": 54,
           "posEcf": {
@@ -12012,7 +12012,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_016",
+          "nameChn": "自爆虫群_54_016",
           "nameEn": "Interceptor_54_016",
           "parentId": 54,
           "posEcf": {
@@ -12052,7 +12052,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_017",
+          "nameChn": "自爆虫群_54_017",
           "nameEn": "Interceptor_54_017",
           "parentId": 54,
           "posEcf": {
@@ -12092,7 +12092,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_018",
+          "nameChn": "自爆虫群_54_018",
           "nameEn": "Interceptor_54_018",
           "parentId": 54,
           "posEcf": {
@@ -12132,7 +12132,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_019",
+          "nameChn": "自爆虫群_54_019",
           "nameEn": "Interceptor_54_019",
           "parentId": 54,
           "posEcf": {
@@ -12172,7 +12172,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_020",
+          "nameChn": "自爆虫群_54_020",
           "nameEn": "Interceptor_54_020",
           "parentId": 54,
           "posEcf": {
@@ -12212,7 +12212,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_021",
+          "nameChn": "自爆虫群_54_021",
           "nameEn": "Interceptor_54_021",
           "parentId": 54,
           "posEcf": {
@@ -12252,7 +12252,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_022",
+          "nameChn": "自爆虫群_54_022",
           "nameEn": "Interceptor_54_022",
           "parentId": 54,
           "posEcf": {
@@ -12292,7 +12292,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_023",
+          "nameChn": "自爆虫群_54_023",
           "nameEn": "Interceptor_54_023",
           "parentId": 54,
           "posEcf": {
@@ -12332,7 +12332,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_024",
+          "nameChn": "自爆虫群_54_024",
           "nameEn": "Interceptor_54_024",
           "parentId": 54,
           "posEcf": {
@@ -12372,7 +12372,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_025",
+          "nameChn": "自爆虫群_54_025",
           "nameEn": "Interceptor_54_025",
           "parentId": 54,
           "posEcf": {
@@ -12412,7 +12412,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_026",
+          "nameChn": "自爆虫群_54_026",
           "nameEn": "Interceptor_54_026",
           "parentId": 54,
           "posEcf": {
@@ -12452,7 +12452,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_027",
+          "nameChn": "自爆虫群_54_027",
           "nameEn": "Interceptor_54_027",
           "parentId": 54,
           "posEcf": {
@@ -12492,7 +12492,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_028",
+          "nameChn": "自爆虫群_54_028",
           "nameEn": "Interceptor_54_028",
           "parentId": 54,
           "posEcf": {
@@ -12532,7 +12532,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_029",
+          "nameChn": "自爆虫群_54_029",
           "nameEn": "Interceptor_54_029",
           "parentId": 54,
           "posEcf": {
@@ -12572,7 +12572,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_030",
+          "nameChn": "自爆虫群_54_030",
           "nameEn": "Interceptor_54_030",
           "parentId": 54,
           "posEcf": {
@@ -12612,7 +12612,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_031",
+          "nameChn": "自爆虫群_54_031",
           "nameEn": "Interceptor_54_031",
           "parentId": 54,
           "posEcf": {
@@ -12652,7 +12652,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_032",
+          "nameChn": "自爆虫群_54_032",
           "nameEn": "Interceptor_54_032",
           "parentId": 54,
           "posEcf": {
@@ -12692,7 +12692,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_033",
+          "nameChn": "自爆虫群_54_033",
           "nameEn": "Interceptor_54_033",
           "parentId": 54,
           "posEcf": {
@@ -12732,7 +12732,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_034",
+          "nameChn": "自爆虫群_54_034",
           "nameEn": "Interceptor_54_034",
           "parentId": 54,
           "posEcf": {
@@ -12772,7 +12772,7 @@
             "y": 24.9,
             "z": 0.0
           },
-          "nameChn": "拦截弹_54_035",
+          "nameChn": "自爆虫群_54_035",
           "nameEn": "Interceptor_54_035",
           "parentId": 54,
           "posEcf": {
@@ -12812,7 +12812,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_001",
+          "nameChn": "自爆虫群_106_001",
           "nameEn": "Interceptor_106_001",
           "parentId": 106,
           "posEcf": {
@@ -12852,7 +12852,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_002",
+          "nameChn": "自爆虫群_106_002",
           "nameEn": "Interceptor_106_002",
           "parentId": 106,
           "posEcf": {
@@ -12892,7 +12892,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_003",
+          "nameChn": "自爆虫群_106_003",
           "nameEn": "Interceptor_106_003",
           "parentId": 106,
           "posEcf": {
@@ -12932,7 +12932,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_004",
+          "nameChn": "自爆虫群_106_004",
           "nameEn": "Interceptor_106_004",
           "parentId": 106,
           "posEcf": {
@@ -12972,7 +12972,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_005",
+          "nameChn": "自爆虫群_106_005",
           "nameEn": "Interceptor_106_005",
           "parentId": 106,
           "posEcf": {
@@ -13012,7 +13012,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_006",
+          "nameChn": "自爆虫群_106_006",
           "nameEn": "Interceptor_106_006",
           "parentId": 106,
           "posEcf": {
@@ -13052,7 +13052,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_007",
+          "nameChn": "自爆虫群_106_007",
           "nameEn": "Interceptor_106_007",
           "parentId": 106,
           "posEcf": {
@@ -13092,7 +13092,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_008",
+          "nameChn": "自爆虫群_106_008",
           "nameEn": "Interceptor_106_008",
           "parentId": 106,
           "posEcf": {
@@ -13132,7 +13132,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_009",
+          "nameChn": "自爆虫群_106_009",
           "nameEn": "Interceptor_106_009",
           "parentId": 106,
           "posEcf": {
@@ -13172,7 +13172,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_010",
+          "nameChn": "自爆虫群_106_010",
           "nameEn": "Interceptor_106_010",
           "parentId": 106,
           "posEcf": {
@@ -13212,7 +13212,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_011",
+          "nameChn": "自爆虫群_106_011",
           "nameEn": "Interceptor_106_011",
           "parentId": 106,
           "posEcf": {
@@ -13252,7 +13252,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_012",
+          "nameChn": "自爆虫群_106_012",
           "nameEn": "Interceptor_106_012",
           "parentId": 106,
           "posEcf": {
@@ -13292,7 +13292,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_013",
+          "nameChn": "自爆虫群_106_013",
           "nameEn": "Interceptor_106_013",
           "parentId": 106,
           "posEcf": {
@@ -13332,7 +13332,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_014",
+          "nameChn": "自爆虫群_106_014",
           "nameEn": "Interceptor_106_014",
           "parentId": 106,
           "posEcf": {
@@ -13372,7 +13372,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_015",
+          "nameChn": "自爆虫群_106_015",
           "nameEn": "Interceptor_106_015",
           "parentId": 106,
           "posEcf": {
@@ -13412,7 +13412,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_016",
+          "nameChn": "自爆虫群_106_016",
           "nameEn": "Interceptor_106_016",
           "parentId": 106,
           "posEcf": {
@@ -13452,7 +13452,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_017",
+          "nameChn": "自爆虫群_106_017",
           "nameEn": "Interceptor_106_017",
           "parentId": 106,
           "posEcf": {
@@ -13492,7 +13492,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_018",
+          "nameChn": "自爆虫群_106_018",
           "nameEn": "Interceptor_106_018",
           "parentId": 106,
           "posEcf": {
@@ -13532,7 +13532,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_019",
+          "nameChn": "自爆虫群_106_019",
           "nameEn": "Interceptor_106_019",
           "parentId": 106,
           "posEcf": {
@@ -13572,7 +13572,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_020",
+          "nameChn": "自爆虫群_106_020",
           "nameEn": "Interceptor_106_020",
           "parentId": 106,
           "posEcf": {
@@ -13612,7 +13612,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_021",
+          "nameChn": "自爆虫群_106_021",
           "nameEn": "Interceptor_106_021",
           "parentId": 106,
           "posEcf": {
@@ -13652,7 +13652,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_022",
+          "nameChn": "自爆虫群_106_022",
           "nameEn": "Interceptor_106_022",
           "parentId": 106,
           "posEcf": {
@@ -13692,7 +13692,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_023",
+          "nameChn": "自爆虫群_106_023",
           "nameEn": "Interceptor_106_023",
           "parentId": 106,
           "posEcf": {
@@ -13732,7 +13732,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_024",
+          "nameChn": "自爆虫群_106_024",
           "nameEn": "Interceptor_106_024",
           "parentId": 106,
           "posEcf": {
@@ -13772,7 +13772,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_025",
+          "nameChn": "自爆虫群_106_025",
           "nameEn": "Interceptor_106_025",
           "parentId": 106,
           "posEcf": {
@@ -13812,7 +13812,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_026",
+          "nameChn": "自爆虫群_106_026",
           "nameEn": "Interceptor_106_026",
           "parentId": 106,
           "posEcf": {
@@ -13852,7 +13852,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_027",
+          "nameChn": "自爆虫群_106_027",
           "nameEn": "Interceptor_106_027",
           "parentId": 106,
           "posEcf": {
@@ -13892,7 +13892,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_028",
+          "nameChn": "自爆虫群_106_028",
           "nameEn": "Interceptor_106_028",
           "parentId": 106,
           "posEcf": {
@@ -13932,7 +13932,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_029",
+          "nameChn": "自爆虫群_106_029",
           "nameEn": "Interceptor_106_029",
           "parentId": 106,
           "posEcf": {
@@ -13972,7 +13972,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_030",
+          "nameChn": "自爆虫群_106_030",
           "nameEn": "Interceptor_106_030",
           "parentId": 106,
           "posEcf": {
@@ -14012,7 +14012,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_031",
+          "nameChn": "自爆虫群_106_031",
           "nameEn": "Interceptor_106_031",
           "parentId": 106,
           "posEcf": {
@@ -14052,7 +14052,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_032",
+          "nameChn": "自爆虫群_106_032",
           "nameEn": "Interceptor_106_032",
           "parentId": 106,
           "posEcf": {
@@ -14092,7 +14092,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_033",
+          "nameChn": "自爆虫群_106_033",
           "nameEn": "Interceptor_106_033",
           "parentId": 106,
           "posEcf": {
@@ -14132,7 +14132,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_034",
+          "nameChn": "自爆虫群_106_034",
           "nameEn": "Interceptor_106_034",
           "parentId": 106,
           "posEcf": {
@@ -14172,7 +14172,7 @@
             "y": 23.0,
             "z": 0.0
           },
-          "nameChn": "拦截弹_106_035",
+          "nameChn": "自爆虫群_106_035",
           "nameEn": "Interceptor_106_035",
           "parentId": 106,
           "posEcf": {
@@ -14212,7 +14212,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_001",
+          "nameChn": "自爆虫群_310_001",
           "nameEn": "Interceptor_310_001",
           "parentId": 310,
           "posEcf": {
@@ -14252,7 +14252,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_002",
+          "nameChn": "自爆虫群_310_002",
           "nameEn": "Interceptor_310_002",
           "parentId": 310,
           "posEcf": {
@@ -14292,7 +14292,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_003",
+          "nameChn": "自爆虫群_310_003",
           "nameEn": "Interceptor_310_003",
           "parentId": 310,
           "posEcf": {
@@ -14332,7 +14332,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_004",
+          "nameChn": "自爆虫群_310_004",
           "nameEn": "Interceptor_310_004",
           "parentId": 310,
           "posEcf": {
@@ -14372,7 +14372,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_005",
+          "nameChn": "自爆虫群_310_005",
           "nameEn": "Interceptor_310_005",
           "parentId": 310,
           "posEcf": {
@@ -14412,7 +14412,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_006",
+          "nameChn": "自爆虫群_310_006",
           "nameEn": "Interceptor_310_006",
           "parentId": 310,
           "posEcf": {
@@ -14452,7 +14452,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_007",
+          "nameChn": "自爆虫群_310_007",
           "nameEn": "Interceptor_310_007",
           "parentId": 310,
           "posEcf": {
@@ -14492,7 +14492,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_008",
+          "nameChn": "自爆虫群_310_008",
           "nameEn": "Interceptor_310_008",
           "parentId": 310,
           "posEcf": {
@@ -14532,7 +14532,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_009",
+          "nameChn": "自爆虫群_310_009",
           "nameEn": "Interceptor_310_009",
           "parentId": 310,
           "posEcf": {
@@ -14572,7 +14572,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_010",
+          "nameChn": "自爆虫群_310_010",
           "nameEn": "Interceptor_310_010",
           "parentId": 310,
           "posEcf": {
@@ -14612,7 +14612,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_011",
+          "nameChn": "自爆虫群_310_011",
           "nameEn": "Interceptor_310_011",
           "parentId": 310,
           "posEcf": {
@@ -14652,7 +14652,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_012",
+          "nameChn": "自爆虫群_310_012",
           "nameEn": "Interceptor_310_012",
           "parentId": 310,
           "posEcf": {
@@ -14692,7 +14692,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_013",
+          "nameChn": "自爆虫群_310_013",
           "nameEn": "Interceptor_310_013",
           "parentId": 310,
           "posEcf": {
@@ -14732,7 +14732,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_014",
+          "nameChn": "自爆虫群_310_014",
           "nameEn": "Interceptor_310_014",
           "parentId": 310,
           "posEcf": {
@@ -14772,7 +14772,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_015",
+          "nameChn": "自爆虫群_310_015",
           "nameEn": "Interceptor_310_015",
           "parentId": 310,
           "posEcf": {
@@ -14812,7 +14812,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_016",
+          "nameChn": "自爆虫群_310_016",
           "nameEn": "Interceptor_310_016",
           "parentId": 310,
           "posEcf": {
@@ -14852,7 +14852,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_017",
+          "nameChn": "自爆虫群_310_017",
           "nameEn": "Interceptor_310_017",
           "parentId": 310,
           "posEcf": {
@@ -14892,7 +14892,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_018",
+          "nameChn": "自爆虫群_310_018",
           "nameEn": "Interceptor_310_018",
           "parentId": 310,
           "posEcf": {
@@ -14932,7 +14932,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_019",
+          "nameChn": "自爆虫群_310_019",
           "nameEn": "Interceptor_310_019",
           "parentId": 310,
           "posEcf": {
@@ -14972,7 +14972,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_020",
+          "nameChn": "自爆虫群_310_020",
           "nameEn": "Interceptor_310_020",
           "parentId": 310,
           "posEcf": {
@@ -15012,7 +15012,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_021",
+          "nameChn": "自爆虫群_310_021",
           "nameEn": "Interceptor_310_021",
           "parentId": 310,
           "posEcf": {
@@ -15052,7 +15052,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_022",
+          "nameChn": "自爆虫群_310_022",
           "nameEn": "Interceptor_310_022",
           "parentId": 310,
           "posEcf": {
@@ -15092,7 +15092,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_023",
+          "nameChn": "自爆虫群_310_023",
           "nameEn": "Interceptor_310_023",
           "parentId": 310,
           "posEcf": {
@@ -15132,7 +15132,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_024",
+          "nameChn": "自爆虫群_310_024",
           "nameEn": "Interceptor_310_024",
           "parentId": 310,
           "posEcf": {
@@ -15172,7 +15172,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_025",
+          "nameChn": "自爆虫群_310_025",
           "nameEn": "Interceptor_310_025",
           "parentId": 310,
           "posEcf": {
@@ -15212,7 +15212,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_026",
+          "nameChn": "自爆虫群_310_026",
           "nameEn": "Interceptor_310_026",
           "parentId": 310,
           "posEcf": {
@@ -15252,7 +15252,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_027",
+          "nameChn": "自爆虫群_310_027",
           "nameEn": "Interceptor_310_027",
           "parentId": 310,
           "posEcf": {
@@ -15292,7 +15292,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_028",
+          "nameChn": "自爆虫群_310_028",
           "nameEn": "Interceptor_310_028",
           "parentId": 310,
           "posEcf": {
@@ -15332,7 +15332,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_029",
+          "nameChn": "自爆虫群_310_029",
           "nameEn": "Interceptor_310_029",
           "parentId": 310,
           "posEcf": {
@@ -15372,7 +15372,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_030",
+          "nameChn": "自爆虫群_310_030",
           "nameEn": "Interceptor_310_030",
           "parentId": 310,
           "posEcf": {
@@ -15412,7 +15412,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_031",
+          "nameChn": "自爆虫群_310_031",
           "nameEn": "Interceptor_310_031",
           "parentId": 310,
           "posEcf": {
@@ -15452,7 +15452,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_032",
+          "nameChn": "自爆虫群_310_032",
           "nameEn": "Interceptor_310_032",
           "parentId": 310,
           "posEcf": {
@@ -15492,7 +15492,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_033",
+          "nameChn": "自爆虫群_310_033",
           "nameEn": "Interceptor_310_033",
           "parentId": 310,
           "posEcf": {
@@ -15532,7 +15532,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_034",
+          "nameChn": "自爆虫群_310_034",
           "nameEn": "Interceptor_310_034",
           "parentId": 310,
           "posEcf": {
@@ -15572,7 +15572,7 @@
             "y": 21.1,
             "z": 0.0
           },
-          "nameChn": "拦截弹_310_035",
+          "nameChn": "自爆虫群_310_035",
           "nameEn": "Interceptor_310_035",
           "parentId": 310,
           "posEcf": {
@@ -15612,7 +15612,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_001",
+          "nameChn": "自爆虫群_312_001",
           "nameEn": "Interceptor_312_001",
           "parentId": 312,
           "posEcf": {
@@ -15652,7 +15652,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_002",
+          "nameChn": "自爆虫群_312_002",
           "nameEn": "Interceptor_312_002",
           "parentId": 312,
           "posEcf": {
@@ -15692,7 +15692,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_003",
+          "nameChn": "自爆虫群_312_003",
           "nameEn": "Interceptor_312_003",
           "parentId": 312,
           "posEcf": {
@@ -15732,7 +15732,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_004",
+          "nameChn": "自爆虫群_312_004",
           "nameEn": "Interceptor_312_004",
           "parentId": 312,
           "posEcf": {
@@ -15772,7 +15772,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_005",
+          "nameChn": "自爆虫群_312_005",
           "nameEn": "Interceptor_312_005",
           "parentId": 312,
           "posEcf": {
@@ -15812,7 +15812,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_006",
+          "nameChn": "自爆虫群_312_006",
           "nameEn": "Interceptor_312_006",
           "parentId": 312,
           "posEcf": {
@@ -15852,7 +15852,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_007",
+          "nameChn": "自爆虫群_312_007",
           "nameEn": "Interceptor_312_007",
           "parentId": 312,
           "posEcf": {
@@ -15892,7 +15892,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_008",
+          "nameChn": "自爆虫群_312_008",
           "nameEn": "Interceptor_312_008",
           "parentId": 312,
           "posEcf": {
@@ -15932,7 +15932,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_009",
+          "nameChn": "自爆虫群_312_009",
           "nameEn": "Interceptor_312_009",
           "parentId": 312,
           "posEcf": {
@@ -15972,7 +15972,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_010",
+          "nameChn": "自爆虫群_312_010",
           "nameEn": "Interceptor_312_010",
           "parentId": 312,
           "posEcf": {
@@ -16012,7 +16012,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_011",
+          "nameChn": "自爆虫群_312_011",
           "nameEn": "Interceptor_312_011",
           "parentId": 312,
           "posEcf": {
@@ -16052,7 +16052,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_012",
+          "nameChn": "自爆虫群_312_012",
           "nameEn": "Interceptor_312_012",
           "parentId": 312,
           "posEcf": {
@@ -16092,7 +16092,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_013",
+          "nameChn": "自爆虫群_312_013",
           "nameEn": "Interceptor_312_013",
           "parentId": 312,
           "posEcf": {
@@ -16132,7 +16132,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_014",
+          "nameChn": "自爆虫群_312_014",
           "nameEn": "Interceptor_312_014",
           "parentId": 312,
           "posEcf": {
@@ -16172,7 +16172,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_015",
+          "nameChn": "自爆虫群_312_015",
           "nameEn": "Interceptor_312_015",
           "parentId": 312,
           "posEcf": {
@@ -16212,7 +16212,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_016",
+          "nameChn": "自爆虫群_312_016",
           "nameEn": "Interceptor_312_016",
           "parentId": 312,
           "posEcf": {
@@ -16252,7 +16252,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_017",
+          "nameChn": "自爆虫群_312_017",
           "nameEn": "Interceptor_312_017",
           "parentId": 312,
           "posEcf": {
@@ -16292,7 +16292,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_018",
+          "nameChn": "自爆虫群_312_018",
           "nameEn": "Interceptor_312_018",
           "parentId": 312,
           "posEcf": {
@@ -16332,7 +16332,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_019",
+          "nameChn": "自爆虫群_312_019",
           "nameEn": "Interceptor_312_019",
           "parentId": 312,
           "posEcf": {
@@ -16372,7 +16372,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_020",
+          "nameChn": "自爆虫群_312_020",
           "nameEn": "Interceptor_312_020",
           "parentId": 312,
           "posEcf": {
@@ -16412,7 +16412,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_021",
+          "nameChn": "自爆虫群_312_021",
           "nameEn": "Interceptor_312_021",
           "parentId": 312,
           "posEcf": {
@@ -16452,7 +16452,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_022",
+          "nameChn": "自爆虫群_312_022",
           "nameEn": "Interceptor_312_022",
           "parentId": 312,
           "posEcf": {
@@ -16492,7 +16492,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_023",
+          "nameChn": "自爆虫群_312_023",
           "nameEn": "Interceptor_312_023",
           "parentId": 312,
           "posEcf": {
@@ -16532,7 +16532,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_024",
+          "nameChn": "自爆虫群_312_024",
           "nameEn": "Interceptor_312_024",
           "parentId": 312,
           "posEcf": {
@@ -16572,7 +16572,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_025",
+          "nameChn": "自爆虫群_312_025",
           "nameEn": "Interceptor_312_025",
           "parentId": 312,
           "posEcf": {
@@ -16612,7 +16612,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_026",
+          "nameChn": "自爆虫群_312_026",
           "nameEn": "Interceptor_312_026",
           "parentId": 312,
           "posEcf": {
@@ -16652,7 +16652,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_027",
+          "nameChn": "自爆虫群_312_027",
           "nameEn": "Interceptor_312_027",
           "parentId": 312,
           "posEcf": {
@@ -16692,7 +16692,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_028",
+          "nameChn": "自爆虫群_312_028",
           "nameEn": "Interceptor_312_028",
           "parentId": 312,
           "posEcf": {
@@ -16732,7 +16732,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_029",
+          "nameChn": "自爆虫群_312_029",
           "nameEn": "Interceptor_312_029",
           "parentId": 312,
           "posEcf": {
@@ -16772,7 +16772,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_030",
+          "nameChn": "自爆虫群_312_030",
           "nameEn": "Interceptor_312_030",
           "parentId": 312,
           "posEcf": {
@@ -16812,7 +16812,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_031",
+          "nameChn": "自爆虫群_312_031",
           "nameEn": "Interceptor_312_031",
           "parentId": 312,
           "posEcf": {
@@ -16852,7 +16852,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_032",
+          "nameChn": "自爆虫群_312_032",
           "nameEn": "Interceptor_312_032",
           "parentId": 312,
           "posEcf": {
@@ -16892,7 +16892,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_033",
+          "nameChn": "自爆虫群_312_033",
           "nameEn": "Interceptor_312_033",
           "parentId": 312,
           "posEcf": {
@@ -16932,7 +16932,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_034",
+          "nameChn": "自爆虫群_312_034",
           "nameEn": "Interceptor_312_034",
           "parentId": 312,
           "posEcf": {
@@ -16972,7 +16972,7 @@
             "y": 22.8,
             "z": 0.0
           },
-          "nameChn": "拦截弹_312_035",
+          "nameChn": "自爆虫群_312_035",
           "nameEn": "Interceptor_312_035",
           "parentId": 312,
           "posEcf": {
@@ -17012,7 +17012,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_001",
+          "nameChn": "自爆虫群_2730_001",
           "nameEn": "Interceptor_2730_001",
           "parentId": 2730,
           "posEcf": {
@@ -17052,7 +17052,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_002",
+          "nameChn": "自爆虫群_2730_002",
           "nameEn": "Interceptor_2730_002",
           "parentId": 2730,
           "posEcf": {
@@ -17092,7 +17092,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_003",
+          "nameChn": "自爆虫群_2730_003",
           "nameEn": "Interceptor_2730_003",
           "parentId": 2730,
           "posEcf": {
@@ -17132,7 +17132,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_004",
+          "nameChn": "自爆虫群_2730_004",
           "nameEn": "Interceptor_2730_004",
           "parentId": 2730,
           "posEcf": {
@@ -17172,7 +17172,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_005",
+          "nameChn": "自爆虫群_2730_005",
           "nameEn": "Interceptor_2730_005",
           "parentId": 2730,
           "posEcf": {
@@ -17212,7 +17212,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_006",
+          "nameChn": "自爆虫群_2730_006",
           "nameEn": "Interceptor_2730_006",
           "parentId": 2730,
           "posEcf": {
@@ -17252,7 +17252,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_007",
+          "nameChn": "自爆虫群_2730_007",
           "nameEn": "Interceptor_2730_007",
           "parentId": 2730,
           "posEcf": {
@@ -17292,7 +17292,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_008",
+          "nameChn": "自爆虫群_2730_008",
           "nameEn": "Interceptor_2730_008",
           "parentId": 2730,
           "posEcf": {
@@ -17332,7 +17332,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_009",
+          "nameChn": "自爆虫群_2730_009",
           "nameEn": "Interceptor_2730_009",
           "parentId": 2730,
           "posEcf": {
@@ -17372,7 +17372,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_010",
+          "nameChn": "自爆虫群_2730_010",
           "nameEn": "Interceptor_2730_010",
           "parentId": 2730,
           "posEcf": {
@@ -17412,7 +17412,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_011",
+          "nameChn": "自爆虫群_2730_011",
           "nameEn": "Interceptor_2730_011",
           "parentId": 2730,
           "posEcf": {
@@ -17452,7 +17452,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_012",
+          "nameChn": "自爆虫群_2730_012",
           "nameEn": "Interceptor_2730_012",
           "parentId": 2730,
           "posEcf": {
@@ -17492,7 +17492,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_013",
+          "nameChn": "自爆虫群_2730_013",
           "nameEn": "Interceptor_2730_013",
           "parentId": 2730,
           "posEcf": {
@@ -17532,7 +17532,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_014",
+          "nameChn": "自爆虫群_2730_014",
           "nameEn": "Interceptor_2730_014",
           "parentId": 2730,
           "posEcf": {
@@ -17572,7 +17572,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_015",
+          "nameChn": "自爆虫群_2730_015",
           "nameEn": "Interceptor_2730_015",
           "parentId": 2730,
           "posEcf": {
@@ -17612,7 +17612,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_016",
+          "nameChn": "自爆虫群_2730_016",
           "nameEn": "Interceptor_2730_016",
           "parentId": 2730,
           "posEcf": {
@@ -17652,7 +17652,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_017",
+          "nameChn": "自爆虫群_2730_017",
           "nameEn": "Interceptor_2730_017",
           "parentId": 2730,
           "posEcf": {
@@ -17692,7 +17692,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_018",
+          "nameChn": "自爆虫群_2730_018",
           "nameEn": "Interceptor_2730_018",
           "parentId": 2730,
           "posEcf": {
@@ -17732,7 +17732,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_019",
+          "nameChn": "自爆虫群_2730_019",
           "nameEn": "Interceptor_2730_019",
           "parentId": 2730,
           "posEcf": {
@@ -17772,7 +17772,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_020",
+          "nameChn": "自爆虫群_2730_020",
           "nameEn": "Interceptor_2730_020",
           "parentId": 2730,
           "posEcf": {
@@ -17812,7 +17812,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_021",
+          "nameChn": "自爆虫群_2730_021",
           "nameEn": "Interceptor_2730_021",
           "parentId": 2730,
           "posEcf": {
@@ -17852,7 +17852,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_022",
+          "nameChn": "自爆虫群_2730_022",
           "nameEn": "Interceptor_2730_022",
           "parentId": 2730,
           "posEcf": {
@@ -17892,7 +17892,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_023",
+          "nameChn": "自爆虫群_2730_023",
           "nameEn": "Interceptor_2730_023",
           "parentId": 2730,
           "posEcf": {
@@ -17932,7 +17932,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_024",
+          "nameChn": "自爆虫群_2730_024",
           "nameEn": "Interceptor_2730_024",
           "parentId": 2730,
           "posEcf": {
@@ -17972,7 +17972,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_025",
+          "nameChn": "自爆虫群_2730_025",
           "nameEn": "Interceptor_2730_025",
           "parentId": 2730,
           "posEcf": {
@@ -18012,7 +18012,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_026",
+          "nameChn": "自爆虫群_2730_026",
           "nameEn": "Interceptor_2730_026",
           "parentId": 2730,
           "posEcf": {
@@ -18052,7 +18052,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_027",
+          "nameChn": "自爆虫群_2730_027",
           "nameEn": "Interceptor_2730_027",
           "parentId": 2730,
           "posEcf": {
@@ -18092,7 +18092,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_028",
+          "nameChn": "自爆虫群_2730_028",
           "nameEn": "Interceptor_2730_028",
           "parentId": 2730,
           "posEcf": {
@@ -18132,7 +18132,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_029",
+          "nameChn": "自爆虫群_2730_029",
           "nameEn": "Interceptor_2730_029",
           "parentId": 2730,
           "posEcf": {
@@ -18172,7 +18172,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_030",
+          "nameChn": "自爆虫群_2730_030",
           "nameEn": "Interceptor_2730_030",
           "parentId": 2730,
           "posEcf": {
@@ -18212,7 +18212,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_031",
+          "nameChn": "自爆虫群_2730_031",
           "nameEn": "Interceptor_2730_031",
           "parentId": 2730,
           "posEcf": {
@@ -18252,7 +18252,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_032",
+          "nameChn": "自爆虫群_2730_032",
           "nameEn": "Interceptor_2730_032",
           "parentId": 2730,
           "posEcf": {
@@ -18292,7 +18292,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_033",
+          "nameChn": "自爆虫群_2730_033",
           "nameEn": "Interceptor_2730_033",
           "parentId": 2730,
           "posEcf": {
@@ -18332,7 +18332,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_034",
+          "nameChn": "自爆虫群_2730_034",
           "nameEn": "Interceptor_2730_034",
           "parentId": 2730,
           "posEcf": {
@@ -18372,7 +18372,7 @@
             "y": 23.849999999999998,
             "z": 0.0
           },
-          "nameChn": "拦截弹_2730_035",
+          "nameChn": "自爆虫群_2730_035",
           "nameEn": "Interceptor_2730_035",
           "parentId": 2730,
           "posEcf": {
@@ -18412,7 +18412,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_001",
+          "nameChn": "自爆虫群_168_001",
           "nameEn": "Interceptor_168_001",
           "parentId": 168,
           "posEcf": {
@@ -18452,7 +18452,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_002",
+          "nameChn": "自爆虫群_168_002",
           "nameEn": "Interceptor_168_002",
           "parentId": 168,
           "posEcf": {
@@ -18492,7 +18492,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_003",
+          "nameChn": "自爆虫群_168_003",
           "nameEn": "Interceptor_168_003",
           "parentId": 168,
           "posEcf": {
@@ -18532,7 +18532,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_004",
+          "nameChn": "自爆虫群_168_004",
           "nameEn": "Interceptor_168_004",
           "parentId": 168,
           "posEcf": {
@@ -18572,7 +18572,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_005",
+          "nameChn": "自爆虫群_168_005",
           "nameEn": "Interceptor_168_005",
           "parentId": 168,
           "posEcf": {
@@ -18612,7 +18612,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_006",
+          "nameChn": "自爆虫群_168_006",
           "nameEn": "Interceptor_168_006",
           "parentId": 168,
           "posEcf": {
@@ -18652,7 +18652,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_007",
+          "nameChn": "自爆虫群_168_007",
           "nameEn": "Interceptor_168_007",
           "parentId": 168,
           "posEcf": {
@@ -18692,7 +18692,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_008",
+          "nameChn": "自爆虫群_168_008",
           "nameEn": "Interceptor_168_008",
           "parentId": 168,
           "posEcf": {
@@ -18732,7 +18732,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_009",
+          "nameChn": "自爆虫群_168_009",
           "nameEn": "Interceptor_168_009",
           "parentId": 168,
           "posEcf": {
@@ -18772,7 +18772,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_010",
+          "nameChn": "自爆虫群_168_010",
           "nameEn": "Interceptor_168_010",
           "parentId": 168,
           "posEcf": {
@@ -18812,7 +18812,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_011",
+          "nameChn": "自爆虫群_168_011",
           "nameEn": "Interceptor_168_011",
           "parentId": 168,
           "posEcf": {
@@ -18852,7 +18852,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_012",
+          "nameChn": "自爆虫群_168_012",
           "nameEn": "Interceptor_168_012",
           "parentId": 168,
           "posEcf": {
@@ -18892,7 +18892,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_013",
+          "nameChn": "自爆虫群_168_013",
           "nameEn": "Interceptor_168_013",
           "parentId": 168,
           "posEcf": {
@@ -18932,7 +18932,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_014",
+          "nameChn": "自爆虫群_168_014",
           "nameEn": "Interceptor_168_014",
           "parentId": 168,
           "posEcf": {
@@ -18972,7 +18972,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_015",
+          "nameChn": "自爆虫群_168_015",
           "nameEn": "Interceptor_168_015",
           "parentId": 168,
           "posEcf": {
@@ -19012,7 +19012,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_016",
+          "nameChn": "自爆虫群_168_016",
           "nameEn": "Interceptor_168_016",
           "parentId": 168,
           "posEcf": {
@@ -19052,7 +19052,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_017",
+          "nameChn": "自爆虫群_168_017",
           "nameEn": "Interceptor_168_017",
           "parentId": 168,
           "posEcf": {
@@ -19092,7 +19092,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_018",
+          "nameChn": "自爆虫群_168_018",
           "nameEn": "Interceptor_168_018",
           "parentId": 168,
           "posEcf": {
@@ -19132,7 +19132,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_019",
+          "nameChn": "自爆虫群_168_019",
           "nameEn": "Interceptor_168_019",
           "parentId": 168,
           "posEcf": {
@@ -19172,7 +19172,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_020",
+          "nameChn": "自爆虫群_168_020",
           "nameEn": "Interceptor_168_020",
           "parentId": 168,
           "posEcf": {
@@ -19212,7 +19212,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_021",
+          "nameChn": "自爆虫群_168_021",
           "nameEn": "Interceptor_168_021",
           "parentId": 168,
           "posEcf": {
@@ -19252,7 +19252,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_022",
+          "nameChn": "自爆虫群_168_022",
           "nameEn": "Interceptor_168_022",
           "parentId": 168,
           "posEcf": {
@@ -19292,7 +19292,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_023",
+          "nameChn": "自爆虫群_168_023",
           "nameEn": "Interceptor_168_023",
           "parentId": 168,
           "posEcf": {
@@ -19332,7 +19332,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_024",
+          "nameChn": "自爆虫群_168_024",
           "nameEn": "Interceptor_168_024",
           "parentId": 168,
           "posEcf": {
@@ -19372,7 +19372,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_025",
+          "nameChn": "自爆虫群_168_025",
           "nameEn": "Interceptor_168_025",
           "parentId": 168,
           "posEcf": {
@@ -19412,7 +19412,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_026",
+          "nameChn": "自爆虫群_168_026",
           "nameEn": "Interceptor_168_026",
           "parentId": 168,
           "posEcf": {
@@ -19452,7 +19452,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_027",
+          "nameChn": "自爆虫群_168_027",
           "nameEn": "Interceptor_168_027",
           "parentId": 168,
           "posEcf": {
@@ -19492,7 +19492,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_028",
+          "nameChn": "自爆虫群_168_028",
           "nameEn": "Interceptor_168_028",
           "parentId": 168,
           "posEcf": {
@@ -19532,7 +19532,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_029",
+          "nameChn": "自爆虫群_168_029",
           "nameEn": "Interceptor_168_029",
           "parentId": 168,
           "posEcf": {
@@ -19572,7 +19572,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_030",
+          "nameChn": "自爆虫群_168_030",
           "nameEn": "Interceptor_168_030",
           "parentId": 168,
           "posEcf": {
@@ -19612,7 +19612,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_031",
+          "nameChn": "自爆虫群_168_031",
           "nameEn": "Interceptor_168_031",
           "parentId": 168,
           "posEcf": {
@@ -19652,7 +19652,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_032",
+          "nameChn": "自爆虫群_168_032",
           "nameEn": "Interceptor_168_032",
           "parentId": 168,
           "posEcf": {
@@ -19692,7 +19692,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_033",
+          "nameChn": "自爆虫群_168_033",
           "nameEn": "Interceptor_168_033",
           "parentId": 168,
           "posEcf": {
@@ -19732,7 +19732,7 @@
             "y": 25.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_168_034",
+          "nameChn": "自爆虫群_168_034",
           "nameEn": "Interceptor_168_034",
           "parentId": 168,
           "posEcf": {
@@ -19772,7 +19772,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_001",
+          "nameChn": "自爆虫群_169_001",
           "nameEn": "Interceptor_169_001",
           "parentId": 169,
           "posEcf": {
@@ -19812,7 +19812,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_002",
+          "nameChn": "自爆虫群_169_002",
           "nameEn": "Interceptor_169_002",
           "parentId": 169,
           "posEcf": {
@@ -19852,7 +19852,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_003",
+          "nameChn": "自爆虫群_169_003",
           "nameEn": "Interceptor_169_003",
           "parentId": 169,
           "posEcf": {
@@ -19892,7 +19892,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_004",
+          "nameChn": "自爆虫群_169_004",
           "nameEn": "Interceptor_169_004",
           "parentId": 169,
           "posEcf": {
@@ -19932,7 +19932,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_005",
+          "nameChn": "自爆虫群_169_005",
           "nameEn": "Interceptor_169_005",
           "parentId": 169,
           "posEcf": {
@@ -19972,7 +19972,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_006",
+          "nameChn": "自爆虫群_169_006",
           "nameEn": "Interceptor_169_006",
           "parentId": 169,
           "posEcf": {
@@ -20012,7 +20012,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_007",
+          "nameChn": "自爆虫群_169_007",
           "nameEn": "Interceptor_169_007",
           "parentId": 169,
           "posEcf": {
@@ -20052,7 +20052,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_008",
+          "nameChn": "自爆虫群_169_008",
           "nameEn": "Interceptor_169_008",
           "parentId": 169,
           "posEcf": {
@@ -20092,7 +20092,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_009",
+          "nameChn": "自爆虫群_169_009",
           "nameEn": "Interceptor_169_009",
           "parentId": 169,
           "posEcf": {
@@ -20132,7 +20132,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_010",
+          "nameChn": "自爆虫群_169_010",
           "nameEn": "Interceptor_169_010",
           "parentId": 169,
           "posEcf": {
@@ -20172,7 +20172,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_011",
+          "nameChn": "自爆虫群_169_011",
           "nameEn": "Interceptor_169_011",
           "parentId": 169,
           "posEcf": {
@@ -20212,7 +20212,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_012",
+          "nameChn": "自爆虫群_169_012",
           "nameEn": "Interceptor_169_012",
           "parentId": 169,
           "posEcf": {
@@ -20252,7 +20252,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_013",
+          "nameChn": "自爆虫群_169_013",
           "nameEn": "Interceptor_169_013",
           "parentId": 169,
           "posEcf": {
@@ -20292,7 +20292,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_014",
+          "nameChn": "自爆虫群_169_014",
           "nameEn": "Interceptor_169_014",
           "parentId": 169,
           "posEcf": {
@@ -20332,7 +20332,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_015",
+          "nameChn": "自爆虫群_169_015",
           "nameEn": "Interceptor_169_015",
           "parentId": 169,
           "posEcf": {
@@ -20372,7 +20372,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_016",
+          "nameChn": "自爆虫群_169_016",
           "nameEn": "Interceptor_169_016",
           "parentId": 169,
           "posEcf": {
@@ -20412,7 +20412,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_017",
+          "nameChn": "自爆虫群_169_017",
           "nameEn": "Interceptor_169_017",
           "parentId": 169,
           "posEcf": {
@@ -20452,7 +20452,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_018",
+          "nameChn": "自爆虫群_169_018",
           "nameEn": "Interceptor_169_018",
           "parentId": 169,
           "posEcf": {
@@ -20492,7 +20492,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_019",
+          "nameChn": "自爆虫群_169_019",
           "nameEn": "Interceptor_169_019",
           "parentId": 169,
           "posEcf": {
@@ -20532,7 +20532,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_020",
+          "nameChn": "自爆虫群_169_020",
           "nameEn": "Interceptor_169_020",
           "parentId": 169,
           "posEcf": {
@@ -20572,7 +20572,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_021",
+          "nameChn": "自爆虫群_169_021",
           "nameEn": "Interceptor_169_021",
           "parentId": 169,
           "posEcf": {
@@ -20612,7 +20612,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_022",
+          "nameChn": "自爆虫群_169_022",
           "nameEn": "Interceptor_169_022",
           "parentId": 169,
           "posEcf": {
@@ -20652,7 +20652,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_023",
+          "nameChn": "自爆虫群_169_023",
           "nameEn": "Interceptor_169_023",
           "parentId": 169,
           "posEcf": {
@@ -20692,7 +20692,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_024",
+          "nameChn": "自爆虫群_169_024",
           "nameEn": "Interceptor_169_024",
           "parentId": 169,
           "posEcf": {
@@ -20732,7 +20732,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_025",
+          "nameChn": "自爆虫群_169_025",
           "nameEn": "Interceptor_169_025",
           "parentId": 169,
           "posEcf": {
@@ -20772,7 +20772,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_026",
+          "nameChn": "自爆虫群_169_026",
           "nameEn": "Interceptor_169_026",
           "parentId": 169,
           "posEcf": {
@@ -20812,7 +20812,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_027",
+          "nameChn": "自爆虫群_169_027",
           "nameEn": "Interceptor_169_027",
           "parentId": 169,
           "posEcf": {
@@ -20852,7 +20852,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_028",
+          "nameChn": "自爆虫群_169_028",
           "nameEn": "Interceptor_169_028",
           "parentId": 169,
           "posEcf": {
@@ -20892,7 +20892,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_029",
+          "nameChn": "自爆虫群_169_029",
           "nameEn": "Interceptor_169_029",
           "parentId": 169,
           "posEcf": {
@@ -20932,7 +20932,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_030",
+          "nameChn": "自爆虫群_169_030",
           "nameEn": "Interceptor_169_030",
           "parentId": 169,
           "posEcf": {
@@ -20972,7 +20972,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_031",
+          "nameChn": "自爆虫群_169_031",
           "nameEn": "Interceptor_169_031",
           "parentId": 169,
           "posEcf": {
@@ -21012,7 +21012,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_032",
+          "nameChn": "自爆虫群_169_032",
           "nameEn": "Interceptor_169_032",
           "parentId": 169,
           "posEcf": {
@@ -21052,7 +21052,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_033",
+          "nameChn": "自爆虫群_169_033",
           "nameEn": "Interceptor_169_033",
           "parentId": 169,
           "posEcf": {
@@ -21092,7 +21092,7 @@
             "y": 20.5,
             "z": 0.0
           },
-          "nameChn": "拦截弹_169_034",
+          "nameChn": "自爆虫群_169_034",
           "nameEn": "Interceptor_169_034",
           "parentId": 169,
           "posEcf": {

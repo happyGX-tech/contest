@@ -1,0 +1,288 @@
+{
+  "scenario": "E06",
+  "policies": {
+    "red": "r11_lethal_package",
+    "red_motion": "local_avoid_s3",
+    "blue": "b0_fixed_ratio_random"
+  },
+  "steps_executed": 878,
+  "termination_reason": "environment_done",
+  "score": {
+    "score": 84.0909090909091,
+    "raw_score": 0.8409090909090909,
+    "K": 0.8409090909090909,
+    "T": 0.0,
+    "completed": false,
+    "destroyed_ids": [
+      51,
+      53,
+      54,
+      168,
+      169,
+      2553,
+      2555,
+      2559,
+      2565,
+      2570,
+      2573,
+      2552,
+      2883,
+      2884,
+      2885,
+      2886,
+      2889,
+      2892,
+      2893
+    ],
+    "destroyed_weight": 37.0,
+    "total_objective_weight": 44.0,
+    "objective_weights": {
+      "51": 5.0,
+      "53": 5.0,
+      "54": 2.0,
+      "168": 1.0,
+      "169": 1.0,
+      "2553": 2.0,
+      "2555": 2.0,
+      "2559": 2.0,
+      "2565": 2.0,
+      "2570": 1.0,
+      "2573": 1.0,
+      "2552": 5.0,
+      "2883": 1.0,
+      "2884": 1.0,
+      "2885": 1.0,
+      "2886": 1.0,
+      "2887": 2.0,
+      "2889": 2.0,
+      "2891": 5.0,
+      "2892": 1.0,
+      "2893": 1.0
+    },
+    "destruction_steps": {
+      "51": 460,
+      "53": 458,
+      "54": 365,
+      "168": 404,
+      "169": 529,
+      "2552": 558,
+      "2553": 385,
+      "2555": 351,
+      "2559": 395,
+      "2565": 432,
+      "2570": 556,
+      "2573": 776,
+      "2883": 544,
+      "2884": 585,
+      "2885": 489,
+      "2886": 747,
+      "2889": 360,
+      "2892": 747,
+      "2893": 532
+    }
+  },
+  "red": {
+    "platforms_total": 126,
+    "launched": 126,
+    "alive": 0,
+    "lost": 126
+  },
+  "blue": {
+    "entities_total": 106,
+    "alive": 3,
+    "destroyed": 103,
+    "initial_health_total": 191484.00000000006,
+    "remaining_health_total": 2260.0
+  },
+  "objectives": [
+    {
+      "id": 51,
+      "name": "母巢_51",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 0.0,
+      "destroyed_step": 460
+    },
+    {
+      "id": 53,
+      "name": "母巢_53",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 0.0,
+      "destroyed_step": 458
+    },
+    {
+      "id": 54,
+      "name": "哨卫巢_54",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 365
+    },
+    {
+      "id": 168,
+      "name": "暗巢_168",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 404
+    },
+    {
+      "id": 169,
+      "name": "暗巢_169",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 529
+    },
+    {
+      "id": 2553,
+      "name": "site_added_2553",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 385
+    },
+    {
+      "id": 2555,
+      "name": "site_added_2555",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 351
+    },
+    {
+      "id": 2559,
+      "name": "site_added_2559",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 395
+    },
+    {
+      "id": 2565,
+      "name": "site_added_2565",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 432
+    },
+    {
+      "id": 2570,
+      "name": "ship_added_2570",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 556
+    },
+    {
+      "id": 2573,
+      "name": "ship_added_2573",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 776
+    },
+    {
+      "id": 2552,
+      "name": "target_added_2552",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 0.0,
+      "destroyed_step": 558
+    },
+    {
+      "id": 2883,
+      "name": "暗巢_2883",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 544
+    },
+    {
+      "id": 2884,
+      "name": "暗巢_2884",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 585
+    },
+    {
+      "id": 2885,
+      "name": "暗巢_2885",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 489
+    },
+    {
+      "id": 2886,
+      "name": "暗巢_2886",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 747
+    },
+    {
+      "id": 2887,
+      "name": "哨卫巢_2887",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 6.0,
+      "destroyed_step": null
+    },
+    {
+      "id": 2889,
+      "name": "哨卫巢_2889",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 360
+    },
+    {
+      "id": 2891,
+      "name": "母巢_2891",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 4.0,
+      "destroyed_step": null
+    },
+    {
+      "id": 2892,
+      "name": "暗巢_2892",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 747
+    },
+    {
+      "id": 2893,
+      "name": "暗巢_2893",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 532
+    }
+  ]
+}

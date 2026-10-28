@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "name": "连续自由部署与立即出发20图",
+  "version": "20261016",
+  "geometry_revision": "tier_inventory_balance_20261016",
+  "max_steps": 3000,
+  "all_units_depart_at_start": true,
+  "grid_required": false,
+  "cases": [
+    {
+      "id": "E01",
+      "difficulty": "easy",
+      "title": "单门扇形",
+      "scenario": "easy/E01/scenario.json",
+      "files_sha256": {
+        "scenario.json": "f2c43a54f1dd69225cf780e9e370cec4d2629f17aff2c0829699e7cdd05494d6",
+        "case_info.json": "deb1855942b22748391dd76fee5e48b6105287bbb35afa85fd76156b5954dd3a",
+        "deployment_area.json": "8852a26e5fea28ee4fe8d95b8eb47c2da1ca6599c452be5738a2bc5b737a2006",
+        "map_info.png": "507c3d4cf80f49d2382d2522dacb661cc7d6d63951b94bfd116b228d279249ea"
+      }
+    },
+    {
+      "id": "E02",
+      "difficulty": "easy",
+      "title": "偏置新月",
+      "scenario": "easy/E02/scenario.json",
+      "files_sha256": {
+        "scenario.json": "9325ad3760c0fff7cdc137a171c9a35ebb826ff65006d2f27c422a64cff60673",
+        "case_info.json": "0b45968ff52b2c70bffa71cf8ed43a12365ce2e0bcc9953e25c31b34211f8283",
+        "deployment_area.json": "028a00a0147e788675c9c04303864564dd3bba33a3fc61a3760e6c56ccd2245a",
+        "map_info.png": "6ed31748f01a7e09f1c128d37c5dfbb6d60c8a813b35f9b97228982b72d9bbe1"
+      }
+    },
+    {
+      "id": "E03",
+      "difficulty": "easy",
+      "title": "三路栅栏",
+      "scenario": "easy/E03/scenario.json",
+      "files_sha256": {
+        "scenario.json": "f3fd9c2354f5b482c8a0bb3dcb64c576cc8a95293479d714c3e536c315c53433",
+        "case_info.json": "a9bba5334caa171edac8594baa459c6d4d2d4046ee1e8df899df8ae541198c72",
+        "deployment_area.json": "6826dd267a17b18db6cfa7d118d1eb6509d38fe5373c3049299c31164771600e",
+        "map_info.png": "ad1762046939dfc86074cf963ad8003be7d9118fb670552dca71bdf47b371afa"
+      }
+    },
+    {
+      "id": "E04",
+      "difficulty": "easy",
+      "title": "楔形漏斗",
+      "scenario": "easy/E04/scenario.json",
+      "files_sha256": {
+        "scenario.json": "6140eb0be7e894029ead121a0d507f91d126ea8048f55462d05b9c71160c1d9c",
+        "case_info.json": "a8ecbb2c19de0b8429bbe2fd6b47606b45a35f9c0e030107853e2482b0e40694",
+        "deployment_area.json": "6cc44267441863430a5f0436bb9a1194f0901b1dda759f0d7445b35c96ab16de",
+        "map_info.png": "c28a8a5b4477c80436c9289455f9e2b2e97b3ad9a704745f300ae9e3b0dcada6"
+      }
+    },
+    {
+      "id": "E05",
+      "difficulty": "easy",
+      "title": "双层错门",
+      "scenario": "easy/E05/scenario.json",
+      "files_sha256": {
+        "scenario.json": "bc6462071c9bf87df297bf012bc50256977b0990d6bfe60aa9894611409b5184",
+        "case_info.json": "eb234e49d17b053be135577124e519d5c3aa2fecd5e211898dbfbc8fab9ecd74",
+        "deployment_area.json": "de53d6991c780c912f8ed8fcf1cce14856ab28bde5ddf01b44726aa5e5dbd3b7",
+        "map_info.png": "084e95d4fce6db62771e53c8760922a02b6a2be4d4a950d79fd7f15d2d3a68a4"
+      }
+    },
+    {
+      "id": "E06",
+      "difficulty": "easy",
+      "title": "三岛接续",
+      "scenario": "easy/E06/scenario.json",
+      "files_sha256": {
+        "scenario.json": "fb4e6647fa47d076ff3a1321ae4e8c0ad0a1c193aef7afc1b417d4dd767414de",
+        "case_info.json": "98e35c3acfebfb23bd9de73ce1e0d248ce6e818026d98a58a97e36ac06e5cfe0",
+        "deployment_area.json": "2f877557b520fd145fa652c6e097a45b4d4a6235d02a442a70d50211133b5aee",
+        "map_info.png": "a2e4baec263fcaf6716a4c59f209881a139fe4d0c626531d15e9fd363b9d6e00"
+      }
+    },
+    {
+      "id": "H01",
+      "difficulty": "hard",
+      "title": "鱼骨走廊",
+      "scenario": "hard/H01/scenario.json",
+      "files_sha256": {
+        "scenario.json": "230188a433ba8a561c1bb3f343bfe813fe4e20c439cf43d89a0b1fd09af6a8b9",
+        "case_info.json": "f019af7364836f7c492ac48aa7eef9e7b1bda50a21e4456329ed233eeb8f2436",
+        "deployment_area.json": "72082a42b501b5434043465583dacd6af2c6a70c99d54987f7868cd500b89107",
+        "map_info.png": "1965478faf4f85eea9e630e72d11b8e33b27203b4f09093832d7e6939852b0b7"
+      }
+    },
+    {
+      "id": "H02",
+      "difficulty": "hard",
+      "title": "三叉收束",
+      "scenario": "hard/H02/scenario.json",
+      "files_sha256": {
+        "scenario.json": "42de7ddfd7f99ad9db0d73b0a9245f2a61ac791dc3f44ef076bdcad03236a706",
+        "case_info.json": "f949884e16399018edbf19dfe28ea0c2b57db6da9305d9975e22baba45b7eeda",
+        "deployment_area.json": "44599c47a40b3ff4bb3c0028e2d1b7dab3894d78c1c5fcd90384901aab527e29",
+        "map_info.png": "bad120a511fa24229983691ef0e148d0301d3e6f7bbfef50d555686f476b177a"
+      }
+    },
+    {
+      "id": "H03",
+      "difficulty": "hard",
+      "title": "三层错位门",
+      "scenario": "hard/H03/scenario.json",
+      "files_sha256": {
+        "scenario.json": "bae02e3ab454d26c960501c3b095d985b126349b887cba4a8210f3f15e268b4c",
+        "case_info.json": "43faaf18ba2bf971615c03b7fa58307a7b0360660bc92c20d73785ced22e1e19",
+        "deployment_area.json": "055629d1be323ee1914a0f4fb0bbb0a880a28fadf017f84368b0472ffd64b0ad",
+        "map_info.png": "16ab9ca490fc0841e3553eddf92726b1d3dd4ab370b473cb6a96dff47a491c89"
+      }
+    },
+    {
+      "id": "H04",
+      "difficulty": "hard",
+      "title": "S形防带",
+      "scenario": "hard/H04/scenario.json",
+      "files_sha256": {
+        "scenario.json": "014dd519f7e75f052c881c01153ec780c9e510a2a55358f37ae56820dda87751",
+        "case_info.json": "5cd33251b6ac1e876556955cb38582bab1803898c250ca4e6078b95609207b9d",
+        "deployment_area.json": "ec572d7105acd6a59bb78e3c9019b8f2d3b909821c71d1d6d8e09c98dc009cae",
+        "map_info.png": "0e723319565fef2d3c8104891712ee6e4e354027a2c1d4bb3c1274f1ce51978d"
+      }
+    },
+    {
+      "id": "H05",
+      "difficulty": "hard",
+      "title": "钩形纵深",
+      "scenario": "hard/H05/scenario.json",
+      "files_sha256": {
+        "scenario.json": "fd5ebc3cbea67d9cc04f98c9cb417db6241c20541ff639503079a3825983400e",
+        "case_info.json": "db5c78e1f09ef3cf7fd7bd6170b33ce886e97c6a76dabefdc21fd155c22023dd",
+        "deployment_area.json": "4982c56a136c4f92c2b847527c8ec3fc93256e1376126cf3921eb3bb94e5914f",
+        "map_info.png": "5fce3625e4eee8046434b929cc7acd61b2ea5fbbb6af0149e3f06237eca0d627"
+      }
+    },
+    {
+      "id": "H06",
+      "difficulty": "hard",
+      "title": "偏置双环",
+      "scenario": "hard/H06/scenario.json",
+      "files_sha256": {
+        "scenario.json": "f0754c8e355ec47a51a5019e4727dad47bfe14cac87a9473ea645d8fe1858359",
+        "case_info.json": "9084a2a458ac9629020d1813a61587bea0b412260c7cd3fe5a729bd6357bc851",
+        "deployment_area.json": "516ccda21dd865030db16e6912251c90c79136d1b521f8a2992336ed436139d6",
+        "map_info.png": "97ba357dbc32735fc4a6d4c280e4a4fed1ee884f22b85f74920bc6efdd82c585"
+      }
+    },
+    {
+      "id": "H07",
+      "difficulty": "hard",
+      "title": "五岛棋盘",
+      "scenario": "hard/H07/scenario.json",
+      "files_sha256": {
+        "scenario.json": "c1873af9ff34b9e792fd85d515ebc8fe9944f282a2e69c45eaae147bd27860a0",
+        "case_info.json": "eb73fe8eb5697374929ee211f3a1e48bcf5c8f6539a4cb1df9ce6d5d3e1eef67",
+        "deployment_area.json": "1c0bdc835c80d19370e5a186b3cc8627486c894877c1197ecb0058331573f181",
+        "map_info.png": "dd19a26dda766dad4ee8e5b885a35683b082e9c081238225655ea7013c1ab200"
+      }
+    },
+    {
+      "id": "H08",
+      "difficulty": "hard",
+      "title": "双弧包络",
+      "scenario": "hard/H08/scenario.json",
+      "files_sha256": {
+        "scenario.json": "b1b5d115c5c4c77eb993377ee3dd3134c2c569a544b3385ef130eb9e351d687c",
+        "case_info.json": "5599ea0f7db866f48930ee96962f0f7a77e76cc5c78e28988c9cc999b8415ee7",
+        "deployment_area.json": "00d43e7df6234383104413de1cd320508ed7eacf03562bd5a1694f820eff73ce",
+        "map_info.png": "39be7604da79e669d1cfed96cc3a514328992e5d73734be782d2428ca5515d7c"
+      }
+    },
+    {
+      "id": "M01",
+      "difficulty": "medium",
+      "title": "弧门侧切",
+      "scenario": "medium/M01/scenario.json",
+      "files_sha256": {
+        "scenario.json": "50a4e59f55439501bfc53341c7e3868984da4a82fd43af28cb09f63ba7335550",
+        "case_info.json": "8b97b2fe573ba1c8ef0b1e1cf404705e1fb676794c668e50147076cc5deaace5",
+        "deployment_area.json": "cb3e65bb547a891ee8d734524fa17d35b647721fda673b6a878f651d09c0df48",
+        "map_info.png": "b165739c82267273f3fc3f4726c9db8dcd2d63705f86e2420f0aa45b531ab5e9"
+      }
+    },
+    {
+      "id": "M02",
+      "difficulty": "medium",
+      "title": "菱堡外环",
+      "scenario": "medium/M02/scenario.json",
+      "files_sha256": {
+        "scenario.json": "9eec3509d3be14d5ffc75746f66b167a31f8d7d5b31b9c50c16fc080988e9435",
+        "case_info.json": "4b294455ce19dfba1046ca1d8f169e948684002ab99ffdcc008c0259089b944c",
+        "deployment_area.json": "81e1a783bf77da9f2097d372dd98c37e6d1503369006c74d24bd69e89deec47d",
+        "map_info.png": "d0c491a93f4b2059b0fcddecc03067252d32f000d3616f43e2b150c26430d058"
+      }
+    },
+    {
+      "id": "M03",
+      "difficulty": "medium",
+      "title": "双门分流",
+      "scenario": "medium/M03/scenario.json",
+      "files_sha256": {
+        "scenario.json": "00a8fd8d4c5792acfe92ce776b67feb746eb1cd1af238bb4209fb0671743cb4a",
+        "case_info.json": "75205550950a9e8b511fdb91a156b973b849e674409d1d253a649c3906f120b2",
+        "deployment_area.json": "a71cbc90225a57481aea8cdbcc0dc0e9c7879b4f3a293c4cf62e905ef070e4d1",
+        "map_info.png": "3e3da41e48e24d5e172dcf006500d09c1d9d5c04d4431e8b12ee15ea4f8df904"
+      }
+    },
+    {
+      "id": "M04",
+      "difficulty": "medium",
+      "title": "断续阶梯",
+      "scenario": "medium/M04/scenario.json",
+      "files_sha256": {
+        "scenario.json": "16d39af9a15399a911fcbeca582ee2031d6a2dafe21bd2cd9fd05dfed5379884",
+        "case_info.json": "269219ad45e61db995a9531abee16c8bab5db0db130ef0265524828979d31489",
+        "deployment_area.json": "7d7ae9c993d5d3781a8ac499e3355c51102c820a591f9bcf1be90242b56467bd",
+        "map_info.png": "925661fc382c2b2a59438dd7d836346a32e7931c685d9c5cfb9bbd4d6b173c46"
+      }
+    },
+    {
+      "id": "M05",
+      "difficulty": "medium",
+      "title": "沙漏双颈",
+      "scenario": "medium/M05/scenario.json",
+      "files_sha256": {
+        "scenario.json": "3d1a138b847038232a9a3788d3482cf163d5b34ec5cf9d020139ffd07670662d",
+        "case_info.json": "6920c4b866c0d9f29d3d943ac34f37398728b7f9d4eafc8c7654fa6eb823d3a3",
+        "deployment_area.json": "7b81f2675f135fbabe7e7048befaef29b10db962db9a4099d81f52e0f6c97f0c",
+        "map_info.png": "d826c0947483e5a5862bb4239e5b7edd0e0ae439811296e5dce1f4cece89d5e2"
+      }
+    },
+    {
+      "id": "M06",
+      "difficulty": "medium",
+      "title": "北窗南堡",
+      "scenario": "medium/M06/scenario.json",
+      "files_sha256": {
+        "scenario.json": "5be4f8c39f10c342857e868084426b371ad30ad5ec25b60801639c35ae1e039f",
+        "case_info.json": "7107e10c4dabb870b7bcc357bfbbb8123280008cb0d30fc9a653d329dbc9d486",
+        "deployment_area.json": "99af368b9c1114d5c36304e0e5df170e38b66dc32a4f53385e1770d73911d16d",
+        "map_info.png": "30d7233b3d536e1f0b190724bb7f7db7d85229fc6b9464a59d14acc7707736a5"
+      }
+    }
+  ],
+  "scoring": "destroyed_objective_weight_ratio",
+  "interceptor_counts": {
+    "easy": 78,
+    "medium": 146,
+    "hard": 348
+  },
+  "ratio_denominator": "毁灭者数量＋突击者数量"
+}

@@ -18,6 +18,9 @@ class WriteConfig:
     # 是否打印日志
     verbose: bool = True
 
+    # 日志频率
+    log_frequency:int = 1
+
     def is_enabled(self, data_type: str) -> bool:
         """检查某类型数据是否启用写入"""
         if data_type == "config":

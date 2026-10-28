@@ -8,13 +8,13 @@
   "mission_type_name": "综合任务",
   "topology_id": "four_quadrant_cells",
   "topology_name": "四象限断网",
-  "design_intent": "四艘计分无人船分置前沿西北/西南与纵深东北/东南四个象限，中央公开资源与上下雷达带把战场分成多块。",
+  "design_intent": "四艘计分暗巢分置前沿西北/西南与纵深东北/东南四个象限，中央公开资源与上下视野塔带把战场分成多块。",
   "structural_features": [
     "前后四象限节点",
     "中央公开资源簇",
-    "上下雷达带分区"
+    "上下视野塔带分区"
   ],
-  "difficulty_mechanism": "11个计分目标、4部雷达和288枚拦截弹；蓝方拦截弹/红方高中性能打击弹=3.0。",
+  "difficulty_mechanism": "11个母巢、4部视野塔和288枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=3.0。",
   "objective_ids": [
     51,
     52,
@@ -154,7 +154,7 @@
       "initial_information": "public"
     }
   ],
-  "scenario_sha256": "c4cbfe67f7b824827afbe754e2d7982fd5f345105b12e3cfe77cdaccd1e9eb99",
+  "scenario_sha256": "3fae78b41c57e1bf64e3a52dc1ff6bf7d2effd202d8383b6d9d89f15d335e9dd",
   "entity_total": 511,
   "blue_entity_total": 303,
   "blue_root_total": 11,

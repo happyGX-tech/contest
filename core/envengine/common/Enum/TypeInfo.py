@@ -9,8 +9,6 @@ from enum import IntEnum
 class TypeInfo(IntEnum):
 	#qqq
 	eee1 = 55555 # eee1
-	#17所雷达模型
-	sevev = 460001 # 雷达十七
 	#基地
 	base = 11000001 # 基地
 	Anderson_Air_Force_Base = 11000002 # 安德森空军基地
@@ -28,15 +26,15 @@ class TypeInfo(IntEnum):
 	Kadena_Air_Base = 11000014 # 嘉手纳空军基地
 	#编组指控
 	GroupCommander = 31000001 # 编组指控
-	#卫星
-	SatelliteA = 9200001 # 卫星1
-	SatelliteB = 9200002 # 卫星2
-	SatelliteC = 9200003 # 卫星3
-	SatelliteD = 9200004 # 卫星4
-	SatelliteE = 9200005 # 卫星5
-	SatelliteF = 9200006 # 卫星6
-	SatelliteG = 9200007 # 卫星7
-	SatelliteH = 9200008 # 卫星8
+	#天眼
+	SatelliteA = 9200001 # 天眼1
+	SatelliteB = 9200002 # 天眼2
+	SatelliteC = 9200003 # 天眼3
+	SatelliteD = 9200004 # 天眼4
+	SatelliteE = 9200005 # 天眼5
+	SatelliteF = 9200006 # 天眼6
+	SatelliteG = 9200007 # 天眼7
+	SatelliteH = 9200008 # 天眼8
 	#车
 	Vehicle = 9300001 # 普通车辆
 	df_fsc_01 = 6 # 导弹发射车
@@ -46,19 +44,12 @@ class TypeInfo(IntEnum):
 	CommonMsgNet = 34000001 # 通用通信链
 	#舰船
 	GeneralShip = 9400001 # 普通舰船
-	us_cvn_89 = 5 # 尼米兹航母
 	#干扰指控
 	JammerCenter = 32000001 # 干扰指控
 	#红外
 	CommonInfraredSeeker = 42000001 # 通用红外
-	#雷达
-	nolmalRadar = 44000001 # 普通雷达
 	#预警指控
 	DetectCommander = 33000001 # 预警指控
-	#巡航弹
-	CommonCruise = 21000001 # 通用巡航弹
-	#弹道弹
-	CommomDDD = 22000001 # 普通DDD
 	#导引头
 	CommonSeeker = 43000001 # 普通导引头
 	#城市
@@ -76,8 +67,8 @@ class TypeInfo(IntEnum):
 	JammerWeaponCarrier = 63000001 # 干扰武器挂架
 	#工事碉堡
 	DefenceWorks = 11001001 # 工事碉堡
-	#地球同步卫星
-	fixorbitSat = 9201001 # 同步卫星
+	#地球同步天眼
+	fixorbitSat = 9201001 # 同步天眼
 	orbitVariableSat = 9201002 # 通用变轨
 	LasetSat = 9201003 # 激光变轨
 	NetCatcherSat = 9201004 # 网捕变轨
@@ -90,10 +81,10 @@ class TypeInfo(IntEnum):
 	defaultLaser = 21004001 # 默认激光器
 	#网捕器
 	defaultNetCatcher = 21005001 # 默认网捕器
-	#卫星探测器
-	defaultSatProber = 45000001 # 默认卫星探测器
-	#拦截弹
-	SM6 = 24000001 # 标6
+	#天眼探测器
+	defaultSatProber = 45000001 # 默认天眼探测器
+	#自爆虫群
+	SM6 = 24000001 # 自爆虫群
 	#拦截指控
 	DefendCommander = 35000001 # 拦截指控
 	#进攻指控
@@ -102,7 +93,7 @@ class TypeInfo(IntEnum):
 	AStartAlgorithm = 90001001 # A星算法
 	#JT导引头
 	JTSeeker = 43001001 # JT导引头
-	radar = 43001002 # 雷达探测器
+	radar = 43001002 # 视野塔探测器
 	sar = 43001003 # sar探测器
 	infrared = 43001004 # 红外探测器
 	#新干扰指控
@@ -121,7 +112,7 @@ class TypeInfo(IntEnum):
 	#充气式角反
 	MK59 = 52000001 # 通用充气式角反
 	CornerReflector_Jam = 52000002 # 角反GR
-	#Tle卫星
+	#Tle天眼
 	G_TEL_1 = 9202001 # G_TEL_1
 	G_TEL_2 = 9202002 # G_TEL_2
 	G_TEL_3 = 9202003 # G_TEL_3
@@ -185,12 +176,10 @@ class TypeInfo(IntEnum):
 	lxnAgentTest = 91003001 # lxn代理模型
 	#挂接测试
 	default = 1024768 # 默认
-	#GS导引头雷达代理
-	gsSeekerAgent_Radar = 91004001 # GS导引头雷达代理
+	#GS导引头视野塔代理
+	gsSeekerAgent_Radar = 91004001 # GS导引头视野塔代理
 	#GS导引头光学代理
 	gsSeekerAgent_Optics = 91005001 # GS导引头光学代理
-	#巡航弹v2
-	speedCruise = 21001001 # 巡航弹v2
 	#云雨雾雪霾环境模型
 	environment = 70000001 # 环境信息模型
 	#MikuSoft代理测试-Class是Example

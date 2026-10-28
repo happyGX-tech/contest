@@ -1,0 +1,269 @@
+{
+  "scenario_id": "E02",
+  "display_id": "E02",
+  "title": "双层错门",
+  "difficulty": "easy",
+  "difficulty_name": "简单",
+  "source_commit": "ad45a7bc804a88703d1259d6083ba57553a25dfb",
+  "scenario_sha256": "a40b275ca4996e405a3ef341d4c61884ef80fc8ada9001a99d617793b5a668d2",
+  "max_steps": 3000,
+  "topology_model": "explicit_motifs_shared_grid_right4_v3",
+  "topology_name": "双层错门",
+  "blue_translation_fraction": [
+    0.04,
+    0
+  ],
+  "design_intent": "错位双层：两条纵向点列交替布置，局部密集区在南部。 蓝方整体右移地图宽度的4%，不收紧点位。",
+  "distribution": "部分不均匀",
+  "band_counts": [
+    {
+      "public": 3,
+      "swarm": 25
+    },
+    {
+      "public": 2,
+      "swarm": 17
+    },
+    {
+      "public": 1,
+      "swarm": 8
+    },
+    {
+      "public": 4,
+      "swarm": 34
+    }
+  ],
+  "band_cv": {
+    "public": 0.447213595499958,
+    "swarm": 0.4579853348016987
+  },
+  "objective_ids": [
+    54,
+    2559,
+    51,
+    2569,
+    2563,
+    52,
+    2570,
+    2565,
+    2573,
+    2567,
+    53,
+    2551,
+    2552,
+    2574
+  ],
+  "public_objective_ids": [
+    54,
+    2559,
+    51,
+    2563,
+    52,
+    2565,
+    2567,
+    53,
+    2551,
+    2552
+  ],
+  "hidden_objective_ids": [
+    2569,
+    2570,
+    2573,
+    2574
+  ],
+  "roots": [
+    {
+      "id": 54,
+      "kind": "site",
+      "lon": 11.91573,
+      "lat": 2.64605,
+      "hp": 12.0,
+      "interceptors": 8,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 55
+    },
+    {
+      "id": 2559,
+      "kind": "site",
+      "lon": 12.09057,
+      "lat": 2.5817375,
+      "hp": 12.0,
+      "interceptors": 8,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2560
+    },
+    {
+      "id": 51,
+      "kind": "target",
+      "lon": 12.2124,
+      "lat": 2.6010312499999997,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2569,
+      "kind": "ship",
+      "lon": 12.045,
+      "lat": 2.59368125,
+      "hp": 0.8,
+      "interceptors": 9,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2563,
+      "kind": "site",
+      "lon": 12.0729,
+      "lat": 2.4301437499999996,
+      "hp": 12.0,
+      "interceptors": 8,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2564
+    },
+    {
+      "id": 52,
+      "kind": "target",
+      "lon": 12.3519,
+      "lat": 2.41728125,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2570,
+      "kind": "ship",
+      "lon": 12.1845,
+      "lat": 2.4099312499999996,
+      "hp": 0.8,
+      "interceptors": 9,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2565,
+      "kind": "site",
+      "lon": 11.9334,
+      "lat": 2.2463937499999997,
+      "hp": 12.0,
+      "interceptors": 4,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2566
+    },
+    {
+      "id": 2573,
+      "kind": "ship",
+      "lon": 12.045,
+      "lat": 2.22618125,
+      "hp": 0.8,
+      "interceptors": 4,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2567,
+      "kind": "site",
+      "lon": 12.0729,
+      "lat": 2.06264375,
+      "hp": 12.0,
+      "interceptors": 17,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2568
+    },
+    {
+      "id": 53,
+      "kind": "target",
+      "lon": 12.316559999999999,
+      "lat": 2.09265625,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2551,
+      "kind": "target",
+      "lon": 12.2124,
+      "lat": 2.0497812499999997,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2552,
+      "kind": "target",
+      "lon": 12.38724,
+      "lat": 2.00690625,
+      "hp": 16.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2574,
+      "kind": "ship",
+      "lon": 12.1845,
+      "lat": 2.04243125,
+      "hp": 0.8,
+      "interceptors": 17,
+      "objective": true,
+      "initial_information": "hidden"
+    }
+  ],
+  "root_counts": {
+    "target": 5,
+    "site": 5,
+    "ship": 4
+  },
+  "interceptor_counts": {
+    "54": 8,
+    "2559": 8,
+    "2569": 9,
+    "2563": 8,
+    "2570": 9,
+    "2565": 4,
+    "2573": 4,
+    "2567": 17,
+    "2574": 17
+  },
+  "red_missile_counts": {
+    "high": 35,
+    "medium": 49,
+    "low": 126
+  },
+  "blue_root_total": 14,
+  "radar_total": 5,
+  "interceptor_total": 84,
+  "entity_total": 315,
+  "blue_root_health_total": 143.2,
+  "red_nominal_damage_total": 1071,
+  "blue_health_to_red_nominal_damage_ratio": 0.13370681605975723,
+  "map_area": {
+    "lonMin": 11.58,
+    "lonMax": 12.51,
+    "latMin": 1.9625,
+    "latMax": 2.6975
+  },
+  "logical_map_size": [
+    75,
+    60
+  ],
+  "launch_altitude_external_m": 3000,
+  "initial_speed_note": "Initial speed 300 is the supplied model rule; no supported scenario speed override was found.",
+  "detection": {
+    "source": "RadarModelSimulator.execute_detection + ISimulator._is_geometrically_visible",
+    "range_m": 20000,
+    "distance_axes": "ECEF X,Y only",
+    "minimum_target_stage": 3,
+    "slice_altitude_m": 3000
+  },
+  "validation_status": "configuration and API contract; full dynamics not certified"
+}

@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 from scenarios.cases import load_reward_policy
+from policies.red.baselines import RED_POLICY_CHOICES
 
 
 ROOT = Path(__file__).resolve().parent
@@ -26,19 +27,6 @@ BLUE_POLICY_CHOICES = (
     "b7_planned_nearest",
     "b8_threat_multi_wave",
     "b9_min_cost_planned_multi_wave",
-)
-RED_POLICY_CHOICES = (
-    "r0_random",
-    "r1_priority",
-    "r2_static_assignment",
-    "r3_wave_schedule",
-    "r4_rolling_rules",
-    "r5_event_rolling",
-    "r6_frontload_decoy",
-    "r7_strike_packages",
-    "r7_static_search",
-    "r8_satellite_packages",
-    "r9_hierarchical_learning",
 )
 RED_MOTION_POLICY_CHOICES = (
     "straight",
@@ -70,72 +58,90 @@ def scenario_path(case_id: str) -> Path:
     )
 
 
-def with_competition_step_limit(scenario: Path, core_args: list[str]) -> list[str]:
-    has_explicit_limit = any(
-        value == "--max-steps" or value.startswith("--max-steps=")
-        for value in core_args
-    )
-    if has_explicit_limit:
-        return core_args
+def competition_step_limit(scenario: Path) -> int | None:
+    """Return the scenario's scoring step limit, if it publishes one."""
 
     policy = load_reward_policy(scenario)
-    if policy is None:
-        return core_args
-    return ["--max-steps", str(policy.max_steps), *core_args]
+    return None if policy is None else int(policy.max_steps)
 
 
 def cmd_run(args: argparse.Namespace) -> int:
-    if args.red_policy == "r9_hierarchical_learning" and args.red_motion_policy not in {
-        "straight", "random_masked", "ppo", "mappo", "local_avoid_s3",
-    }:
-        print(
-            "r9_hierarchical_learning requires --red-motion-policy "
-            "straight, random_masked, ppo, mappo, or local_avoid_s3",
-            file=sys.stderr,
-        )
-        return 2
+    """Run one round through the 10-19 engine entry point.
+
+    The engine now owns the red action protocol, the blue baselines and the
+    scoring metadata, so this wrapper forwards explicit CLI flags instead of
+    environment variables.  Paths and the shared library search path are set
+    here so ``core/main.py`` can import the workspace ``policies`` package.
+    """
+
     try:
         scenario = scenario_path(args.scenario)
     except ValueError as error:
         print(error, file=sys.stderr)
         return 2
-    output = ROOT / "results" / "runs" / args.run_id
+    output = (ROOT / "results" / "runs" / args.run_id).resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
-    command = [sys.executable, "main.py", "--scenario", str(scenario), "--output-dir", str(output)]
+
     # argparse keeps the separator used before REMAINDER.  It is meaningful to
     # this wrapper only; forwarding it makes core/main.py reject its arguments.
     core_args = args.core_args[1:] if args.core_args[:1] == ["--"] else args.core_args
-    command.extend(with_competition_step_limit(scenario, core_args))
-    env = os.environ.copy()
-    env["BLUE_POLICY"] = args.blue_policy
-    env["RED_POLICY"] = args.red_policy
-    env["RED_MOTION_POLICY"] = args.red_motion_policy
-    if args.blue_interceptor_ratio is not None:
-        env["BLUE_INTERCEPTOR_RATIO"] = str(args.blue_interceptor_ratio)
-    if args.blue_plan_delay is not None:
-        env["BLUE_PLAN_DELAY"] = str(args.blue_plan_delay * 1000.0)
-    if args.blue_wave_gap is not None:
-        env["BLUE_WAVE_GAP"] = str(args.blue_wave_gap * 1000.0)
-    if args.blue_wave_size is not None:
-        env["BLUE_WAVE_SIZE"] = str(args.blue_wave_size)
-    if args.blue_min_cost_decision_interval is not None:
-        env["BLUE_MIN_COST_DECISION_INTERVAL"] = str(
-            args.blue_min_cost_decision_interval
-        )
-    reward_policy = load_reward_policy(scenario)
-    if reward_policy is not None:
-        env["BLUE_ASSET_VALUES"] = json.dumps(
-            dict(reward_policy.objective_weights)
-        )
-    if args.red_learning_model is not None:
-        env["RED_LEARNING_MODEL"] = str(Path(args.red_learning_model).resolve())
-    if args.red_learning_train:
-        env["RED_LEARNING_TRAIN"] = "1"
+    command = [
+        sys.executable,
+        str(CORE / "main.py"),
+        "--scenario", str(scenario),
+        "--output-dir", str(output),
+        "--red-policy", args.red_policy,
+        "--red-motion-policy", args.red_motion_policy,
+        "--blue-policy", args.blue_policy,
+    ]
+    if "--render-mode" not in core_args:
+        command.extend(["--render-mode", "none"])
+    if "--max-steps" not in core_args:
+        limit = competition_step_limit(scenario)
+        if limit is not None:
+            command.extend(["--max-steps", str(limit)])
     if args.seed is not None:
-        env["BLUE_POLICY_SEED"] = str(args.seed)
-        env["RED_POLICY_SEED"] = str(args.seed)
-        env["SIMULATION_SEED"] = str(args.seed)
-    return subprocess.call(command, cwd=CORE, env=env)
+        command.extend(["--seed", str(args.seed)])
+    if args.red_learning_model is not None:
+        command.extend(["--red-learning-model", str(Path(args.red_learning_model).resolve())])
+    if args.red_learning_train:
+        command.append("--red-learning-train")
+    if args.blue_interceptor_ratio is not None:
+        command.extend(["--blue-interceptor-ratio", str(args.blue_interceptor_ratio)])
+    if args.blue_plan_delay is not None:
+        command.extend(["--blue-plan-delay", str(args.blue_plan_delay)])
+    if args.blue_wave_gap is not None:
+        command.extend(["--blue-wave-gap", str(args.blue_wave_gap)])
+    if args.blue_wave_size is not None:
+        command.extend(["--blue-wave-size", str(args.blue_wave_size)])
+    if args.blue_min_cost_decision_interval is not None:
+        command.extend(["--blue-min-cost-decision-interval", str(args.blue_min_cost_decision_interval)])
+    command.extend(core_args)
+
+    if any(
+        arg == "--deployment-plan" or arg.startswith("--deployment-plan=")
+        for arg in command
+    ):
+        # ``core/user_agents/red/grid_deploy_agent.py`` imports
+        # ``scenarios.grid_maps``, which only exists in the repository-root
+        # ``scenarios`` package (the engine's own package lives under
+        # ``core/``).  Launching through ``-m`` keeps that root package first
+        # on sys.path; other runs keep the original script invocation.
+        command = [sys.executable, "-m", "core.main", *command[2:]]
+
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(
+        part for part in (str(ROOT), str(CORE), env.get("PYTHONPATH", "")) if part
+    )
+    runtime_library_path = Path(sys.executable).resolve().parent.parent / "lib"
+    env["LD_LIBRARY_PATH"] = os.pathsep.join([
+        str(CORE),
+        str(CORE / "envengine" / "sdk" / "Util"),
+        str(runtime_library_path),
+        env.get("LD_LIBRARY_PATH", ""),
+    ])
+    env.setdefault("OMP_NUM_THREADS", "1")
+    return subprocess.call(command, cwd=ROOT, env=env)
 
 
 def cmd_ui(_: argparse.Namespace) -> int:

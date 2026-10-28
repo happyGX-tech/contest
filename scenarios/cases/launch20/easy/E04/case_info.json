@@ -1,0 +1,366 @@
+{
+  "scenario_id": "E04",
+  "display_id": "E04",
+  "title": "楔形漏斗",
+  "difficulty": "easy",
+  "scenario_sha256": "6140eb0be7e894029ead121a0d507f91d126ea8048f55462d05b9c71160c1d9c",
+  "design_intent": "保留收束入口，考察先搜索后主攻能否减少正面损失。",
+  "max_steps": 3000,
+  "topology_model": "tier_inventory_balance_20261016",
+  "map_area": {
+    "lonMin": 11.407545169158894,
+    "lonMax": 12.51,
+    "latMin": 1.9625,
+    "latMax": 2.6975
+  },
+  "map_size_m": [
+    122622.03390508695,
+    81272.89550286377
+  ],
+  "public_engagement_polygon": [
+    [
+      11.8125,
+      1.9625
+    ],
+    [
+      12.51,
+      1.9625
+    ],
+    [
+      12.51,
+      2.6975
+    ],
+    [
+      11.8125,
+      2.6975
+    ]
+  ],
+  "public_engagement_polygon_source": "场景预先公开的固定边界，数值记录在public_engagement_polygon。",
+  "deployment_rule": "连续矩形内自由选择每个单位初始位置；格子方案仅作部署策略对照。全体红方在首次战斗推进前出发。",
+  "launch_altitude_external_m": 3000,
+  "roots": [
+    {
+      "id": 52,
+      "kind": "target",
+      "lon": 12.393237289221545,
+      "lat": 2.267872491138945,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 54,
+      "kind": "site",
+      "lon": 11.995328451407751,
+      "lat": 2.6097318621162935,
+      "hp": 18.0,
+      "interceptors": 4,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 55
+    },
+    {
+      "id": 169,
+      "kind": "ship",
+      "lon": 12.089850396658928,
+      "lat": 2.5987877258977896,
+      "hp": 1.2000000000000002,
+      "interceptors": 4,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2551,
+      "kind": "target",
+      "lon": 12.281637289221544,
+      "lat": 2.084122491138946,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2553,
+      "kind": "site",
+      "lon": 12.106928451407752,
+      "lat": 2.4259818621162927,
+      "hp": 18.0,
+      "interceptors": 4,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2554
+    },
+    {
+      "id": 2557,
+      "kind": "site",
+      "lon": 12.122049289221545,
+      "lat": 2.2807349911389463,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2558
+    },
+    {
+      "id": 2559,
+      "kind": "site",
+      "lon": 12.116890177568006,
+      "lat": 2.217306892314234,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2560
+    },
+    {
+      "id": 2563,
+      "kind": "site",
+      "lon": 12.007065523941327,
+      "lat": 2.06576516591278,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2564
+    },
+    {
+      "id": 2571,
+      "kind": "ship",
+      "lon": 12.259149710421761,
+      "lat": 2.395065980055398,
+      "hp": 1.2000000000000002,
+      "interceptors": 4,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2574,
+      "kind": "ship",
+      "lon": 12.216296451407752,
+      "lat": 2.2303431378837066,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2575,
+      "kind": "ship",
+      "lon": 12.10469645140775,
+      "lat": 2.046593137883705,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 51,
+      "kind": "target",
+      "lon": 12.28214045140775,
+      "lat": 2.596869362116293,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2883,
+      "kind": "ship",
+      "lon": 12.105102454125415,
+      "lat": 2.249929270005328,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2884,
+      "kind": "ship",
+      "lon": 12.060354501921626,
+      "lat": 2.1025961904377715,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2885,
+      "kind": "ship",
+      "lon": 12.108822454125418,
+      "lat": 2.307187841438498,
+      "hp": 1.2000000000000002,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2886,
+      "kind": "ship",
+      "lon": 12.039811201365854,
+      "lat": 2.6624468572254063,
+      "hp": 1.2000000000000002,
+      "interceptors": 4,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2887,
+      "kind": "site",
+      "lon": 12.337168553617186,
+      "lat": 2.377825023571085,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2888
+    },
+    {
+      "id": 2889,
+      "kind": "site",
+      "lon": 12.305072489726514,
+      "lat": 2.158037158561502,
+      "hp": 18.0,
+      "interceptors": 5,
+      "objective": true,
+      "initial_information": "public",
+      "radar_id": 2890
+    },
+    {
+      "id": 2891,
+      "kind": "target",
+      "lon": 12.186824894706112,
+      "lat": 2.4057565650016315,
+      "hp": 24.0,
+      "interceptors": 0,
+      "objective": true,
+      "initial_information": "public"
+    },
+    {
+      "id": 2892,
+      "kind": "ship",
+      "lon": 12.359016391075029,
+      "lat": 2.121862815001635,
+      "hp": 1.2000000000000002,
+      "interceptors": 4,
+      "objective": true,
+      "initial_information": "hidden"
+    },
+    {
+      "id": 2893,
+      "kind": "ship",
+      "lon": 12.390618893246355,
+      "lat": 2.344582362210511,
+      "hp": 1.2000000000000002,
+      "interceptors": 4,
+      "objective": true,
+      "initial_information": "hidden"
+    }
+  ],
+  "root_counts": {
+    "target": 4,
+    "site": 7,
+    "ship": 10
+  },
+  "red_missile_counts": {
+    "high": 17,
+    "medium": 24,
+    "low": 85
+  },
+  "blue_root_total": 21,
+  "radar_total": 7,
+  "interceptor_total": 78,
+  "entity_total": 234,
+  "interceptor_counts": {
+    "54": 4,
+    "169": 4,
+    "2553": 4,
+    "2557": 5,
+    "2559": 5,
+    "2563": 5,
+    "2571": 4,
+    "2574": 5,
+    "2575": 5,
+    "2883": 5,
+    "2884": 5,
+    "2885": 5,
+    "2886": 4,
+    "2887": 5,
+    "2889": 5,
+    "2892": 4,
+    "2893": 4
+  },
+  "objective_ids": [
+    52,
+    54,
+    169,
+    2551,
+    2553,
+    2557,
+    2559,
+    2563,
+    2571,
+    2574,
+    2575,
+    51,
+    2883,
+    2884,
+    2885,
+    2886,
+    2887,
+    2889,
+    2891,
+    2892,
+    2893
+  ],
+  "public_objective_ids": [
+    52,
+    54,
+    2551,
+    2553,
+    2557,
+    2559,
+    2563,
+    51,
+    2887,
+    2889,
+    2891
+  ],
+  "hidden_objective_ids": [
+    169,
+    2571,
+    2574,
+    2575,
+    2883,
+    2884,
+    2885,
+    2886,
+    2892,
+    2893
+  ],
+  "dark_to_mother_ratio": 2.5,
+  "balance_status": "减量与布局调整；全组合成绩以当前版本真实测试为准。",
+  "initial_speed_note": "毁灭者、突击者、清道夫的标称速度分别为200、180、100m/s；实际到达时间由原生模型的加速、转向和飞行阶段决定。",
+  "detection": {
+    "range_m": 20000,
+    "altitude_m": 3000,
+    "deployment_front_to_nearest_sentinel_center_km": 25.372627572194435,
+    "conservative_horizontal_clearance_km": 5.372627572194435,
+    "note": "按各哨卫巢初始纬度计算其到部署东侧边界的东西距离，最小距离减20公里作为静态水平间距。实际探测使用三维距离及目标飞行阶段。"
+  },
+  "layout_revision": "tier_inventory_balance_20261016",
+  "satelliteMaxUseCount": 1,
+  "balance_design": {
+    "interceptors_before": 97,
+    "interceptors_after": 78,
+    "remaining_ratio": 0.8041237113402062,
+    "ratio_denominator": "毁灭者数量＋突击者数量",
+    "non_scavenger_agents": 41,
+    "interceptors_per_attack_agent_before": 2.3658536585365852,
+    "interceptors_per_attack_agent_after": 1.9024390243902438,
+    "desired_score_gain": 10,
+    "score_rule": "完整摧毁目标加权计分",
+    "geometry": "保持原有布局"
+  },
+  "scoring": "destroyed_objective_weight_ratio"
+}

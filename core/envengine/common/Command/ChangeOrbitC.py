@@ -12,5 +12,5 @@ from ..BaseStruct import *
 @dataclass_json
 @dataclass
 class ChangeOrbitC:
-	# 卫星变轨
+	# 天眼变轨
 	cmd: OrbitChangCmd = field(default_factory=OrbitChangCmd)

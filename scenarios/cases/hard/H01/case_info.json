@@ -8,13 +8,13 @@
   "mission_type_name": "综合任务",
   "topology_id": "nested_diamond_rings",
   "topology_name": "双环菱阵",
-  "design_intent": "六座雷达阵地组成外菱形与内门阵，两艘无人船前置在西北/西南前沿，第三艘留在东部纵深，形成前后夹层。",
+  "design_intent": "六座视野塔哨卫巢组成外菱形与内门阵，两艘暗巢前置在西北/西南前沿，第三艘留在东部纵深，形成前后夹层。",
   "structural_features": [
     "双前沿节点",
     "嵌套覆盖区判断",
     "分流—汇合—再分流"
   ],
-  "difficulty_mechanism": "14个计分目标、6部雷达和432枚拦截弹；蓝方拦截弹/红方高中性能打击弹=3.0。",
+  "difficulty_mechanism": "14个母巢、6部视野塔和432枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=3.0。",
   "objective_ids": [
     51,
     301,
@@ -190,7 +190,7 @@
       "initial_information": "public"
     }
   ],
-  "scenario_sha256": "d79e10214f52e60caa471d1535d5ca4e9ae7ccdb9ced13f308171b62fb099e42",
+  "scenario_sha256": "01668bd1c3f1814420989ad5fffd508f104e2f49030ff0639c2ad35b2346d53c",
   "entity_total": 758,
   "blue_entity_total": 452,
   "blue_root_total": 14,

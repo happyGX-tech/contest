@@ -27,9 +27,9 @@ class ZNY_GeneralType:
 	width: float = 0.0
 	# 机高（车高、弹翼展、人高）（m）
 	height: float = 0.0
-	# 最小雷达特性（m^2）
+	# 最小视野塔特性（m^2）
 	minRCS: float = 0.0
-	# 最大雷达特性（m^2）
+	# 最大视野塔特性（m^2）
 	maxRCS: float = 0.0
 	# 最小红外特征(w/sr)
 	minInfrared: float = 0.0

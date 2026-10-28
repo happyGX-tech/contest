@@ -1,0 +1,443 @@
+{
+  "environmentProfile": {
+    "mqttIp": "127.0.0.1",
+    "domain": 232,
+    "subDomain": "50",
+    "projectName": "XXX",
+    "engineName": "platform",
+    "engineId": 1,
+    "role": 0,
+    "parentId": -1,
+    "childrenId": [],
+    "dynamicLibraryConfigs": [
+      {
+        "entityType": 24000,
+        "entityTypeId": [
+          24000001
+        ],
+        "dynamicLibraryPath": "./Packages/Interceptor/libInterceptorS.so"
+      },
+      {
+        "entityType": 35000,
+        "entityTypeId": [
+          35000001
+        ],
+        "dynamicLibraryPath": "./Packages/DefendCommander/libDefendCommanderS.so"
+      },
+      {
+        "entityType": 21000,
+        "entityTypeId": [
+          21000001
+        ],
+        "dynamicLibraryPath": "./Packages/CruiseMissile/libCruiseMissileHS.so"
+      },
+      {
+        "entityType": 9202,
+        "entityTypeId": [
+          9202001
+        ],
+        "dynamicLibraryPath": "./Packages/TleSatellite/libTleSatelliteS.so"
+      },
+      {
+        "entityType": 21001,
+        "entityTypeId": [
+          21001001
+        ],
+        "dynamicLibraryPath": "./Packages/CruiseMissile2/libCruiseMissileMS.so"
+      },
+      {
+        "entityType": 9400,
+        "entityTypeId": [
+          9400001
+        ],
+        "dynamicLibraryPath": "./Packages/GeneralShip/libGeneralShipS.so"
+      },
+      {
+        "entityType": 21002,
+        "entityTypeId": [
+          21002001
+        ],
+        "dynamicLibraryPath": "./Packages/CruiseMissileL/libCruiseMissileLS.so"
+      },
+      {
+        "entityType": 44000,
+        "entityTypeId": [
+          44000001
+        ],
+        "dynamicLibraryPath": "./Packages/NormalRadar/libNormalRadarS.so"
+      },
+      {
+        "entityType": 9500,
+        "entityTypeId": [
+          9500001
+        ],
+        "dynamicLibraryPath": "./Packages/UnmannedShip/libUnmannedShipS.so"
+      },
+      {
+        "entityType": 9600,
+        "entityTypeId": [
+          9600001
+        ],
+        "dynamicLibraryPath": "./Packages/InterceptField/libInterceptFieldS.so"
+      }
+    ]
+  },
+  "imagineProfile": {
+    "simStep": 1000,
+    "simTime": 1783391450000,
+    "simEndLogicTime": 50000000,
+    "entityList": [
+      {
+        "entity": {
+          "id": 2,
+          "parentId": -1,
+          "childrenId": [],
+          "entityType": 21000,
+          "typeId": 21000001,
+          "sideId": 0,
+          "threatLevel": 0,
+          "time": 1783391450000,
+          "step": 1000,
+          "survivePoints": 1,
+          "maxSurvivePoints": 0.0,
+          "healthState": true,
+          "powerState": true,
+          "lla": {
+            "x": -0.24190175552452704,
+            "y": 0.02,
+            "z": 500
+          },
+          "posEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velNue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "att": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "isVisible": true,
+          "nameChn": "毁灭者_21000001_002",
+          "nameEn": "destoryer_002",
+          "detectInfo": {},
+          "commRangeInfo": []
+        },
+        "external": ""
+      },
+      {
+        "entity": {
+          "id": 3,
+          "parentId": -1,
+          "childrenId": [],
+          "entityType": 9202,
+          "typeId": 9202001,
+          "sideId": 0,
+          "threatLevel": 0,
+          "time": 1783391450000,
+          "step": 1000,
+          "survivePoints": 1500,
+          "maxSurvivePoints": 0.0,
+          "healthState": true,
+          "powerState": true,
+          "lla": {
+            "x": -0.06,
+            "y": 0.08,
+            "z": 0
+          },
+          "posEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velNue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "att": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "isVisible": true,
+          "nameChn": "红方_天眼_9202001_003",
+          "nameEn": "天眼_003",
+          "detectInfo": {},
+          "commRangeInfo": []
+        },
+        "external": ""
+      },
+      {
+        "entity": {
+          "id": 4,
+          "parentId": -1,
+          "childrenId": [
+            6
+          ],
+          "entityType": 9600,
+          "typeId": 9600001,
+          "sideId": 1,
+          "threatLevel": 0,
+          "time": 1783391450000,
+          "step": 1000,
+          "survivePoints": 30,
+          "maxSurvivePoints": 0.0,
+          "healthState": true,
+          "powerState": true,
+          "lla": {
+            "x": 0.18,
+            "y": 0.02,
+            "z": 0
+          },
+          "posEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velNue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "att": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "isVisible": true,
+          "nameChn": "蓝方_哨卫巢_9600001_004",
+          "nameEn": "哨卫巢_004",
+          "detectInfo": {},
+          "commRangeInfo": []
+        },
+        "external": ""
+      },
+      {
+        "entity": {
+          "id": 6,
+          "parentId": 4,
+          "childrenId": [],
+          "entityType": 44000,
+          "typeId": 44000001,
+          "sideId": 1,
+          "threatLevel": 0,
+          "time": 1783391450000,
+          "step": 1000,
+          "survivePoints": 1500,
+          "maxSurvivePoints": 0.0,
+          "healthState": true,
+          "powerState": true,
+          "lla": {
+            "x": 0.18,
+            "y": 0.02,
+            "z": 0
+          },
+          "posEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velNue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "att": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "isVisible": false,
+          "nameChn": "视野塔_44000_4",
+          "nameEn": "NormalRadar_44000_4",
+          "detectInfo": {},
+          "commRangeInfo": []
+        },
+        "external": "{\"raderExternal\":{\"range\":{\"x\":0,\"y\":0,\"z\":0},\"distance\":350000,\"scanSpeed\":5}}"
+      },
+      {
+        "entity": {
+          "id": 7,
+          "parentId": -1,
+          "childrenId": [],
+          "entityType": 9400,
+          "typeId": 9400001,
+          "sideId": 1,
+          "threatLevel": 0,
+          "time": 1783391450000,
+          "step": 1000,
+          "survivePoints": 60,
+          "maxSurvivePoints": 0.0,
+          "healthState": true,
+          "powerState": true,
+          "lla": {
+            "x": 0.19,
+            "y": 0.02,
+            "z": 0
+          },
+          "posEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velNue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "att": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "isVisible": true,
+          "nameChn": "母巢_9400001_007",
+          "nameEn": "母巢_007",
+          "detectInfo": {},
+          "commRangeInfo": []
+        },
+        "external": ""
+      },
+      {
+        "entity": {
+          "id": 8,
+          "parentId": -1,
+          "childrenId": [],
+          "entityType": 35000,
+          "typeId": 35000001,
+          "sideId": 0,
+          "threatLevel": 0,
+          "time": 1783391450000,
+          "step": 1000,
+          "survivePoints": 1500,
+          "maxSurvivePoints": 0.0,
+          "healthState": true,
+          "powerState": true,
+          "lla": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0
+          },
+          "posEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velNue": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "velEcf": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "att": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "isVisible": true,
+          "nameChn": "拦截指控_35000001001",
+          "nameEn": "DefendCommander_35000001001",
+          "detectInfo": {},
+          "commRangeInfo": []
+        },
+        "external": ""
+      }
+    ],
+    "eventList": [],
+    "taskList": [],
+    "redArea": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -0.20,
+            -0.15
+          ],
+          [
+            -0.08,
+            -0.15
+          ],
+          [
+            -0.08,
+            0.15
+          ],
+          [
+            -0.20,
+            0.15
+          ]
+        ]
+      ],
+      "coordinatesHM": [
+        [
+          [
+            -0.38,
+            -0.15
+          ],
+          [
+            -0.22,
+            -0.15
+          ],
+          [
+            -0.22,
+            0.15
+          ],
+          [
+            -0.38,
+            0.15
+          ]
+        ]
+      ]
+    },
+    "mapArea": {
+      "lonMin": -0.40,
+      "latMin": -0.20,
+      "lonMax": 0.40,
+      "latMax": 0.20
+    },
+    "satelliteMaxUseCount":100,
+    "satelliteUseMinutes": 3,
+
+    "missileRateIncreaseTimeIntervalMinutes": 2.0,
+    "missileRateIncreaseMinAngle": 30,
+    "missileRateIncreaseMaxValue": 0.2,
+
+    "missileRateDecreaseTimeIntervalMinutes": 4.0,
+    "missileRateDecreaseMaxAngle": 10,
+    "missileRateDecreaseMaxValue": 0.4
+  }
+}

@@ -34,10 +34,10 @@ class Imagine(object):
     # 地图区域
     mapArea: MapArea = field(default=None)
 
-    # 卫星最大使用次数
+    # 天眼最大使用次数
     satelliteMaxUseCount:int = 100
 
-    # 卫星使用时间（分钟）
+    # 天眼使用时间（分钟）
     satelliteUseMinutes:float = 3
 
     # 导弹命中率提升条件的判断时间间隔（分钟）

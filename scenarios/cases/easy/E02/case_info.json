@@ -8,13 +8,13 @@
   "mission_type_name": "综合任务",
   "topology_id": "separated_twin_islands",
   "topology_name": "南北双岛",
-  "design_intent": "蓝方资源被拆成北岛和南岛，中部留下大面积空域；两艘无人船位于西侧前沿，阵地居中，普通目标和另一艘船位于东部纵深。",
+  "design_intent": "蓝方资源被拆成北岛和南岛，中部留下大面积空域；两艘暗巢位于西侧前沿，阵地居中，母巢和另一艘船位于东部纵深。",
   "structural_features": [
     "南北双岛",
     "前沿—阵地—纵深分层",
     "跨岛资源差异"
   ],
-  "difficulty_mechanism": "8个计分目标、2部雷达和154枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.0。",
+  "difficulty_mechanism": "8个母巢、2部视野塔和154枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.0。",
   "objective_ids": [
     51,
     301,
@@ -116,7 +116,7 @@
       "initial_information": "public"
     }
   ],
-  "scenario_sha256": "a65073591d1fce504403d9805185a597eaf8f29ff74334ea83d9c81ea740f5e9",
+  "scenario_sha256": "30478560fa048a3b272e2715a91ae362e5c2a9c2a3b427f811f7dc258899dfd1",
   "entity_total": 333,
   "blue_entity_total": 164,
   "blue_root_total": 8,

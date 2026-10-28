@@ -1,0 +1,26 @@
+# 版本控制
+.git
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# Windows 专有二进制（Linux 容器无法加载；*.so 必须保留）
+*.pyd
+*.dll
+
+# 运行结果（运行时重新生成）
+results/
+Results/
+backup/
+.venv/
+.env
+
+# Docker 自身文件
+Dockerfile
+.dockerignore

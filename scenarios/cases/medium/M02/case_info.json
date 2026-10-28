@@ -8,13 +8,13 @@
   "mission_type_name": "综合任务",
   "topology_id": "three_resource_islands",
   "topology_name": "三角三岛",
-  "design_intent": "北岛、南岛和东部中央岛构成巨大三角形；北/南无人船前置在西侧，阵地居中，普通目标与东部无人船拉开纵深。",
+  "design_intent": "北岛、南岛和东部中央岛构成巨大三角形；北/南暗巢前置在西侧，阵地居中，母巢与东部暗巢拉开纵深。",
   "structural_features": [
     "三角三岛",
     "双前沿节点",
     "不同纵深资源组合"
   ],
-  "difficulty_mechanism": "9个计分目标、3部雷达和213枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.5。",
+  "difficulty_mechanism": "9个母巢、3部视野塔和213枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.5。",
   "objective_ids": [
     51,
     301,
@@ -129,7 +129,7 @@
       "initial_information": "public"
     }
   ],
-  "scenario_sha256": "cb1d165a4f70cad9011088232d6fc32be0c1eed55c292e5a076d9dd70a353c89",
+  "scenario_sha256": "3ed76a5387451e9466bca85ffe7e7b5cd5ec1f676ee57aedea6ac7c54b23ed63",
   "entity_total": 412,
   "blue_entity_total": 225,
   "blue_root_total": 9,

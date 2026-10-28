@@ -25,5 +25,5 @@ class DetectedEntity:
 	time: int = 0
 	# 是否可探测到
 	visible: bool = False
-	# 雷达id
+	# 视野塔id
 	radarId: int = 0

@@ -1,0 +1,56 @@
+{
+  "map_id": "M05",
+  "rows": 8,
+  "columns": 4,
+  "type_totals": {
+    "21000": 27,
+    "21001": 37,
+    "21002": 128
+  },
+  "coordinates": [
+    [
+      [
+        11.58,
+        1.90125
+      ],
+      [
+        11.58,
+        2.75875
+      ],
+      [
+        11.797,
+        2.75875
+      ],
+      [
+        11.797,
+        1.90125
+      ]
+    ]
+  ],
+  "coordinatesHM": [
+    [
+      [
+        11.58,
+        1.90125
+      ],
+      [
+        11.58,
+        2.75875
+      ],
+      [
+        11.797,
+        2.75875
+      ],
+      [
+        11.797,
+        1.90125
+      ]
+    ]
+  ],
+  "row_order": "north_to_south",
+  "column_order": "west_to_east",
+  "shared_cells": true,
+  "launch_altitude_external_m": 3000,
+  "cell_capacity": null,
+  "deployment_rule": "For each type and all types combined, cell counts differ by at most one."
+}

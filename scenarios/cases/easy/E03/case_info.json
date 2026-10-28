@@ -8,13 +8,13 @@
   "mission_type_name": "综合任务",
   "topology_id": "hub_and_twin_islands",
   "topology_name": "堡垒双岛",
-  "design_intent": "公开目标和两座雷达收缩成中央堡垒，一艘计分无人船前置在西北侧，另一艘留在东南纵深，形成斜向双岛。",
+  "design_intent": "公开目标和两座视野塔收缩成中央堡垒，一艘计分暗巢前置在西北侧，另一艘留在东南纵深，形成斜向双岛。",
   "structural_features": [
     "前沿西北孤岛",
     "中央高密度堡垒",
     "东南纵深孤岛"
   ],
-  "difficulty_mechanism": "7个计分目标、2部雷达和146枚拦截弹；蓝方拦截弹/红方高中性能打击弹=2.0。",
+  "difficulty_mechanism": "7个母巢、2部视野塔和146枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=2.0。",
   "objective_ids": [
     51,
     52,
@@ -104,7 +104,7 @@
       "initial_information": "public"
     }
   ],
-  "scenario_sha256": "6480a83bf1ec83efee28fd9b7aa99612e3650ab3166462db31fa012fccdaea2f",
+  "scenario_sha256": "754aa38c04ec63a2c7287d32224fccef2dcaaa76b5692f30091d12620f2991ef",
   "entity_total": 310,
   "blue_entity_total": 155,
   "blue_root_total": 7,

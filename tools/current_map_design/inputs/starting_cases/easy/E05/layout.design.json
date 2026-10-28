@@ -1,0 +1,580 @@
+{
+  "artifact_type": "logical_design_map_not_engine_scenario",
+  "map_id": "E05",
+  "title": "偏置新月",
+  "tier_index": 0,
+  "distribution": "部分不均匀",
+  "source": {
+    "commit": "ad45a7bc804a88703d1259d6083ba57553a25dfb",
+    "scenario_sha256": "24e4eac92c57bc63e21bb6245f371d0288fd335901bc8a7304bf341a87860fe2"
+  },
+  "revision": "自爆虫约增15%，红方总数约减15%；蓝方原点位、目标数量与1.5倍血量保留",
+  "units": "logical units, not km",
+  "size": [
+    75,
+    60
+  ],
+  "budget": {
+    "name": "简单",
+    "ids": "E01—E06",
+    "maps": 6,
+    "width": 75,
+    "height": 60,
+    "red": [
+      17,
+      24,
+      85
+    ],
+    "blue": [
+      2,
+      5,
+      4
+    ],
+    "swarm": 97,
+    "bounds": [
+      11.58,
+      12.51,
+      1.9625,
+      2.6975
+    ],
+    "red_total": 126,
+    "blue_total": 11,
+    "total_entities": 241,
+    "total_hp": 142.8,
+    "nominal_damage": 545,
+    "relative_area": 0.5625,
+    "public_target_budget_ratio": 0.30434782608695654,
+    "hidden_target_budget_ratio": 0.047058823529411764,
+    "swarm_ratio": 0.7698412698412699,
+    "hp_ratio": 0.26201834862385326
+  },
+  "deployment": {
+    "rows": 8,
+    "columns": 4,
+    "x_range": [
+      0,
+      15.0
+    ],
+    "y_range": [
+      0,
+      60
+    ],
+    "buffer_x_range": [
+      15.0,
+      18.0
+    ],
+    "shared_types": [
+      "毁灭者",
+      "突击者",
+      "清道夫"
+    ],
+    "per_cell_cap": null,
+    "red_assignment": null,
+    "cells": [
+      {
+        "row": 1,
+        "column": 1,
+        "rect": [
+          0.0,
+          0.0,
+          3.75,
+          7.5
+        ]
+      },
+      {
+        "row": 1,
+        "column": 2,
+        "rect": [
+          3.75,
+          0.0,
+          7.5,
+          7.5
+        ]
+      },
+      {
+        "row": 1,
+        "column": 3,
+        "rect": [
+          7.5,
+          0.0,
+          11.25,
+          7.5
+        ]
+      },
+      {
+        "row": 1,
+        "column": 4,
+        "rect": [
+          11.25,
+          0.0,
+          15.0,
+          7.5
+        ]
+      },
+      {
+        "row": 2,
+        "column": 1,
+        "rect": [
+          0.0,
+          7.5,
+          3.75,
+          15.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 2,
+        "rect": [
+          3.75,
+          7.5,
+          7.5,
+          15.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "rect": [
+          7.5,
+          7.5,
+          11.25,
+          15.0
+        ]
+      },
+      {
+        "row": 2,
+        "column": 4,
+        "rect": [
+          11.25,
+          7.5,
+          15.0,
+          15.0
+        ]
+      },
+      {
+        "row": 3,
+        "column": 1,
+        "rect": [
+          0.0,
+          15.0,
+          3.75,
+          22.5
+        ]
+      },
+      {
+        "row": 3,
+        "column": 2,
+        "rect": [
+          3.75,
+          15.0,
+          7.5,
+          22.5
+        ]
+      },
+      {
+        "row": 3,
+        "column": 3,
+        "rect": [
+          7.5,
+          15.0,
+          11.25,
+          22.5
+        ]
+      },
+      {
+        "row": 3,
+        "column": 4,
+        "rect": [
+          11.25,
+          15.0,
+          15.0,
+          22.5
+        ]
+      },
+      {
+        "row": 4,
+        "column": 1,
+        "rect": [
+          0.0,
+          22.5,
+          3.75,
+          30.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 2,
+        "rect": [
+          3.75,
+          22.5,
+          7.5,
+          30.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 3,
+        "rect": [
+          7.5,
+          22.5,
+          11.25,
+          30.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 4,
+        "rect": [
+          11.25,
+          22.5,
+          15.0,
+          30.0
+        ]
+      },
+      {
+        "row": 5,
+        "column": 1,
+        "rect": [
+          0.0,
+          30.0,
+          3.75,
+          37.5
+        ]
+      },
+      {
+        "row": 5,
+        "column": 2,
+        "rect": [
+          3.75,
+          30.0,
+          7.5,
+          37.5
+        ]
+      },
+      {
+        "row": 5,
+        "column": 3,
+        "rect": [
+          7.5,
+          30.0,
+          11.25,
+          37.5
+        ]
+      },
+      {
+        "row": 5,
+        "column": 4,
+        "rect": [
+          11.25,
+          30.0,
+          15.0,
+          37.5
+        ]
+      },
+      {
+        "row": 6,
+        "column": 1,
+        "rect": [
+          0.0,
+          37.5,
+          3.75,
+          45.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 2,
+        "rect": [
+          3.75,
+          37.5,
+          7.5,
+          45.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 3,
+        "rect": [
+          7.5,
+          37.5,
+          11.25,
+          45.0
+        ]
+      },
+      {
+        "row": 6,
+        "column": 4,
+        "rect": [
+          11.25,
+          37.5,
+          15.0,
+          45.0
+        ]
+      },
+      {
+        "row": 7,
+        "column": 1,
+        "rect": [
+          0.0,
+          45.0,
+          3.75,
+          52.5
+        ]
+      },
+      {
+        "row": 7,
+        "column": 2,
+        "rect": [
+          3.75,
+          45.0,
+          7.5,
+          52.5
+        ]
+      },
+      {
+        "row": 7,
+        "column": 3,
+        "rect": [
+          7.5,
+          45.0,
+          11.25,
+          52.5
+        ]
+      },
+      {
+        "row": 7,
+        "column": 4,
+        "rect": [
+          11.25,
+          45.0,
+          15.0,
+          52.5
+        ]
+      },
+      {
+        "row": 8,
+        "column": 1,
+        "rect": [
+          0.0,
+          52.5,
+          3.75,
+          60.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 2,
+        "rect": [
+          3.75,
+          52.5,
+          7.5,
+          60.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 3,
+        "rect": [
+          7.5,
+          52.5,
+          11.25,
+          60.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 4,
+        "rect": [
+          11.25,
+          52.5,
+          15.0,
+          60.0
+        ]
+      }
+    ]
+  },
+  "requested_bands": {
+    "public_roots": [
+      1,
+      1,
+      2,
+      3
+    ],
+    "swarm_stock": [
+      9,
+      19,
+      29,
+      40
+    ]
+  },
+  "roots": [
+    {
+      "source_id": 106,
+      "kind": "watch",
+      "x_norm": 0.430453688946231,
+      "y_norm": 0.11375,
+      "hp": 18.0,
+      "swarm_stock": 5,
+      "id": "E05-W03",
+      "x": 32.28402667096732,
+      "y": 6.825,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 169,
+      "kind": "hidden",
+      "x_norm": 0.5687457267954616,
+      "y_norm": 0.14125,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 4,
+      "id": "E05-D01",
+      "x": 42.65592950965962,
+      "y": 8.475,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2555,
+      "kind": "watch",
+      "x_norm": 0.5592494552456875,
+      "y_norm": 0.36375,
+      "hp": 18.0,
+      "swarm_stock": 9,
+      "id": "E05-W02",
+      "x": 41.94370914342656,
+      "y": 21.825000000000003,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2572,
+      "kind": "hidden",
+      "x_norm": 0.6867068582368948,
+      "y_norm": 0.39125,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 10,
+      "id": "E05-D02",
+      "x": 51.50301436776711,
+      "y": 23.474999999999998,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2559,
+      "kind": "watch",
+      "x_norm": 0.5654697285814022,
+      "y_norm": 0.61375,
+      "hp": 18.0,
+      "swarm_stock": 14,
+      "id": "E05-W01",
+      "x": 42.41022964360516,
+      "y": 36.825,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 52,
+      "kind": "mother",
+      "x_norm": 0.8523647043843389,
+      "y_norm": 0.5875,
+      "hp": 24.0,
+      "swarm_stock": 0,
+      "id": "E05-B04",
+      "x": 63.92735282882541,
+      "y": 35.25,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2573,
+      "kind": "hidden",
+      "x_norm": 0.6777240511824186,
+      "y_norm": 0.64125,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 15,
+      "id": "E05-D03",
+      "x": 50.8293038386814,
+      "y": 38.475,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2561,
+      "kind": "watch",
+      "x_norm": 0.45424016284516927,
+      "y_norm": 0.82,
+      "hp": 18.0,
+      "swarm_stock": 13,
+      "id": "E05-W05",
+      "x": 34.068012213387696,
+      "y": 49.199999999999996,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2565,
+      "kind": "watch",
+      "x_norm": 0.4349006471273937,
+      "y_norm": 0.9075,
+      "hp": 18.0,
+      "swarm_stock": 13,
+      "id": "E05-W04",
+      "x": 32.61754853455452,
+      "y": 54.449999999999996,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2551,
+      "kind": "mother",
+      "x_norm": 0.7433828855442995,
+      "y_norm": 0.8375,
+      "hp": 24.0,
+      "swarm_stock": 0,
+      "id": "E05-B02",
+      "x": 55.75371641582247,
+      "y": 50.25,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2574,
+      "kind": "hidden",
+      "x_norm": 0.5470593121763645,
+      "y_norm": 0.89125,
+      "hp": 1.2000000000000002,
+      "swarm_stock": 14,
+      "id": "E05-D04",
+      "x": 41.029448413227335,
+      "y": 53.475,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    }
+  ],
+  "topology_idea": "偏置新月骨架；母巢2座；红方126，自爆虫97。蓝方保留右移4%的点位，血量为原值1.5倍。",
+  "blue_translation_fraction": [
+    0.04,
+    0
+  ],
+  "map_area": {
+    "lonMin": 11.58,
+    "lonMax": 12.51,
+    "latMin": 1.9625,
+    "latMax": 2.6975
+  },
+  "detection": {
+    "source": "RadarModelSimulator.execute_detection + ISimulator._is_geometrically_visible",
+    "range_m": 20000,
+    "distance_axes": "ECEF X,Y only",
+    "minimum_target_stage": 3,
+    "slice_altitude_m": 3000
+  },
+  "launch_altitude_external_m": 3000,
+  "distribution_rule": {
+    "public_cv_limit": 0.24743582965269675,
+    "stock_cv_limit": 0.2,
+    "small_count_rule": "public limit=max(0.20, minimum CV achievable by integer counts in four bands)"
+  },
+  "blue_health_multiplier": 1.5
+}

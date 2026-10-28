@@ -12,5 +12,5 @@ from ..BaseStruct import *
 @dataclass_json
 @dataclass
 class InterceptorLaunchC:
-	# 拦截弹发射指令
+	# 自爆虫群发射指令
 	cmd: InterceptorLaunchCmd = field(default_factory=InterceptorLaunchCmd)

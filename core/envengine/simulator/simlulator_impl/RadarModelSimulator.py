@@ -18,7 +18,7 @@ from envengine.simulator.simulator_factory import SimulatorFactory
 @Simulator.register("NormalRadarS")
 class RadarModelSimulator(ISimulator):
     """
-    轨道模型仿真器
+    视野塔探测仿真器
     """
 
     def __init__(self, entity_ext: EntityExt,
@@ -77,7 +77,8 @@ class RadarModelSimulator(ISimulator):
 
     def execute_detection(self):
         """
-        执行探测
+        按20千米三维ECEF直线距离探测对方存活且stage>=3的实体
+        场景external.raderExternal.distance字段不参与距离判断
         :return:
         """
 
@@ -85,8 +86,8 @@ class RadarModelSimulator(ISimulator):
         detected_candidate_simulators: list[ISimulator] = self._simulator_factory.get_simulators_by_side(
             1 if self.entity_ext.entity.sideId == 0 else 0)
         detected: list[ISimulator] = self._get_targets_within_self_range(detected_candidate_simulators,
-                                                                         max_range=200 * 1000)
-        # 只有蓝方有雷达，仅探测 stage >= 3 的实体（滑翔段及以后）
+                                                                         max_range=20 * 1000)
+        # 只有蓝方有视野塔，仅探测 stage >= 3 的实体（滑翔段及以后）
         detected = [i for i in detected if i.entity_ext.entity.stage >= 3]
 
         if not detected:
@@ -100,9 +101,9 @@ class RadarModelSimulator(ISimulator):
                 entity_id=target.entity_ext.entity.id,
                 entity_type=target.entity_ext.entity.entityType,
                 nameChn=target.entity_ext.entity.nameChn,
-                lla=target.entity_ext.entity.lla,
-                pos_ecf=target.entity_ext.entity.posEcf,
-                vel_ecf=target.entity_ext.entity.velEcf
+                lla=Vector3d(target.entity_ext.entity.lla.x, target.entity_ext.entity.lla.y, target.entity_ext.entity.lla.z),
+                pos_ecf=Vector3d(target.entity_ext.entity.posEcf.x, target.entity_ext.entity.posEcf.y, target.entity_ext.entity.posEcf.z),
+                vel_ecf=Vector3d(target.entity_ext.entity.velEcf.x, target.entity_ext.entity.velEcf.y, target.entity_ext.entity.velEcf.z)
             ) for target in detected}
         # 更新自身探测信息
         self.handel_detect_info(detect_info)
@@ -110,14 +111,7 @@ class RadarModelSimulator(ISimulator):
     def reset(self) -> None:
         """重置到初始状态"""
         super().reset()
-        posEcf: Vector3D = UtilsPy.CoordinateHelper.llaToEcef_py(
-            Vector3D(self.entity_ext.entity.lla.x, self.entity_ext.entity.lla.y, self.entity_ext.entity.lla.z))
-
-        self.entity_ext.entity.posEcf = Vector3d(
-            posEcf.x(),
-            posEcf.y(),
-            posEcf.z()
-        )
+        self.entity_ext.entity.posEcf = self._get_ecf_position()
 
     def init_model(self) -> None:
         pass

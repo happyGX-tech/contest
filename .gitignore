@@ -121,3 +121,42 @@ results/local_avoid_ppo/*
 !results/local_avoid_ppo/evaluation_v9_stage2_recovery_best_2000.json
 !results/local_avoid_ppo/stage3_diagnosis_v4_3000.json
 !results/local_avoid_ppo/stage3_diagnosis_v9_selected_3000.json
+
+# Scratch single-episode runs and per-phase calibration artifacts. They are
+# re-derivable (and huge), so they stay out of git; anything worth keeping is
+# summarised under local_plan/ as a compact JSON.
+results/runs/
+results/local_avoid_ppo_calib/
+results/tensorboard/
+
+# 训练产物：checkpoint 体积大，不上链
+results/ab_temporal_new_engine/*/ckpt_*.pt
+
+# tier-holdout 训练产物（大文件不入库，摘要手工抄进 local_plan/69 §9）
+results/tierhold_*/
+results/tierhold_logs/
+results/real_iter*/
+
+# v15 训练产出的原始 trace 与逐轮 checkpoint（体积大）：只保留 protocol/history/tensorboard
+results/v15/**/traces/
+results/v15/**/checkpoints/
+results/v15/**/logs/
+results/_archive_已结题实验_20261018/tensorboard/
+
+# 2026-10-25 归档（过时结果/文档移出跟踪范围，仅存本机，不提交）
+_archive_20261025/
+
+# 汇报目录不纳入版本库（用户 2026-10-25 要求）
+汇报/
+
+# 2026-10-28 归档结果：只留索引与矩阵，原始产物不入库
+results/_archive_*/runs/
+results/_archive_*/v15/
+results/_archive_*/deployment_plans/
+results/_archive_*/diag_a/
+results/_archive_*/ab_temporal_new_engine/
+results/_archive_*/ab_tricks_new_engine/
+results/_archive_*/search_enhanced/
+results/_archive_*/HLMselect4launch20/
+results/_archive_*/HLopt4launch20_mlead/
+results/_archive_*/HLopt4launch20_mopup/

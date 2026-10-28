@@ -12,7 +12,7 @@ from .PosVelAcc import PosVelAcc
 @dataclass_json
 @dataclass
 class InterceptorGuidanceCmd:
-	# 拦截弹id
+	# 自爆虫群id
 	id: int = 0
 	# 目标id
 	targetId: int = 0

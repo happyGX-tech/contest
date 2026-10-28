@@ -70,6 +70,10 @@ class EvasionObservationEncoder:
         self._cached_step: int | None = None
         self._cached_vector: np.ndarray | None = None
         self._cached_threat_sources: tuple[float, ...] = ()
+        self._cached_threat_candidates: tuple[
+            tuple[float, float, tuple[float, ...]], ...
+        ] = ()
+        self._detected_interceptor_count = 0
         self._track_ages: dict[int, _TrackAge] = {}
 
     @staticmethod
@@ -152,6 +156,8 @@ class EvasionObservationEncoder:
         self._cached_step = None
         self._cached_vector = None
         self._cached_threat_sources = ()
+        self._cached_threat_candidates = ()
+        self._detected_interceptor_count = 0
         self._track_ages.clear()
 
     @property
@@ -164,6 +170,26 @@ class EvasionObservationEncoder:
         """
 
         return self._cached_threat_sources
+
+    @property
+    def threat_candidates(
+        self,
+    ) -> tuple[tuple[float, float, tuple[float, ...]], ...]:
+        """Return every fresh interceptor candidate before fixed-slot truncation.
+
+        Each item contains ``(distance_m, source, features)`` and is ordered by
+        distance. This side channel lets newer set-based policies consume a
+        variable number of legal tracks without changing the legacy 51-feature
+        ABI used by existing checkpoints.
+        """
+
+        return self._cached_threat_candidates
+
+    @property
+    def detected_interceptor_count(self) -> int:
+        """Number of interceptor IDs present before freshness/risk filtering."""
+
+        return self._detected_interceptor_count
 
     def _own_velocity(self, position: np.ndarray, step: int) -> np.ndarray:
         if self._previous_position is None or self._previous_step is None:
@@ -233,9 +259,11 @@ class EvasionObservationEncoder:
             int(value) for value in (own.get("commRangeInfo") or [])
         }
         threats: list[tuple[float, float, list[float]]] = []
+        self._detected_interceptor_count = 0
         for raw_id, track in (own.get("detectInfo") or {}).items():
             if int(self._field(track, "entity_type", -1)) != 24000:
                 continue
+            self._detected_interceptor_count += 1
             detect_from = int(self._field(track, "detect_from", -1))
             if not self.allow_fused_tracks and detect_from != self.entity_id:
                 continue
@@ -316,6 +344,10 @@ class EvasionObservationEncoder:
             )
 
         threats.sort(key=lambda item: item[0])
+        self._cached_threat_candidates = tuple(
+            (float(distance), float(source), tuple(float(value) for value in values))
+            for distance, source, values in threats
+        )
         self._cached_threat_sources = tuple(
             item[1] for item in threats[: self.MAX_THREATS]
         )

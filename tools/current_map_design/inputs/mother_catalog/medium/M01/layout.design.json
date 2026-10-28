@@ -1,0 +1,756 @@
+{
+  "artifact_type": "logical_design_map_not_engine_scenario",
+  "map_id": "M01",
+  "title": "双门分流",
+  "tier_index": 1,
+  "distribution": "比较均匀",
+  "source": {
+    "commit": "ad45a7bc804a88703d1259d6083ba57553a25dfb",
+    "scenario_sha256": "9f7745c76baa96af50c1918f0996695ab7248e7369b044bc115db1e9ffcaafc9"
+  },
+  "revision": "按主题骨架重建；分区预算与档位总量不变",
+  "units": "logical units, not km",
+  "size": [
+    87.5,
+    70
+  ],
+  "budget": {
+    "name": "中等",
+    "ids": "M01—M06",
+    "maps": 6,
+    "width": 87.5,
+    "height": 70,
+    "red": [
+      50,
+      70,
+      180
+    ],
+    "blue": [
+      7,
+      10,
+      8
+    ],
+    "swarm": 195,
+    "bounds": [
+      11.58,
+      12.665,
+      1.90125,
+      2.75875
+    ],
+    "red_total": 300,
+    "blue_total": 25,
+    "total_entities": 532,
+    "total_hp": 238.4,
+    "nominal_damage": 1530,
+    "relative_area": 0.765625,
+    "public_target_budget_ratio": 0.2518518518518518,
+    "hidden_target_budget_ratio": 0.044444444444444446,
+    "swarm_ratio": 0.65,
+    "hp_ratio": 0.15581699346405228
+  },
+  "deployment": {
+    "rows": 8,
+    "columns": 4,
+    "x_range": [
+      0,
+      17.5
+    ],
+    "y_range": [
+      0,
+      70
+    ],
+    "buffer_x_range": [
+      17.5,
+      21.0
+    ],
+    "shared_types": [
+      "毁灭者",
+      "突击者",
+      "清道夫"
+    ],
+    "per_cell_cap": null,
+    "red_assignment": null,
+    "cells": [
+      {
+        "row": 1,
+        "column": 1,
+        "rect": [
+          0.0,
+          0.0,
+          4.375,
+          8.75
+        ]
+      },
+      {
+        "row": 1,
+        "column": 2,
+        "rect": [
+          4.375,
+          0.0,
+          8.75,
+          8.75
+        ]
+      },
+      {
+        "row": 1,
+        "column": 3,
+        "rect": [
+          8.75,
+          0.0,
+          13.125,
+          8.75
+        ]
+      },
+      {
+        "row": 1,
+        "column": 4,
+        "rect": [
+          13.125,
+          0.0,
+          17.5,
+          8.75
+        ]
+      },
+      {
+        "row": 2,
+        "column": 1,
+        "rect": [
+          0.0,
+          8.75,
+          4.375,
+          17.5
+        ]
+      },
+      {
+        "row": 2,
+        "column": 2,
+        "rect": [
+          4.375,
+          8.75,
+          8.75,
+          17.5
+        ]
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "rect": [
+          8.75,
+          8.75,
+          13.125,
+          17.5
+        ]
+      },
+      {
+        "row": 2,
+        "column": 4,
+        "rect": [
+          13.125,
+          8.75,
+          17.5,
+          17.5
+        ]
+      },
+      {
+        "row": 3,
+        "column": 1,
+        "rect": [
+          0.0,
+          17.5,
+          4.375,
+          26.25
+        ]
+      },
+      {
+        "row": 3,
+        "column": 2,
+        "rect": [
+          4.375,
+          17.5,
+          8.75,
+          26.25
+        ]
+      },
+      {
+        "row": 3,
+        "column": 3,
+        "rect": [
+          8.75,
+          17.5,
+          13.125,
+          26.25
+        ]
+      },
+      {
+        "row": 3,
+        "column": 4,
+        "rect": [
+          13.125,
+          17.5,
+          17.5,
+          26.25
+        ]
+      },
+      {
+        "row": 4,
+        "column": 1,
+        "rect": [
+          0.0,
+          26.25,
+          4.375,
+          35.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 2,
+        "rect": [
+          4.375,
+          26.25,
+          8.75,
+          35.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 3,
+        "rect": [
+          8.75,
+          26.25,
+          13.125,
+          35.0
+        ]
+      },
+      {
+        "row": 4,
+        "column": 4,
+        "rect": [
+          13.125,
+          26.25,
+          17.5,
+          35.0
+        ]
+      },
+      {
+        "row": 5,
+        "column": 1,
+        "rect": [
+          0.0,
+          35.0,
+          4.375,
+          43.75
+        ]
+      },
+      {
+        "row": 5,
+        "column": 2,
+        "rect": [
+          4.375,
+          35.0,
+          8.75,
+          43.75
+        ]
+      },
+      {
+        "row": 5,
+        "column": 3,
+        "rect": [
+          8.75,
+          35.0,
+          13.125,
+          43.75
+        ]
+      },
+      {
+        "row": 5,
+        "column": 4,
+        "rect": [
+          13.125,
+          35.0,
+          17.5,
+          43.75
+        ]
+      },
+      {
+        "row": 6,
+        "column": 1,
+        "rect": [
+          0.0,
+          43.75,
+          4.375,
+          52.5
+        ]
+      },
+      {
+        "row": 6,
+        "column": 2,
+        "rect": [
+          4.375,
+          43.75,
+          8.75,
+          52.5
+        ]
+      },
+      {
+        "row": 6,
+        "column": 3,
+        "rect": [
+          8.75,
+          43.75,
+          13.125,
+          52.5
+        ]
+      },
+      {
+        "row": 6,
+        "column": 4,
+        "rect": [
+          13.125,
+          43.75,
+          17.5,
+          52.5
+        ]
+      },
+      {
+        "row": 7,
+        "column": 1,
+        "rect": [
+          0.0,
+          52.5,
+          4.375,
+          61.25
+        ]
+      },
+      {
+        "row": 7,
+        "column": 2,
+        "rect": [
+          4.375,
+          52.5,
+          8.75,
+          61.25
+        ]
+      },
+      {
+        "row": 7,
+        "column": 3,
+        "rect": [
+          8.75,
+          52.5,
+          13.125,
+          61.25
+        ]
+      },
+      {
+        "row": 7,
+        "column": 4,
+        "rect": [
+          13.125,
+          52.5,
+          17.5,
+          61.25
+        ]
+      },
+      {
+        "row": 8,
+        "column": 1,
+        "rect": [
+          0.0,
+          61.25,
+          4.375,
+          70.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 2,
+        "rect": [
+          4.375,
+          61.25,
+          8.75,
+          70.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 3,
+        "rect": [
+          8.75,
+          61.25,
+          13.125,
+          70.0
+        ]
+      },
+      {
+        "row": 8,
+        "column": 4,
+        "rect": [
+          13.125,
+          61.25,
+          17.5,
+          70.0
+        ]
+      }
+    ]
+  },
+  "requested_bands": {
+    "public_roots": [
+      4,
+      5,
+      4,
+      4
+    ],
+    "swarm_stock": [
+      49,
+      49,
+      49,
+      48
+    ]
+  },
+  "roots": [
+    {
+      "source_id": 106,
+      "kind": "watch",
+      "x_norm": 0.361,
+      "y_norm": 0.06999999999999999,
+      "hp": 12.0,
+      "swarm_stock": 12,
+      "id": "M01-W05",
+      "x": 31.5875,
+      "y": 4.8999999999999995,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2731,
+      "kind": "watch",
+      "x_norm": 0.549,
+      "y_norm": 0.15749999999999997,
+      "hp": 12.0,
+      "swarm_stock": 12,
+      "id": "M01-W01",
+      "x": 48.0375,
+      "y": 11.024999999999999,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 51,
+      "kind": "mother",
+      "x_norm": 0.661,
+      "y_norm": 0.0875,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "id": "M01-B07",
+      "x": 57.837500000000006,
+      "y": 6.125,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 52,
+      "kind": "mother",
+      "x_norm": 0.8490000000000001,
+      "y_norm": 0.175,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "id": "M01-B06",
+      "x": 74.28750000000001,
+      "y": 12.25,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 168,
+      "kind": "hidden",
+      "x_norm": 0.481,
+      "y_norm": 0.09749999999999999,
+      "hp": 0.8,
+      "swarm_stock": 13,
+      "id": "M01-D01",
+      "x": 42.0875,
+      "y": 6.824999999999999,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 169,
+      "kind": "hidden",
+      "x_norm": 0.669,
+      "y_norm": 0.185,
+      "hp": 0.8,
+      "swarm_stock": 12,
+      "id": "M01-D02",
+      "x": 58.5375,
+      "y": 12.95,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2733,
+      "kind": "watch",
+      "x_norm": 0.492,
+      "y_norm": 0.30541666666666667,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "id": "M01-W06",
+      "x": 43.05,
+      "y": 21.379166666666666,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2735,
+      "kind": "watch",
+      "x_norm": 0.38,
+      "y_norm": 0.36374999999999996,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "id": "M01-W07",
+      "x": 33.25,
+      "y": 25.4625,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2737,
+      "kind": "watch",
+      "x_norm": 0.5680000000000001,
+      "y_norm": 0.42208333333333337,
+      "hp": 12.0,
+      "swarm_stock": 9,
+      "id": "M01-W09",
+      "x": 49.7,
+      "y": 29.545833333333334,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 53,
+      "kind": "mother",
+      "x_norm": 0.811,
+      "y_norm": 0.3375,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "id": "M01-B05",
+      "x": 70.9625,
+      "y": 23.625,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 301,
+      "kind": "mother",
+      "x_norm": 0.6990000000000001,
+      "y_norm": 0.425,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "id": "M01-B04",
+      "x": 61.16250000000001,
+      "y": 29.75,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2753,
+      "kind": "hidden",
+      "x_norm": 0.631,
+      "y_norm": 0.3475,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "id": "M01-D03",
+      "x": 55.2125,
+      "y": 24.325,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2756,
+      "kind": "hidden",
+      "x_norm": 0.519,
+      "y_norm": 0.435,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "id": "M01-D08",
+      "x": 45.4125,
+      "y": 30.45,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2739,
+      "kind": "watch",
+      "x_norm": 0.342,
+      "y_norm": 0.5554166666666667,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "id": "M01-W10",
+      "x": 29.925,
+      "y": 38.87916666666667,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2741,
+      "kind": "watch",
+      "x_norm": 0.53,
+      "y_norm": 0.61375,
+      "hp": 12.0,
+      "swarm_stock": 10,
+      "id": "M01-W04",
+      "x": 46.375,
+      "y": 42.9625,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2743,
+      "kind": "watch",
+      "x_norm": 0.418,
+      "y_norm": 0.6720833333333334,
+      "hp": 12.0,
+      "swarm_stock": 9,
+      "id": "M01-W03",
+      "x": 36.574999999999996,
+      "y": 47.045833333333334,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2728,
+      "kind": "mother",
+      "x_norm": 0.68,
+      "y_norm": 0.63125,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "id": "M01-B03",
+      "x": 59.50000000000001,
+      "y": 44.1875,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2757,
+      "kind": "hidden",
+      "x_norm": 0.481,
+      "y_norm": 0.5975,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "id": "M01-D07",
+      "x": 42.0875,
+      "y": 41.825,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2758,
+      "kind": "hidden",
+      "x_norm": 0.669,
+      "y_norm": 0.685,
+      "hp": 0.8,
+      "swarm_stock": 10,
+      "id": "M01-D06",
+      "x": 58.5375,
+      "y": 47.95,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2745,
+      "kind": "watch",
+      "x_norm": 0.511,
+      "y_norm": 0.82,
+      "hp": 12.0,
+      "swarm_stock": 12,
+      "id": "M01-W02",
+      "x": 44.7125,
+      "y": 57.4,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2749,
+      "kind": "watch",
+      "x_norm": 0.399,
+      "y_norm": 0.9075,
+      "hp": 12.0,
+      "swarm_stock": 12,
+      "id": "M01-W08",
+      "x": 34.9125,
+      "y": 63.525,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2729,
+      "kind": "mother",
+      "x_norm": 0.811,
+      "y_norm": 0.8375,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "id": "M01-B02",
+      "x": 70.9625,
+      "y": 58.625,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2730,
+      "kind": "mother",
+      "x_norm": 0.6990000000000001,
+      "y_norm": 0.925,
+      "hp": 16.0,
+      "swarm_stock": 0,
+      "id": "M01-B01",
+      "x": 61.16250000000001,
+      "y": 64.75,
+      "mobility": "fixed",
+      "initial_visibility": "public"
+    },
+    {
+      "source_id": 2762,
+      "kind": "hidden",
+      "x_norm": 0.631,
+      "y_norm": 0.8475,
+      "hp": 0.8,
+      "swarm_stock": 12,
+      "id": "M01-D04",
+      "x": 55.2125,
+      "y": 59.325,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    },
+    {
+      "source_id": 2763,
+      "kind": "hidden",
+      "x_norm": 0.519,
+      "y_norm": 0.935,
+      "hp": 0.8,
+      "swarm_stock": 12,
+      "id": "M01-D05",
+      "x": 45.4125,
+      "y": 65.45,
+      "mobility": "fixed",
+      "initial_visibility": "hidden"
+    }
+  ],
+  "topology_idea": "双层分流：前后两个层次，上下采用不同横向位置，资源均衡。 蓝方整体右移地图宽度的4%，不收紧点位。",
+  "blue_translation_fraction": [
+    0.04,
+    0
+  ],
+  "map_area": {
+    "lonMin": 11.58,
+    "lonMax": 12.665,
+    "latMin": 1.90125,
+    "latMax": 2.75875
+  },
+  "detection": {
+    "source": "RadarModelSimulator.execute_detection + ISimulator._is_geometrically_visible",
+    "range_m": 20000,
+    "distance_axes": "ECEF X,Y only",
+    "minimum_target_stage": 3,
+    "slice_altitude_m": 3000
+  },
+  "launch_altitude_external_m": 3000
+}

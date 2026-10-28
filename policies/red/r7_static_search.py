@@ -23,10 +23,12 @@ from .coverage_search import radial_fan_endpoints
 logger = logging.getLogger(__name__)
 
 _CANDIDATE_GROUP_CENTERS = 73
-_MINIMUM_SEARCH_ROUTE_KM = 120.0
-_SEARCH_ROUTE_LENGTH_STEP_KM = 25.0
+# Geometry follows the current 1:10 scenario coordinates; step timing does not.
+_MINIMUM_SEARCH_ROUTE_KM = 12.0
+_SEARCH_ROUTE_LENGTH_STEP_KM = 2.5
 _SAFE_INITIAL_LAUNCH_DELAY_STEPS = 1
-_DIRECT_RETARGET_RANGE_KM = 100.0
+_DIRECT_RETARGET_RANGE_KM = 10.0
+_SEARCH_DANGER_RADIUS_KM = 10.0
 _KM_PER_DEGREE_LATITUDE = 111.32
 
 
@@ -147,6 +149,7 @@ class R7StaticSearchPolicy(R7StrikePackagePolicy):
         platform: PlatformState,
         targets: tuple[TargetPrior, ...],
         counts: dict[int, int],
+        damage: dict[int, float] | None = None,
     ) -> TargetPrior | None:
         if platform.kind == "L":
             detected_ships = [
@@ -159,7 +162,7 @@ class R7StaticSearchPolicy(R7StrikePackagePolicy):
                     detected_ships,
                     key=lambda item: (distance_km(platform.position, item.position), item.entity_id),
                 )
-        return super()._best_target(platform, targets, counts)
+        return super()._best_target(platform, targets, counts, damage)
 
     def _build_initial_search(
         self,
@@ -199,7 +202,7 @@ class R7StaticSearchPolicy(R7StrikePackagePolicy):
             for platform in low_platforms
             if all(
                 distance_km(platform.position, site)
-                >= self.rules.static_search_danger_radius_km
+                >= _SEARCH_DANGER_RADIUS_KM
                 for site in danger_sites
             )
         ]
@@ -210,7 +213,7 @@ class R7StaticSearchPolicy(R7StrikePackagePolicy):
         if not platform_groups:
             logger.info(
                 "R7 static search has no communication-safe triple outside the %.0f km danger zones",
-                self.rules.static_search_danger_radius_km,
+                _SEARCH_DANGER_RADIUS_KM,
             )
             return ()
 
@@ -318,14 +321,20 @@ class R7StaticSearchPolicy(R7StrikePackagePolicy):
                     platforms,
                     formation,
                     danger_sites,
-                    self.rules.static_search_danger_radius_km,
+                    _SEARCH_DANGER_RADIUS_KM,
                 )
-                if destinations is not None:
-                    # Keep one longest safe route per bearing.  Shortening a
-                    # boundary route lets the 50 km formation remain inside
-                    # the public search area near map edges.
-                    candidates.append(destinations)
-                    break
+                if destinations is None:
+                    continue
+                if any(
+                    destination.lon <= platform.position.lon
+                    for platform, destination in zip(platforms, destinations)
+                ):
+                    continue
+                # Keep one longest safe eastbound route per bearing.  Shortening
+                # a boundary route lets the scaled formation remain inside the
+                # public search area near map edges.
+                candidates.append(destinations)
+                break
 
         if not candidates:
             return None
@@ -399,9 +408,9 @@ def _candidate_platform_groups(
                 distance_km(first.position, second.position)
                 for first, second in combinations(group, 2)
             )
-            # Launchers may be co-located.  The 50 km separation requirement
+            # Launchers may be co-located.  The preferred separation requirement
             # applies to the in-flight destination formation; initially we
-            # only need every member to remain inside the 100 km comm limit.
+            # only need every member inside twice the preferred separation.
             if max(distances) > communication_limit:
                 continue
             score = (

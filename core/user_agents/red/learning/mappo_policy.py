@@ -1,0 +1,266 @@
+"""集中训练、分散执行的参数共享 MAPPO 红方基线。"""
+
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+
+import numpy as np
+import torch
+from torch import nn
+from torch.distributions import Categorical
+
+from .red_policy import ACTION_DIM, GlobalStateEncoder, PolicyTransition, SharedPolicy
+
+
+@dataclass
+class MAPPOConfig:
+    observation_dim: int = 85
+    global_state_dim: int = 70
+    action_dim: int = ACTION_DIM
+    actor_hidden_dim: int = 128
+    critic_hidden_dim: int = 256
+    learning_rate: float = 3e-4
+    gamma: float = 0.99
+    gae_lambda: float = 0.95
+    clip_ratio: float = 0.2
+    value_coef: float = 0.5
+    entropy_coef: float = 0.01
+    max_grad_norm: float = 0.5
+    update_epochs: int = 4
+    minibatch_size: int = 256
+    rollout_size: int = 8192
+    min_update_size: int = 512
+    seed: int = 0
+    device: str = "cpu"
+    max_steps: int = 1000
+
+
+class MAPPOActorCritic(nn.Module):
+    def __init__(self, config: MAPPOConfig):
+        super().__init__()
+        self.actor = nn.Sequential(
+            nn.Linear(config.observation_dim, config.actor_hidden_dim),
+            nn.Tanh(),
+            nn.Linear(config.actor_hidden_dim, config.actor_hidden_dim),
+            nn.Tanh(),
+            nn.Linear(config.actor_hidden_dim, config.action_dim),
+        )
+        self.critic = nn.Sequential(
+            nn.Linear(
+                config.global_state_dim + config.observation_dim,
+                config.critic_hidden_dim,
+            ),
+            nn.Tanh(),
+            nn.Linear(config.critic_hidden_dim, config.critic_hidden_dim),
+            nn.Tanh(),
+            nn.Linear(config.critic_hidden_dim, 1),
+        )
+
+    def actor_forward(self, local_observation: torch.Tensor) -> torch.Tensor:
+        return self.actor(local_observation)
+
+    def critic_forward(
+        self, global_state: torch.Tensor, local_observation: torch.Tensor
+    ) -> torch.Tensor:
+        critic_input = torch.cat((global_state, local_observation), dim=-1)
+        return self.critic(critic_input).squeeze(-1)
+
+
+class MAPPOSharedPolicy(SharedPolicy):
+    """所有红方导弹共享 Actor，训练时由集中式 Critic 读取全局状态。"""
+
+    def __init__(self, config: MAPPOConfig | None = None):
+        self.config = config or MAPPOConfig()
+        self.global_encoder = GlobalStateEncoder(max_steps=self.config.max_steps)
+        if self.global_encoder.state_dim != self.config.global_state_dim:
+            raise ValueError(
+                f"global_state_dim={self.config.global_state_dim}，"
+                f"但编码器输出维度为{self.global_encoder.state_dim}"
+            )
+        torch.manual_seed(self.config.seed)
+        np.random.seed(self.config.seed)
+        self.device = torch.device(self.config.device)
+        self.network = MAPPOActorCritic(self.config).to(self.device)
+        self.optimizer = torch.optim.Adam(self.network.parameters(), lr=self.config.learning_rate)
+        self._buffer: list[tuple[PolicyTransition, float, float]] = []
+        self._pending: list[tuple[float, float]] = []
+        self._global_state: np.ndarray | None = None
+        self._next_global_state: np.ndarray | None = None
+        self.update_count = 0
+        self.transition_count = 0
+        self.last_metrics: dict[str, float] = {}
+        self.training = True
+
+    def begin_environment_step(self, full_observation) -> None:
+        if not self.training:
+            return
+        self._global_state = self.global_encoder.encode(full_observation)
+        self._next_global_state = None
+
+    def end_environment_step(self, full_observation) -> None:
+        if not self.training:
+            return
+        self._next_global_state = self.global_encoder.encode(full_observation)
+
+    def get_global_state_context(self):
+        return self._global_state, self._next_global_state
+
+    def finish_environment_step(self) -> None:
+        if self.training and len(self._buffer) >= self.config.rollout_size:
+            self.update()
+
+    def select_action(self, observation: np.ndarray, action_mask: np.ndarray) -> int:
+        if self.training and self._global_state is None:
+            raise RuntimeError("MAPPO选择动作前未设置全局状态")
+        observation_tensor = torch.as_tensor(
+            observation, dtype=torch.float32, device=self.device
+        ).unsqueeze(0)
+        mask_tensor = torch.as_tensor(action_mask, dtype=torch.bool, device=self.device).unsqueeze(0)
+        with torch.no_grad():
+            logits = self.network.actor_forward(observation_tensor)
+            value = None
+            if self.training:
+                state_tensor = torch.as_tensor(
+                    self._global_state, dtype=torch.float32, device=self.device
+                ).unsqueeze(0)
+                value = self.network.critic_forward(state_tensor, observation_tensor)
+            logits = logits.masked_fill(~mask_tensor, torch.finfo(logits.dtype).min)
+            distribution = Categorical(logits=logits)
+            action = distribution.sample() if self.training else torch.argmax(logits, dim=-1)
+            log_prob = distribution.log_prob(action)
+        if self.training:
+            assert value is not None
+            self._pending.append((float(log_prob.item()), float(value.item())))
+        return int(action.item())
+
+    def observe(self, transition: PolicyTransition) -> None:
+        if not self.training:
+            return
+        if not self._pending:
+            raise RuntimeError("MAPPO收到transition前没有对应动作")
+        if transition.global_state is None or transition.next_global_state is None:
+            raise RuntimeError("MAPPO transition缺少全局状态")
+        log_prob, value = self._pending.pop(0)
+        self._buffer.append((transition, log_prob, value))
+        self.transition_count += 1
+
+    def reset_episode(self) -> None:
+        if not self.training:
+            return
+        if self._pending:
+            raise RuntimeError("回合结束时仍有未匹配的MAPPO动作")
+        if len(self._buffer) >= self.config.min_update_size:
+            self.update()
+        self._global_state = None
+        self._next_global_state = None
+
+    def set_training(self, training: bool) -> None:
+        self.training = bool(training)
+        self.network.train(self.training)
+        if not self.training:
+            self._buffer.clear()
+            self._pending.clear()
+            self._global_state = None
+            self._next_global_state = None
+
+    def _advantages_and_returns(self, rewards, dones, values, next_values, agent_ids):
+        advantages = torch.zeros_like(rewards)
+        for agent_id in torch.unique(agent_ids).tolist():
+            indices = torch.nonzero(agent_ids == agent_id, as_tuple=False).flatten()
+            gae = torch.zeros((), dtype=torch.float32, device=self.device)
+            for index in reversed(indices.tolist()):
+                nonterminal = 1.0 - dones[index]
+                delta = rewards[index] + self.config.gamma * next_values[index] * nonterminal - values[index]
+                gae = delta + self.config.gamma * self.config.gae_lambda * nonterminal * gae
+                advantages[index] = gae
+        return advantages, advantages + values
+
+    def update(self) -> dict[str, float]:
+        if len(self._buffer) < self.config.min_update_size:
+            return self.last_metrics
+
+        transitions = [item[0] for item in self._buffer]
+        observations = torch.as_tensor(np.stack([x.observation for x in transitions]), dtype=torch.float32, device=self.device)
+        next_observations = torch.as_tensor(
+            np.stack([x.next_observation for x in transitions]),
+            dtype=torch.float32,
+            device=self.device,
+        )
+        global_states = torch.as_tensor(np.stack([x.global_state for x in transitions]), dtype=torch.float32, device=self.device)
+        next_global_states = torch.as_tensor(np.stack([x.next_global_state for x in transitions]), dtype=torch.float32, device=self.device)
+        actions = torch.as_tensor([x.action for x in transitions], dtype=torch.long, device=self.device)
+        action_masks = torch.as_tensor(np.stack([x.action_mask for x in transitions]), dtype=torch.bool, device=self.device)
+        rewards = torch.as_tensor([x.reward for x in transitions], dtype=torch.float32, device=self.device)
+        dones = torch.as_tensor([x.done for x in transitions], dtype=torch.float32, device=self.device)
+        agent_ids = torch.as_tensor([x.agent_id for x in transitions], dtype=torch.long, device=self.device)
+        old_log_probs = torch.as_tensor([item[1] for item in self._buffer], dtype=torch.float32, device=self.device)
+        old_values = torch.as_tensor([item[2] for item in self._buffer], dtype=torch.float32, device=self.device)
+
+        with torch.no_grad():
+            next_values = self.network.critic_forward(next_global_states, next_observations)
+            advantages, returns = self._advantages_and_returns(
+                rewards, dones, old_values, next_values, agent_ids
+            )
+            if advantages.numel() > 1:
+                advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
+
+        totals = {"policy_loss": 0.0, "value_loss": 0.0, "entropy": 0.0}
+        updates = 0
+        sample_count = observations.shape[0]
+        for _ in range(self.config.update_epochs):
+            permutation = torch.randperm(sample_count, device=self.device)
+            for start in range(0, sample_count, self.config.minibatch_size):
+                indices = permutation[start:start + self.config.minibatch_size]
+                logits = self.network.actor_forward(observations[indices])
+                logits = logits.masked_fill(~action_masks[indices], torch.finfo(logits.dtype).min)
+                distribution = Categorical(logits=logits)
+                new_log_probs = distribution.log_prob(actions[indices])
+                entropy = distribution.entropy().mean()
+                ratio = torch.exp(new_log_probs - old_log_probs[indices])
+                unclipped = ratio * advantages[indices]
+                clipped = torch.clamp(
+                    ratio, 1.0 - self.config.clip_ratio, 1.0 + self.config.clip_ratio
+                ) * advantages[indices]
+                policy_loss = -torch.min(unclipped, clipped).mean()
+                predicted_values = self.network.critic_forward(
+                    global_states[indices], observations[indices]
+                )
+                value_loss = torch.nn.functional.mse_loss(predicted_values, returns[indices])
+                loss = policy_loss + self.config.value_coef * value_loss - self.config.entropy_coef * entropy
+
+                self.optimizer.zero_grad()
+                loss.backward()
+                nn.utils.clip_grad_norm_(self.network.parameters(), self.config.max_grad_norm)
+                self.optimizer.step()
+                totals["policy_loss"] += float(policy_loss.item())
+                totals["value_loss"] += float(value_loss.item())
+                totals["entropy"] += float(entropy.item())
+                updates += 1
+
+        self.update_count += 1
+        self.last_metrics = {
+            key: value / max(updates, 1) for key, value in totals.items()
+        }
+        self.last_metrics["samples"] = float(sample_count)
+        self._buffer.clear()
+        return self.last_metrics
+
+    def save(self, path: str) -> None:
+        torch.save({
+            "algorithm": "mappo",
+            "config": asdict(self.config),
+            "network": self.network.state_dict(),
+            "optimizer": self.optimizer.state_dict(),
+            "update_count": self.update_count,
+            "transition_count": self.transition_count,
+        }, path)
+
+    def load(self, path: str) -> None:
+        checkpoint = torch.load(path, map_location=self.device, weights_only=False)
+        if checkpoint.get("algorithm") != "mappo":
+            raise ValueError("该checkpoint不是MAPPO模型")
+        self.network.load_state_dict(checkpoint["network"])
+        if "optimizer" in checkpoint:
+            self.optimizer.load_state_dict(checkpoint["optimizer"])
+        self.update_count = int(checkpoint.get("update_count", 0))
+        self.transition_count = int(checkpoint.get("transition_count", 0))

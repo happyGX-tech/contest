@@ -18,7 +18,7 @@ class DefendCenterInfoTrigger:
 	engineTime: int = 0
 	# 舰船信息
 	ships: list[ShipInfo] = field(default_factory=list[ShipInfo])
-	# 拦截弹信息
+	# 自爆虫群信息
 	icpts: list[IcptInfo] = field(default_factory=list[IcptInfo])
 	# 弹目标信息
 	missileTargets: list[MissileTargetInfo] = field(default_factory=list[MissileTargetInfo])

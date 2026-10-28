@@ -8,13 +8,13 @@
   "mission_type_name": "综合任务",
   "topology_id": "honeycomb_archipelago",
   "topology_name": "蜂窝资源群",
-  "design_intent": "五个阵地与九个目标/无人船节点形成横跨全图的蜂窝资源群；两艘无人船前置在西侧上下边缘，另两艘保留在东部纵深。",
+  "design_intent": "五个哨卫巢与九个母巢/暗巢节点形成横跨全图的蜂窝资源群；两艘暗巢前置在西侧上下边缘，另两艘保留在东部纵深。",
   "structural_features": [
     "前后双层蜂窝",
     "多节点资源组合",
     "交叉覆盖与边缘节点"
   ],
-  "difficulty_mechanism": "14个计分目标、5部雷达和408枚拦截弹；蓝方拦截弹/红方高中性能打击弹=3.0。",
+  "difficulty_mechanism": "14个母巢、5部视野塔和408枚自爆虫群；蓝方自爆虫群/红方毁灭者、突击者=3.0。",
   "objective_ids": [
     51,
     52,
@@ -189,7 +189,7 @@
       "initial_information": "public"
     }
   ],
-  "scenario_sha256": "71680b7981c7d619b379a8a5c51779f397b26a8fb80e5d14d77927c5ba5af2e1",
+  "scenario_sha256": "4c5501b1342c6cb7cb8eb253e469771aab351810176032a60764d6e742b9016b",
   "entity_total": 715,
   "blue_entity_total": 427,
   "blue_root_total": 14,

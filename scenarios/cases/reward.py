@@ -1,4 +1,4 @@
-"""Unified weighted-damage scoring for competition scenarios."""
+# 比赛得分按完整摧毁的计分目标权重计算。
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 
-# 不同蓝方根节点的任务价值：无人船:拦截阵地:计分目标 = 1:2:5。
+# 不同蓝方根节点的任务价值：暗巢:哨卫巢:计分母巢 = 1:2:5。
 OBJECTIVE_KIND_WEIGHTS = {
     "target": 5.0,
     "site": 2.0,
@@ -123,7 +123,7 @@ def load_reward_policy(scenario: str | Path) -> RewardPolicy | None:
     )
     max_steps = int(info["max_steps"])
     if not objective_ids:
-        raise ValueError(f"{info_path} 没有计分目标")
+        raise ValueError(f"{info_path} 没有计分母巢")
     if max_steps <= 0:
         raise ValueError(f"{info_path} 的 max_steps 必须大于 0")
     if any(weight <= 0 for _, weight in objective_weights):
@@ -147,12 +147,10 @@ def calculate_reward(
     target_health: Mapping[int | str, float],
     destruction_steps: Mapping[int | str, int] | None = None,
 ) -> RewardBreakdown:
-    """Calculate the 0--100 weighted damage ratio, independent of time.
+    """按血量归零的目标权重计算0至100分，存活目标得零分。
 
-    Each objective contributes its own fractional health loss multiplied by
-    the configured kind weight.  ``K`` and ``raw_score`` both expose that
-    normalized damage value. ``T`` is retained as a compatibility field and
-    is always zero; destruction steps are retained only for result reporting.
+    K与raw_score记录已摧毁目标的权重占比；T恒为零。
+    摧毁时刻仅用于结果记录，不影响得分。
     """
     destroyed_ids = tuple(
         entity_id
@@ -175,25 +173,7 @@ def calculate_reward(
         raise ValueError("计分目标总权重必须大于 0")
 
     destroyed_weight = sum(weight_by_id[entity_id] for entity_id in destroyed_ids)
-    initial_pairs = policy.objective_initial_health or tuple(
-        (entity_id, 1.0)
-        for entity_id in policy.objective_ids
-    )
-    initial_health_by_id = dict(initial_pairs)
-    weighted_damage = 0.0
-    for entity_id in policy.objective_ids:
-        initial_health = float(initial_health_by_id.get(entity_id, 0.0))
-        if initial_health <= 0:
-            raise ValueError(f"计分目标 {entity_id} 的初始血量必须大于 0")
-        final_health = float(
-            target_health.get(
-                entity_id,
-                target_health.get(str(entity_id), initial_health),
-            )
-        )
-        damage_fraction = max(0.0, min(1.0, (initial_health - final_health) / initial_health))
-        weighted_damage += weight_by_id[entity_id] * damage_fraction
-    k_value = weighted_damage / total_objective_weight
+    k_value = destroyed_weight / total_objective_weight
     completed = len(destroyed_ids) == len(policy.objective_ids)
 
     supplied_steps = destruction_steps or {}

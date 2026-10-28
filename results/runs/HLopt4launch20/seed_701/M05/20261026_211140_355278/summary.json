@@ -1,0 +1,422 @@
+{
+  "scenario": "M05",
+  "policies": {
+    "red": "r11_lethal_package",
+    "red_motion": "local_avoid_s3",
+    "blue": "b0_fixed_ratio_random"
+  },
+  "steps_executed": 979,
+  "termination_reason": "time_limit",
+  "score": {
+    "score": 79.71014492753623,
+    "raw_score": 0.7971014492753623,
+    "K": 0.7971014492753623,
+    "T": 0.0,
+    "completed": false,
+    "destroyed_ids": [
+      52,
+      169,
+      301,
+      312,
+      2729,
+      2733,
+      2737,
+      2743,
+      2754,
+      2755,
+      2756,
+      2757,
+      2760,
+      2762,
+      2763,
+      2730,
+      3289,
+      3290,
+      3291,
+      3292,
+      3293,
+      3294,
+      3296,
+      3297,
+      3301,
+      3302
+    ],
+    "destroyed_weight": 55.0,
+    "total_objective_weight": 69.0,
+    "objective_weights": {
+      "52": 5.0,
+      "106": 2.0,
+      "169": 1.0,
+      "301": 5.0,
+      "310": 2.0,
+      "312": 2.0,
+      "2729": 5.0,
+      "2731": 2.0,
+      "2733": 2.0,
+      "2737": 2.0,
+      "2743": 2.0,
+      "2745": 2.0,
+      "2747": 2.0,
+      "2749": 2.0,
+      "2754": 1.0,
+      "2755": 1.0,
+      "2756": 1.0,
+      "2757": 1.0,
+      "2760": 1.0,
+      "2762": 1.0,
+      "2763": 1.0,
+      "2730": 5.0,
+      "3289": 1.0,
+      "3290": 1.0,
+      "3291": 1.0,
+      "3292": 1.0,
+      "3293": 1.0,
+      "3294": 1.0,
+      "3296": 1.0,
+      "3297": 2.0,
+      "3299": 2.0,
+      "3301": 5.0,
+      "3302": 5.0
+    },
+    "destruction_steps": {
+      "52": 636,
+      "169": 477,
+      "301": 627,
+      "312": 392,
+      "2729": 643,
+      "2730": 615,
+      "2733": 432,
+      "2737": 447,
+      "2743": 415,
+      "2754": 529,
+      "2755": 606,
+      "2756": 903,
+      "2757": 657,
+      "2760": 702,
+      "2762": 637,
+      "2763": 699,
+      "3289": 659,
+      "3290": 686,
+      "3291": 668,
+      "3292": 673,
+      "3293": 640,
+      "3294": 517,
+      "3296": 661,
+      "3297": 607,
+      "3301": 422,
+      "3302": 440
+    }
+  },
+  "red": {
+    "platforms_total": 192,
+    "launched": 192,
+    "alive": 2,
+    "lost": 190
+  },
+  "blue": {
+    "entities_total": 191,
+    "alive": 30,
+    "destroyed": 161,
+    "initial_health_total": 355878.00000000006,
+    "remaining_health_total": 51858.0
+  },
+  "objectives": [
+    {
+      "id": 52,
+      "name": "母巢_52",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 0.0,
+      "destroyed_step": 636
+    },
+    {
+      "id": 106,
+      "name": "哨卫巢_106",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 12.0,
+      "destroyed_step": null
+    },
+    {
+      "id": 169,
+      "name": "暗巢_169",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 477
+    },
+    {
+      "id": 301,
+      "name": "母巢_301",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 0.0,
+      "destroyed_step": 627
+    },
+    {
+      "id": 310,
+      "name": "哨卫巢_310",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 18.0,
+      "destroyed_step": null
+    },
+    {
+      "id": 312,
+      "name": "哨卫巢_312",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 392
+    },
+    {
+      "id": 2729,
+      "name": "target_added_2729",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 0.0,
+      "destroyed_step": 643
+    },
+    {
+      "id": 2731,
+      "name": "site_added_2731",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 18.0,
+      "destroyed_step": null
+    },
+    {
+      "id": 2733,
+      "name": "site_added_2733",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 432
+    },
+    {
+      "id": 2737,
+      "name": "site_added_2737",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 447
+    },
+    {
+      "id": 2743,
+      "name": "site_added_2743",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 415
+    },
+    {
+      "id": 2745,
+      "name": "site_added_2745",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 18.0,
+      "destroyed_step": null
+    },
+    {
+      "id": 2747,
+      "name": "site_added_2747",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 18.0,
+      "destroyed_step": null
+    },
+    {
+      "id": 2749,
+      "name": "site_added_2749",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 18.0,
+      "destroyed_step": null
+    },
+    {
+      "id": 2754,
+      "name": "ship_added_2754",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 529
+    },
+    {
+      "id": 2755,
+      "name": "ship_added_2755",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 606
+    },
+    {
+      "id": 2756,
+      "name": "ship_added_2756",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 903
+    },
+    {
+      "id": 2757,
+      "name": "ship_added_2757",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 657
+    },
+    {
+      "id": 2760,
+      "name": "ship_added_2760",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 702
+    },
+    {
+      "id": 2762,
+      "name": "ship_added_2762",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 637
+    },
+    {
+      "id": 2763,
+      "name": "ship_added_2763",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 699
+    },
+    {
+      "id": 2730,
+      "name": "target_added_2730",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 0.0,
+      "destroyed_step": 615
+    },
+    {
+      "id": 3289,
+      "name": "暗巢_3289",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 659
+    },
+    {
+      "id": 3290,
+      "name": "暗巢_3290",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 686
+    },
+    {
+      "id": 3291,
+      "name": "暗巢_3291",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 668
+    },
+    {
+      "id": 3292,
+      "name": "暗巢_3292",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 673
+    },
+    {
+      "id": 3293,
+      "name": "暗巢_3293",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 640
+    },
+    {
+      "id": 3294,
+      "name": "暗巢_3294",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 517
+    },
+    {
+      "id": 3296,
+      "name": "暗巢_3296",
+      "type": 9500,
+      "weight": 1.0,
+      "initial_health": 1.2000000000000002,
+      "final_health": 0.0,
+      "destroyed_step": 661
+    },
+    {
+      "id": 3297,
+      "name": "哨卫巢_3297",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 0.0,
+      "destroyed_step": 607
+    },
+    {
+      "id": 3299,
+      "name": "哨卫巢_3299",
+      "type": 9600,
+      "weight": 2.0,
+      "initial_health": 18.0,
+      "final_health": 6.0,
+      "destroyed_step": null
+    },
+    {
+      "id": 3301,
+      "name": "母巢_3301",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 0.0,
+      "destroyed_step": 422
+    },
+    {
+      "id": 3302,
+      "name": "母巢_3302",
+      "type": 9400,
+      "weight": 5.0,
+      "initial_health": 24.0,
+      "final_health": 0.0,
+      "destroyed_step": 440
+    }
+  ]
+}

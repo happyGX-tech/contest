@@ -92,7 +92,7 @@
           "id": 2,
           "parentId": -1,
           "childrenId": [],
-          "entityType": 21001,
+          "entityType": 21000,
           "typeId": 21000001,
           "sideId": 0,
           "threatLevel": 0,
@@ -103,9 +103,9 @@
           "healthState": true,
           "powerState": true,
           "lla": {
-            "x": -2.4190175552452704,
-            "y": 0.2,
-            "z": 0.1
+            "x": -0.24190175552452704,
+            "y": 0.02,
+            "z": 500
           },
           "posEcf": {
             "x": 0,
@@ -128,8 +128,8 @@
             "z": 0.0
           },
           "isVisible": true,
-          "nameChn": "红方_高性能飞行器_21000001_002",
-          "nameEn": "高性能Cruise_002",
+          "nameChn": "毁灭者_21000001_002",
+          "nameEn": "destoryer_002",
           "detectInfo": {},
           "commRangeInfo": []
         },
@@ -151,8 +151,8 @@
           "healthState": true,
           "powerState": true,
           "lla": {
-            "x": -0.6,
-            "y": 0.8,
+            "x": -0.06,
+            "y": 0.08,
             "z": 0
           },
           "posEcf": {
@@ -176,8 +176,8 @@
             "z": 0.0
           },
           "isVisible": true,
-          "nameChn": "红方_卫星_9202001_003",
-          "nameEn": "卫星_003",
+          "nameChn": "红方_天眼_9202001_003",
+          "nameEn": "天眼_003",
           "detectInfo": {},
           "commRangeInfo": []
         },
@@ -202,8 +202,8 @@
           "healthState": true,
           "powerState": true,
           "lla": {
-            "x": 1.8,
-            "y": 0.2,
+            "x": 0.18,
+            "y": 0.02,
             "z": 0
           },
           "posEcf": {
@@ -227,8 +227,8 @@
             "z": 0.0
           },
           "isVisible": true,
-          "nameChn": "蓝方_拦截阵地_9600001_004",
-          "nameEn": "拦截阵地_004",
+          "nameChn": "蓝方_哨卫巢_9600001_004",
+          "nameEn": "哨卫巢_004",
           "detectInfo": {},
           "commRangeInfo": []
         },
@@ -250,8 +250,8 @@
           "healthState": true,
           "powerState": true,
           "lla": {
-            "x": 1.8,
-            "y": 0.2,
+            "x": 0.18,
+            "y": 0.02,
             "z": 0
           },
           "posEcf": {
@@ -275,7 +275,7 @@
             "z": 0.0
           },
           "isVisible": false,
-          "nameChn": "拦截弹-1-4",
+          "nameChn": "自爆虫群-1-4",
           "nameEn": "Interceptor_1_4",
           "detectInfo": {},
           "commRangeInfo": []
@@ -298,8 +298,8 @@
           "healthState": true,
           "powerState": true,
           "lla": {
-            "x": 1.8,
-            "y": 0.2,
+            "x": 0.18,
+            "y": 0.02,
             "z": 0
           },
           "posEcf": {
@@ -323,7 +323,7 @@
             "z": 0.0
           },
           "isVisible": false,
-          "nameChn": "普通雷达_44000_4",
+          "nameChn": "视野塔_44000_4",
           "nameEn": "NormalRadar_44000_4",
           "detectInfo": {},
           "commRangeInfo": []
@@ -346,8 +346,8 @@
           "healthState": true,
           "powerState": true,
           "lla": {
-            "x": 1.9,
-            "y": 0.2,
+            "x": 0.19,
+            "y": 0.02,
             "z": 0
           },
           "posEcf": {
@@ -371,8 +371,8 @@
             "z": 0.0
           },
           "isVisible": true,
-          "nameChn": "蓝方_目标_9400001_007",
-          "nameEn": "目标_007",
+          "nameChn": "母巢_9400001_007",
+          "nameEn": "母巢_007",
           "detectInfo": {},
           "commRangeInfo": []
         },
@@ -434,49 +434,49 @@
       "coordinates": [
         [
           [
-            -2.0,
-            -1.5
+            -0.20,
+            -0.15
           ],
           [
-            -0.8,
-            -1.5
+            -0.08,
+            -0.15
           ],
           [
-            -0.8,
-            1.5
+            -0.08,
+            0.15
           ],
           [
-            -2.0,
-            1.5
+            -0.20,
+            0.15
           ]
         ]
       ],
       "coordinatesHM": [
         [
           [
-            -3.8,
-            -1.5
+            -0.38,
+            -0.15
           ],
           [
-            -2.2,
-            -1.5
+            -0.22,
+            -0.15
           ],
           [
-            -2.2,
-            1.5
+            -0.22,
+            0.15
           ],
           [
-            -3.8,
-            1.5
+            -0.38,
+            0.15
           ]
         ]
       ]
     },
     "mapArea": {
-      "lonMin": -4.0,
-      "latMin": -2.0,
-      "lonMax": 4.0,
-      "latMax": 2.0
+      "lonMin": -0.40,
+      "latMin": -0.20,
+      "lonMax": 0.40,
+      "latMax": 0.20
     },
     "satelliteMaxUseCount":100,
     "satelliteUseMinutes": 3,

@@ -18,5 +18,5 @@ class IcptThreatInfoT0:
 	pos: Vector3d = field(default_factory=Vector3d)
 	# 类型
 	type: int = 0
-	# 拦截弹信息（拦截弹型号，拦截弹数量）
+	# 自爆虫群信息（自爆虫群型号，自爆虫群数量）
 	interceptorInfo: dict[int, int] = field(default_factory=dict[int, int])

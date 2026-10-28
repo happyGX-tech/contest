@@ -66,6 +66,23 @@ class B9MinCostPlannedMultiWavePolicy(ScheduledBluePolicy):
         }
         plans: list[PlannedInterceptorAssignment] = []
 
+        # These terms are constant throughout this decision. Cache per target
+        # occurrence, not ID: observations can contain distinct tracks for one ID.
+        # Keep both encounter order and the original floating-point association.
+        costs_by_target = []
+        for target in observation.targets:
+            if not available_by_id or remaining_need[target.target_id] <= 0:
+                continue
+            asset_cost = self._nearest_asset_distance(observation, target) * 0.05
+            urgency_cost = self._target_urgency(observation, target) * 100_000.0
+            pair_costs = {
+                interceptor.interceptor_id: (
+                    distance_m(interceptor.pos_ecf, target.pos_ecf) / 1200.0
+                ) * 1000.0 + asset_cost
+                for interceptor in available_by_id.values()
+            }
+            costs_by_target.append((target, pair_costs, urgency_cost))
+
         while available_by_id and any(
             need > 0 for need in remaining_need.values()
         ):
@@ -74,15 +91,15 @@ class B9MinCostPlannedMultiWavePolicy(ScheduledBluePolicy):
                 ThreatTrack,
                 InterceptorState,
             ] | None = None
-            for target in observation.targets:
+            for target, pair_costs, urgency_cost in costs_by_target:
                 if remaining_need.get(target.target_id, 0) <= 0:
                     continue
+                overkill_penalty = assigned_count[target.target_id] * 50_000.0
                 for interceptor in available_by_id.values():
-                    cost = self._assignment_cost(
-                        observation,
-                        target,
-                        interceptor,
-                        assigned_count[target.target_id],
+                    cost = (
+                        pair_costs[interceptor.interceptor_id]
+                        + overkill_penalty
+                        - urgency_cost
                     )
                     if best_pair is None or cost < best_pair[0]:
                         best_pair = (cost, target, interceptor)
@@ -117,31 +134,6 @@ class B9MinCostPlannedMultiWavePolicy(ScheduledBluePolicy):
 
         self.schedule_assignments(observation, plans)
         return self.release_due_assignments(observation)
-
-    def _assignment_cost(
-        self,
-        observation: BlueObservation,
-        target: ThreatTrack,
-        interceptor: InterceptorState,
-        already_assigned: int,
-    ) -> float:
-        intercept_distance = distance_m(
-            interceptor.pos_ecf,
-            target.pos_ecf,
-        )
-        intercept_time = intercept_distance / 1200.0
-        asset_distance = self._nearest_asset_distance(
-            observation,
-            target,
-        )
-        target_urgency = self._target_urgency(observation, target)
-        overkill_penalty = already_assigned * 50_000.0
-        return (
-            intercept_time * 1000.0
-            + asset_distance * 0.05
-            + overkill_penalty
-            - target_urgency * 100_000.0
-        )
 
     @staticmethod
     def _nearest_asset_distance(
